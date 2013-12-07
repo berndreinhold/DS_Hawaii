@@ -1,0 +1,19 @@
+#Dec. 2013
+#DarkSide MC neutron efficiency study
+#Bernd
+
+GoodGuysBadGuys.C/.h
+-------------------- 
+... was originally created from veto->MakeClass("GoodGuysBadGuys") in gun_x34_veto.root, which Erin had produced from S4Det and running vetoTree.cc as a selection.
+The data structure is relatively complicated, with vectors per event, through which one has to loop through. The GoodGuysBadGuys.C/.h does some classification of events based on process (inelastic, Hadronelastic,...), spawn_volume (p_active, p_veto) and type (nucleus, baryon, ...). These classifications are stored in an output ntuple, where columns have the format [variable]__[selection], e.g. qdep_active__inelastic__active (quenched energy deposited in the active volume) for inelastic processes in the 'active' volume. The output ntupe is stored in an output root file, e.g. gun_x34_veto_goodguysbadguys.root
+It comes with a Makefile to produce an executable, which runs reasonably fast and allows for better debugging
+
+ROOT macros:
+------------
+- UseGoodGuysBadGuys.C
+... runs consistency and sanity checks on the output, thereby validating the logic applied in GoodGuysBadGuys.C/.h
+It also illustrates the usage of AddFriend()
+
+- AnalyseThis.C
+... is even simpler and just friends the tree, so that one can formulate queries on the ROOT commandline and make plots.
+
