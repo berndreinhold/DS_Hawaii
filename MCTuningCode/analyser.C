@@ -42,10 +42,17 @@ void analyser(string infilename) {
   Load_TopBottom_Data(hTopBottom_Data, "$DATA_G4DS/analysisKr2.root"); //fills
   Chi2_TopBottom(hTopBottom_Data, hTopBottom_MC); //number of points used in the chi2 as defined in data, errors are ignored for now.
 
+  string picname=infilename.substr(0, infilename.length()-5); //reomoves the ".root"
+
   TCanvas *cc = new TCanvas("cc" ,"", 1000, 850);
   cc->Divide(1,2);
   Draw_CollEff(grCollEff_data, grCollEff_MC, cc);
   Draw_TopBottom(hTopBottom_Data, hTopBottom_MC, cc);
+
+  if(picname!=""){
+    cc->SaveAs((picname+".C").c_str());
+    cc->SaveAs((picname+".png").c_str());
+  }
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -387,6 +394,7 @@ void Draw_CollEff(TGraphErrors *grData, TGraph *grMC, TCanvas *cc){
 
   mg->Draw("a");
   //grData->Draw("p");
+
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
