@@ -1,9 +1,19 @@
 #include "TFile.h"
 #include "TF1.h"
 #include "TStyle.h"
+#include "TMath.h"
 #include "TTree.h"
 #include "TH1F.h"
+#include "TH2D.h"
 #include "TCanvas.h"
+#include "TGraphErrors.h"
+#include "TGraph.h"
+#include "TMultiGraph.h"
+#include "TPaveText.h"
+#include <fstream>
+#include <string>
+
+using namespace std;
 
 void Load_CollEff_Data(TGraphErrors *gr,string filename);
 void Load_TopBottom_Data(TH1F *hTopBottom, string filename);
@@ -13,8 +23,26 @@ void Draw_CollEff(TGraphErrors *grData, TGraph *grCollEff_MC, TCanvas *cc);
 void Draw_TopBottom(TH1F *hData, TH1F *hMC, TCanvas *cc);
 //plotter.C provided by Paolo Agnes, APC (March 2014)
 //modified to allow for a chi2 analysis and easier plotting by using multigraph /multi histogram -> automatic choice of correct axes ranges
-float Chi2_CollEff(TGraph *grData, TGraph *grMC); 
+float Chi2_CollEff(TGraphErrors *grData, TGraph *grMC); 
 float Chi2_TopBottom(TH1F *hData, TH1F *hMC); 
+//
+void analyser(string infilename);
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+int main(int argc, char* argv[]){
+
+  if(argc==2){
+    string infilename=argv[1];
+    size_t nOffset = infilename.find(".root",0); //http://www.java2s.com/Code/Cpp/String/Findsubstringdayinastringandcheckifitwasfound.htm
+    if(nOffset !=string::npos){
+      analyser(infilename);
+    } else {
+      cout << "something went wrong with the input argument: " << infilename << endl;
+    }
+  } else {
+    cout << "analyser.exe requires exactly one argument: input filename" << endl;
+  }
+}
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 void analyser(string infilename) {
@@ -36,11 +64,11 @@ void analyser(string infilename) {
   TGraph *grCollEff_MC=new TGraph(bins);
   TH1F *hTopBottom_MC = new TH1F("hTopBottom_MC","",bins,-80,270); //top PMTs
   Load_MC(grCollEff_MC, hTopBottom_MC, infilename); //fills 
-  Chi2_CollEff(grCollEff_data, grCollEff_MC); //number of points used in the chi2 as defined in MC, fit errors are ignored for now.
+  float chi2_colleff = Chi2_CollEff(grCollEff_data, grCollEff_MC); //number of points used in the chi2 as defined in MC, fit errors are ignored for now.
 
   TH1F *hTopBottom_Data = new TH1F("hTopBottom_Data","",60,10-85,360-85);
   Load_TopBottom_Data(hTopBottom_Data, "$DATA_G4DS/analysisKr2.root"); //fills
-  Chi2_TopBottom(hTopBottom_Data, hTopBottom_MC); //number of points used in the chi2 as defined in data, errors are ignored for now.
+  float chi2_topbottom = Chi2_TopBottom(hTopBottom_Data, hTopBottom_MC); //number of points used in the chi2 as defined in data, errors are ignored for now.
 
   string picname=infilename.substr(0, infilename.length()-5); //reomoves the ".root"
 
@@ -53,6 +81,12 @@ void analyser(string infilename) {
     cc->SaveAs((picname+".C").c_str());
     cc->SaveAs((picname+".png").c_str());
   }
+
+  //store the chi2 of CoffEff and TopBottom in there
+  ofstream f((picname+".txt").c_str());
+  f << chi2_colleff << ", " << chi2_topbottom << endl;
+  f.close();
+
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -100,7 +134,7 @@ float Chi2_TopBottom(TH1F *hData, TH1F *hMC){
     //chi2+=TMath::Power(grMC->GetY()[i]-grData->Eval(grMC->GetX()[i]),2)/TMath::Power(uncert,2);
     
     yData=hData->GetBinContent(hData->FindBin(hMC->GetBinCenter(i)));
-    cout << Form("%d, %f, %f, %f", i, hMC->GetBinCenter(i), hMC->GetBinContent(i), yData, TMath::Power(hMC->GetBinContent(i)-yData,2)) << endl;
+    cout << Form("%d, %f, %f, %f, %f", i, hMC->GetBinCenter(i), hMC->GetBinContent(i), yData, TMath::Power(hMC->GetBinContent(i)-yData,2)) << endl;
     chi2+=TMath::Power(hMC->GetBinContent(i)-yData,2);
     
   }
@@ -128,7 +162,8 @@ void Load_CollEff_Data(TGraphErrors *gr, string filename){
       fin >> vuoto >> eY[i] ;
       fin  >> eX[i] >> vuoto;
   }
-  float x2[37], eX2[37], eY2[37];
+  //float x2[37], eX2[37], eY2[37];
+  float eX2[37], eY2[37];
   for (int i=0;i<37;++i) {
       
       eX2[i] = (eX[i] - x[i] );
@@ -154,7 +189,8 @@ void Load_TopBottom_Data(TH1F *hTopBottom, string filename){
  //real data 2 
   //TH2D *asym = new TH2D("asym","",120,0,3750, 30,0, 3.3 );
   TFile *_file1 = TFile::Open(filename.c_str());
-  //asym = (TH2D*) _file1->Get("asymm");
+  TH2D *asymm = (TH2D*) _file1->Get("asymm");
+  
 
   for (int i=1;i<61;++i){  
      float toplight= asymm->ProjectionY("bb",i,i)->GetMaximumBin()*asymm->GetYaxis()->GetBinWidth(3) ; 
@@ -173,8 +209,9 @@ void Load_MC(TGraph *grCollEff_MC, TH1F *hTopBottom, const string filename){
   
   //Declaration of leaves types
    Int_t           ev;
-   Int_t           pdg;
-   Float_t         ene0;
+   //Int_t           pdg;
+   //Float_t         ene0;
+   /*
    Float_t         s1ene;
    Float_t         s2ene;
    Float_t         veto_visene;
@@ -185,16 +222,21 @@ void Load_MC(TGraph *grCollEff_MC, TH1F *hTopBottom, const string filename){
    Float_t         ene;
    Float_t         x;
    Float_t         y;
-   Float_t         z;
-   Float_t         radius;
+
+   */
+   Float_t         z;   
+   /*
+Float_t         radius;
    Float_t         px;
    Float_t         py;
    Float_t         pz;
    Float_t         bx;
    Float_t         by;
    Float_t         bz;
+   */
    Int_t           npe;
-   Int_t           munpe;
+   /*
+     Int_t           munpe;
    Int_t           vnpe;
    Int_t           nph;
    Int_t           ndaughters;
@@ -228,7 +270,9 @@ void Load_MC(TGraph *grCollEff_MC, TH1F *hTopBottom, const string filename){
    Float_t         userfloat2[1];
    Double_t        userdouble0[1];
    Double_t        pe_time[259];
+   */
    Int_t           pe_pmt[259];
+   /*
    Double_t        vpe_time[0];
    Int_t           vpe_pmt[0];
    Double_t        mupe_time[0];
@@ -240,7 +284,7 @@ void Load_MC(TGraph *grCollEff_MC, TH1F *hTopBottom, const string filename){
    Float_t         ph_y[0];
    Float_t         ph_z[0];
    Double_t        ph_time[0];
-
+*/
    // Set branch addresses.
    dstree->SetBranchAddress("ev",&ev);
    /*dstree->SetBranchAddress("pdg",&pdg);
@@ -319,8 +363,8 @@ void Load_MC(TGraph *grCollEff_MC, TH1F *hTopBottom, const string filename){
    Long64_t nentries = dstree->GetEntries();
 
    TH1F *hCollEff_MC = new TH1F("hCollEff_MC","",grCollEff_MC->GetN(),-80,270);
-   TH1F *ht = hTopBottom->Clone();
-   TH1F *hb = hTopBottom->Clone();
+   TH1F *ht = (TH1F *)hTopBottom->Clone();
+   TH1F *hb = (TH1F *)hTopBottom->Clone();
 
    Long64_t nbytes = 0;
    for (Long64_t ik=0; ik<nentries;ik++) {
@@ -400,23 +444,23 @@ void Draw_CollEff(TGraphErrors *grData, TGraph *grMC, TCanvas *cc){
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 void Draw_TopBottom(TH1F *hData, TH1F *hMC, TCanvas *cc){
   
-   TPaveText *pt1 = new TPaveText(0.2,0.8,0.21,0.81,"bcNDC");
-   pt1->SetName("txtTop1");
-   pt1->SetBorderSize(0);
-   pt1->SetFillColor(0);
-   pt1->SetLineWidth(2);
-   pt1->SetTextSize(0.05);
-   TText *text = pt1->AddText("top");
-   pt1->Draw();
+   TPaveText *ptTop1 = new TPaveText(0.2,0.8,0.21,0.81,"bcNDC");
+   ptTop1->SetName("txtTop1");
+   ptTop1->SetBorderSize(0);
+   ptTop1->SetFillColor(0);
+   ptTop1->SetLineWidth(2);
+   ptTop1->SetTextSize(0.05);
+   ptTop1->AddText("top");
+   ptTop1->Draw();
 
-   TPaveText *pt2 = new TPaveText(0.8,0.3,0.81,0.31,"bcNDC");
-   pt2->SetName("txtBottom11");
-   pt2->SetBorderSize(0);
-   pt2->SetFillColor(0);
-   pt2->SetLineWidth(2);
-   pt2->SetTextSize(0.05);
-   TText *text = pt2->AddText("bottom");
-   pt2->Draw();
+   TPaveText *ptBottom2 = new TPaveText(0.8,0.3,0.81,0.31,"bcNDC");
+   ptBottom2->SetName("txtBottom11");
+   ptBottom2->SetBorderSize(0);
+   ptBottom2->SetFillColor(0);
+   ptBottom2->SetLineWidth(2);
+   ptBottom2->SetTextSize(0.05);
+   ptBottom2->AddText("bottom");
+   ptBottom2->Draw();
 
   
   //hfinal->GetYaxis()->SetRangeUser(0,3.3);
@@ -437,17 +481,17 @@ void Draw_TopBottom(TH1F *hData, TH1F *hMC, TCanvas *cc){
    pt1->SetFillColor(0);
    pt1->SetLineWidth(2);
    pt1->SetTextSize(0.05);
-   TText *text = pt1->AddText("bottom");
+   pt1->AddText("bottom");
    pt1->Draw();
 
-   TPaveText *pt2 = new TPaveText(0.8,0.3,0.81,0.31,"bcNDC");
-   pt2->SetName("txtTop2");
-   pt2->SetBorderSize(0);
-   pt2->SetFillColor(0);
-   pt2->SetLineWidth(2);
-   pt2->SetTextSize(0.05);
-   TText *text = pt2->AddText("top");
-   pt2->Draw();
+   TPaveText *ptTop2 = new TPaveText(0.8,0.3,0.81,0.31,"bcNDC");
+   ptTop2->SetName("txtTop2");
+   ptTop2->SetBorderSize(0);
+   ptTop2->SetFillColor(0);
+   ptTop2->SetLineWidth(2);
+   ptTop2->SetTextSize(0.05);
+   ptTop2->AddText("top");
+   ptTop2->Draw();
 
 }
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
