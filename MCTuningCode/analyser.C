@@ -3,30 +3,16 @@
 #include "TStyle.h"
 #include "TMath.h"
 #include "TTree.h"
-#include "TH1F.h"
 #include "TH2D.h"
 #include "TCanvas.h"
-#include "TGraphErrors.h"
-#include "TGraph.h"
 #include "TMultiGraph.h"
 #include "TPaveText.h"
 #include <fstream>
-#include <string>
+
+#include "analyser.h"
 
 using namespace std;
 
-void Load_CollEff_Data(TGraphErrors *gr,string filename);
-void Load_TopBottom_Data(TH1F *hTopBottom, string filename);
-void Load_MC(TGraph *grCollEff_MC, TH1F *hTopBottom, const string filename);
-//
-void Draw_CollEff(TGraphErrors *grData, TGraph *grCollEff_MC, TCanvas *cc);
-void Draw_TopBottom(TH1F *hData, TH1F *hMC, TCanvas *cc);
-//plotter.C provided by Paolo Agnes, APC (March 2014)
-//modified to allow for a chi2 analysis and easier plotting by using multigraph /multi histogram -> automatic choice of correct axes ranges
-float Chi2_CollEff(TGraphErrors *grData, TGraph *grMC); 
-float Chi2_TopBottom(TH1F *hData, TH1F *hMC); 
-//
-void analyser(string infilename);
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 int main(int argc, char* argv[]){
@@ -34,18 +20,36 @@ int main(int argc, char* argv[]){
   if(argc==2){
     string infilename=argv[1];
     size_t nOffset = infilename.find(".root",0); //http://www.java2s.com/Code/Cpp/String/Findsubstringdayinastringandcheckifitwasfound.htm
+    cTopBottom x(infilename);
     if(nOffset !=string::npos){
-      analyser(infilename);
+      x.analyser();
     } else {
       cout << "something went wrong with the input argument: " << infilename << endl;
     }
   } else {
-    cout << "analyser.exe requires exactly one argument: input filename" << endl;
+    cout << "analyser.exe requires one argument: input filename" << endl;
   }
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-void analyser(string infilename) {
+cTopBottom::cTopBottom(string inname):bins(11),inMCname(inname) {
+
+  outfilename=inMCname.substr(0, inMCname.length()-5)+"_output.root"; //inserts '_output'
+  fOut=new TFile(outfilename.c_str(), "RECREATE");
+  t=new TNtuple("tOut","contains all the variables to make the Paolo's and Davide's plots (DocDB xxx) and to calculate the chi2 (this is new).","topbottom:dataMC:z:z_e:par1:par1_e:rms_par1:rms_par1_e:chi2:ndf");
+
+  fN_CollEff_Data=Form("%s/realdata.dat", getenv("DATA_G4DS"));
+  fN_TopBottom_Data="$DATA_G4DS/analysisKr2.root";
+}
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cTopBottom::~cTopBottom() {
+  fOut->Close();
+  cout << "outfile: " << outfilename << endl;
+}
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+void cTopBottom::analyser() {
   //////////////////////////////////////////////////////////
   //   This file has been automatically generated 
   //     (Mon Mar  3 17:29:18 2014 by ROOT version5.34/11)
@@ -55,40 +59,43 @@ void analyser(string infilename) {
   gStyle->SetOptStat(0);
   gStyle->SetOptFit(11111);
 
-  const int bins=11;
+  Load_CollEff_Data();
+  //TGraphErrors *grCollEff_data = new TGraphErrors(36); //filled in Load_CollEff_Data
+  //cout << grCollEff_data << endl;
 
-  TGraphErrors *grCollEff_data = new TGraphErrors(36); //filled in Load_CollEff_Data
-  Load_CollEff_Data(grCollEff_data, Form("%s/realdata.dat", getenv("DATA_G4DS")));
-  cout << grCollEff_data << endl;
+  //TGraph *grCollEff_MC=new TGraph(bins);
+  //TH1F *hTopBottom_MC = new TH1F("hTopBottom_MC","",bins,-80,270); //top PMTs
+  Load_MC(); //fills 
+  //float chi2_colleff = Chi2_CollEff(grCollEff_data, grCollEff_MC); //number of points used in the chi2 as defined in MC, fit errors are ignored for now.
 
-  TGraph *grCollEff_MC=new TGraph(bins);
-  TH1F *hTopBottom_MC = new TH1F("hTopBottom_MC","",bins,-80,270); //top PMTs
-  Load_MC(grCollEff_MC, hTopBottom_MC, infilename); //fills 
-  float chi2_colleff = Chi2_CollEff(grCollEff_data, grCollEff_MC); //number of points used in the chi2 as defined in MC, fit errors are ignored for now.
+  //TH1F *hTopBottom_Data = new TH1F("hTopBottom_Data","",60,10-85,360-85);
+  Load_TopBottom_Data(); //fills
+  //float chi2_topbottom = Chi2_TopBottom(hTopBottom_Data, hTopBottom_MC); //number of points used in the chi2 as defined in data, errors are ignored for now.
 
-  TH1F *hTopBottom_Data = new TH1F("hTopBottom_Data","",60,10-85,360-85);
-  Load_TopBottom_Data(hTopBottom_Data, "$DATA_G4DS/analysisKr2.root"); //fills
-  float chi2_topbottom = Chi2_TopBottom(hTopBottom_Data, hTopBottom_MC); //number of points used in the chi2 as defined in data, errors are ignored for now.
-
-  string picname=infilename.substr(0, infilename.length()-5); //reomoves the ".root"
+  string picname=inMCname.substr(0, inMCname.length()-5); //reomoves the ".root"
 
   TCanvas *cc = new TCanvas("cc" ,"", 1000, 850);
   cc->Divide(1,2);
-  Draw_CollEff(grCollEff_data, grCollEff_MC, cc);
-  Draw_TopBottom(hTopBottom_Data, hTopBottom_MC, cc);
+  //Draw_CollEff(grCollEff_data, grCollEff_MC, cc);
+  //Draw_TopBottom(hTopBottom_Data, hTopBottom_MC, cc);
 
   if(picname!=""){
     cc->SaveAs((picname+".C").c_str());
     cc->SaveAs((picname+".png").c_str());
   }
 
+  fOut->cd();
+  cc->Write();
+  t->Write();
+
   //store the chi2 of CoffEff and TopBottom in there
   ofstream f((picname+".txt").c_str());
-  f << chi2_colleff << ", " << chi2_topbottom << endl;
+  //f << chi2_colleff << ", " << chi2_topbottom << endl;
   f.close();
 
 }
 
+/*
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 float Chi2_CollEff(TGraphErrors *grData, TGraph *grMC){
   float chi2=0;
@@ -105,10 +112,10 @@ float Chi2_CollEff(TGraphErrors *grData, TGraph *grMC){
   for(int i=0;i<grMC->GetN();++i){
     cout << Form("%d, %f, %f, %f, %f", i, grMC->GetX()[i], grMC->GetY()[i], grData->Eval(grMC->GetX()[i]), TMath::Power(grMC->GetY()[i]-grData->Eval(grMC->GetX()[i]),2)) << endl;
     chi2+=TMath::Power(grMC->GetY()[i]-grData->Eval(grMC->GetX()[i]),2)/TMath::Power(uncert,2);
-    /*
+*/    /*
     cout << Form("%d, %f, %f, %f", i, hMC->GetBinCenter(i), hMC->GetBinContent(i), grData->Eval(hMC->GetBinCenter(i)), TMath::Power(hMC->GetBinContent(i)-grData->Eval(hMC->GetBinCenter(i)),2)) << endl;
     chi2+=TMath::Power(hMC->GetBinContent(i)-grData->Eval(hMC->GetBinCenter(i)),2);
-    */
+      *//*
   }
   cout << "chi2: " << chi2 << endl;
 
@@ -118,7 +125,7 @@ float Chi2_CollEff(TGraphErrors *grData, TGraph *grMC){
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 float Chi2_TopBottom(TH1F *hData, TH1F *hMC){
   float chi2=0;
-  /*
+	*//*
   float uncert=0;
   //average uncertainty in data
   for(int i=0;i<grData->GetN();++i){
@@ -126,7 +133,7 @@ float Chi2_TopBottom(TH1F *hData, TH1F *hMC){
   }
   uncert/=grData->GetN();
   cout << "average uncert.: " << uncert << endl;
-  */
+	  *//*
 
   float yData;
   for(int i=0;i<hMC->GetXaxis()->GetNbins();++i){
@@ -142,15 +149,15 @@ float Chi2_TopBottom(TH1F *hData, TH1F *hMC){
 
   return chi2;
 }
-
+	    */
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-void Load_CollEff_Data(TGraphErrors *gr, string filename){
+void cTopBottom::Load_CollEff_Data(){
 
   //collection efficiency data
   //real data 1 
   ifstream fin;
-  fin.open(filename.c_str());
+  fin.open(fN_CollEff_Data.c_str());
 
   float x[37], y[37], eX[37], eY[37];
   double vuoto =0;
@@ -171,39 +178,77 @@ void Load_CollEff_Data(TGraphErrors *gr, string filename){
   }
 
   for (int i=0;i<36;++i){ //ignore the last entry. I don't know why. But it works
-    gr->SetPoint(i,x[i],y[i]);
-    gr->SetPointError(i,eX2[i],eY2[i]);
+
+  //first argument is topbottom
+    t->Fill(0, 1, x[i], eX2[i], y[i], eY2[i], 0, 0, 0, 0);
+    //gr->SetPoint(i,x[i],y[i]);
+    //gr->SetPointError(i,eX2[i],eY2[i]);
   }
   //cout << gr << endl;
   //gr->Draw("AP");
   
-fin.close();
-
+  fin.close();
+ 
   //TMultiGraph *multi = new TMultiGraph("multi", "top_vs_bottom");
 }
 
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-void Load_TopBottom_Data(TH1F *hTopBottom, string filename){
+void cTopBottom::Load_TopBottom_Data(){
 
  //real data 2 
   //TH2D *asym = new TH2D("asym","",120,0,3750, 30,0, 3.3 );
-  TFile *_file1 = TFile::Open(filename.c_str());
+  TFile *_file1 = TFile::Open(fN_TopBottom_Data.c_str());
   TH2D *asymm = (TH2D*) _file1->Get("asymm");
-  
-
-  for (int i=1;i<61;++i){  
-     float toplight= asymm->ProjectionY("bb",i,i)->GetMaximumBin()*asymm->GetYaxis()->GetBinWidth(3) ; 
-     hTopBottom->SetBinContent(61-i, toplight/(toplight+1) );
-    }
+  TH1D *dim=(TH1D *)asymm->ProjectionX("dim",1,1); //just to get the dimensions correctly: the number of bins and the z-coordinate
+ 
+  float z=0;
+  for (int i=1;i<dim->GetNbinsX();++i){  
+    //toplight= asymm->ProjectionY("bb",i,i)->GetMean(); 
+    asymm->ProjectionY(Form("bb_%d",i),i,i);
+    TH1F *h = (TH1F *)gDirectory->Get(Form("bb_%d",i));
+    z=dim->GetXaxis()->GetBinCenter(i);
+    Fit_TopBottom(h, z, 1);
+  }
 
   _file1->Close();
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-void Load_MC(TGraph *grCollEff_MC, TH1F *hTopBottom, const string filename){
+void cTopBottom::Fit_TopBottom(TH1F *h, float z, bool dataMC){
+
+  float toplight = 0;
+  float toplight_e = 0;
+  float topbottom = 0;
+  float topbottom_e = 0;
+  
+  h->Fit("gaus","Q","",h->GetMean()-1.5*h->GetRMS(),h->GetMean()+1.5*h->GetRMS());
+  TF1 *g=(TF1*)h->GetFunction("gaus");
+  //cout << Form("%f +- %f, %f +- %f, ", g->GetParameter(1), g->GetParError(1), g->GetParameter(2), g->GetParError(2)) << g->GetChisquare() << ", " << g->GetNDF() << endl;
+  toplight=g->GetParameter(1);
+  
+  //increase the uncertainty dx by sqrt(chi2/ndf);
+  //do that later
+  toplight_e = g->GetParError(1); //*sqrt(g->GetChisquare()/g->GetNDF());
+  
+  //error:
+  //dy/y = dx/x/(x+1)
+  topbottom = toplight/(toplight+1);
+  topbottom_e = topbottom*toplight_e/toplight/(toplight+1);
+  
+  //first argument is topbottom
+  //t->Fill(1, static_cast<int>(dataMC), z,0, g->GetParameter(1), g->GetParError(1), g->GetParameter(2), g->GetParError(2), g->GetChisquare(), g->GetNDF());
+  t->Fill(1, static_cast<int>(dataMC), z,0, topbottom, topbottom_e, 0, 0, g->GetChisquare(), g->GetNDF());
+
+  //hTopBottom_Fit->SetBinContent(61-i, toplight/(toplight+1) );
+
+}
+
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+void cTopBottom::Load_MC(){
   //Reset ROOT and connect tree file
-  TFile *_file0 = TFile::Open(filename.c_str());
+  TFile *_file0 = TFile::Open(inMCname.c_str());
   TTree *dstree = (TTree*) _file0->Get("dstree");
   
   
@@ -362,59 +407,59 @@ Float_t         radius;
 
    Long64_t nentries = dstree->GetEntries();
 
-   TH1F *hCollEff_MC = new TH1F("hCollEff_MC","",grCollEff_MC->GetN(),-80,270);
-   TH1F *ht = (TH1F *)hTopBottom->Clone();
-   TH1F *hb = (TH1F *)hTopBottom->Clone();
+   //get the dimensions of npe from the dstree itself
+   dstree->Draw("npe>>dim", "", "goff");
+   TH1F *dim = (TH1F *)gDirectory->Get("dim"); //just to get the dimensions correct below
+
+   TH2F *hCollEff_MC = new TH2F("hCollEff_MC","",bins,-80,270, dim->GetXaxis()->GetNbins(), dim->GetMean()-4*dim->GetRMS(), dim->GetMean()+4*dim->GetRMS());
+   //TH1F *ht = (TH1F *)hTopBottom->Clone();
+   //TH1F *hb = (TH1F *)hTopBottom->Clone();
+
+   //where are these numbers coming from?
+  double midpos =  (275+83)/2.;
+  double offset = 275.;
 
    Long64_t nbytes = 0;
    for (Long64_t ik=0; ik<nentries;ik++) {
       nbytes += dstree->GetEntry(ik);
       hCollEff_MC->Fill(z,npe);
+      /*
       for(int i=0;i<npe;++i) {
         if(pe_pmt[i] < 19) ht->Fill(z);
 	else               hb->Fill(z);
       }
+      */
    }
 
+   float zCoord=0;
+   for(int i=0;i<hCollEff_MC->GetXaxis()->GetNbins();++i){
+     hCollEff_MC->ProjectionY(Form("xx_%d",i),i,i);
+     TH1F *h=(TH1F *)gDirectory->Get(Form("xx_%d",i));
+     zCoord = hCollEff_MC->GetXaxis()->GetBinCenter(i); //to distinguish it from the 'z' variable in the dstree
+     Fit_TopBottom(h,(offset - zCoord)/midpos, 0); //THIS IS WRONG TOPBOTTOM should be COLLEFF
+   }
+
+   /*
+   //TopBottom
   float content;
   int nbins= hTopBottom->GetXaxis()->GetNbins()+1;
   for(int i=1;i<nbins;++i) {
     content=ht->GetBinContent(i);
     if(hb->GetBinContent(i)+content>0) {
       hTopBottom->SetBinContent(i,content/float(hb->GetBinContent(i) + content));
+      
     } else {
       cout << "warning: bin " << i << ", denominator: " << hb->GetBinContent(i)+content << endl;
     }
   }
-
-
-
-   //refill hCollEff_MC into a TGraph:
-  hCollEff_MC->Scale(1./hCollEff_MC->GetBinContent(hCollEff_MC->FindBin(99.)));
-  //hCollEff_MC->GetYaxis()->SetRangeUser(hCollEff_MC->GetMinimum()*0.75, hCollEff_MC->GetMaximum()*1.14);
-  //hCollEff_MC->GetYaxis()->SetRangeUser(0.85, 1.15);
-  //cout << fun->Eval(-100)/fun->Eval(250) << endl;
-  
-  //hCollEff_MC->SetMarkerStyle(2);
-  double midpos =  (275+83)/2.;
-  double offset = 275.;
-
-  grCollEff_MC->SetNameTitle("grCollEff_MC","coll. eff relative to center (MC)");
-  for(int i=1;i<hCollEff_MC->GetXaxis()->GetNbins()+1;++i) {
-    double pos = hCollEff_MC->GetBinCenter(i);
-    //int bin = hnew->FindBin((offset - pos)/midpos);
-    //hnew->SetBinContent(bin,hCollEff_MC->GetBinContent(i));
-    //cout << i-1 << ", " << (offset - pos)/midpos << ", " <<  hCollEff_MC->GetBinContent(i) << endl;
-    grCollEff_MC->SetPoint(i-1,(offset - pos)/midpos, hCollEff_MC->GetBinContent(i));
-  }
-
+   */
 
    _file0->Close();
 }
 
-
+/*
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-void Draw_CollEff(TGraphErrors *grData, TGraph *grMC, TCanvas *cc){
+void cTopBottom::Draw_CollEff(TGraphErrors *grData, TGraph *grMC, TCanvas *cc){
 
   cc->cd(1);
 
@@ -436,6 +481,9 @@ void Draw_CollEff(TGraphErrors *grData, TGraph *grMC, TCanvas *cc){
 
   mg->Add(grData, "p");
 
+  mg->Draw("a");
+  mg->GetYaxis()->SetRangeUser(0.85,1.15);
+  //mg->GetYaxis()->SetMaximum(1.15);
   mg->Draw("a");
   //grData->Draw("p");
 
@@ -494,4 +542,5 @@ void Draw_TopBottom(TH1F *hData, TH1F *hMC, TCanvas *cc){
    ptTop2->Draw();
 
 }
+*/
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

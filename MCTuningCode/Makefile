@@ -25,8 +25,7 @@ $(objects): %.exe: %.o
 	@echo '<< compiling' $< '>>'
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-#%.o: %.C %.h
-%.o: %.C
+%.o: %.C %.h
 	@echo '<< compiling' $< '>>'
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
