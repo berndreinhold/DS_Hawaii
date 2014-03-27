@@ -1,0 +1,14 @@
+# Macro file for the visualization setting inthe initialization phase
+# of testApp
+
+/vis/open OGL 600x600-0+0
+
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+
+/vis/drawVolume
+
+/vis/scene/add/trajectories smoot
+/vis/scene/add/hits
+/vis/scene/endOfEventAction accumulate
+/vis/viewer/flush

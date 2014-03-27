@@ -1,0 +1,21 @@
+# Macro file for testApp
+
+# Can be run in batch, without graphic
+# or interactively via: Idle> /control/execute run.mac
+
+/control/verbose 2
+
+/run/verbose 2
+/event/verbose 0
+/tracking/verbose 1
+
+/gun/particle gamma
+/gun/energy 6 MeV
+
+/run/beamOn 5
+
+/gun/particle proton
+/gun/energy/210 MeV
+/tracking/verbose 2
+
+/run/beamOn 1
