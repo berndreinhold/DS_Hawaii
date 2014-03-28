@@ -2,7 +2,7 @@
 @date March 25, 2014
 @analysis chain used to do MC tuning of G4DS
 
-configure one of the MCTuning*py scripts and call as:
+configure one of the MCTuning*.py scripts and call as:
 -----------------------------------------------------
 python main_script.py &> GridSteelRindScale_output.log &
 
@@ -12,6 +12,16 @@ python main_script.py &> GridSteelRindScale_output.log &
 - plot.py (analysis_step3.py) collects the chi2, ndf for all parameter values and plots the chi2 as a function of the parameter for TopBottom and CollEff separately (and possibly future other indicators).
 
 there is quite complicated refilling of data going on. I decided to refill the data TH2D histogram once and for all with Refill_MCTuning_Data.C
+
+- In the optical.mac individual photons are simulated throughout the TPC volume. Unlike for Krypton or Argon, where all light originates in one poilt (to first order).
+- An optical photon per event makes the calculation of PE and top/bottom asymmetries different than for gamma or electron sources. Therefore there are different functions for optical photons and for (future) gamma sources:
+  void MC_TopBottom(); //krypton85
+  void MC_TopBottom_Optical(); //optical photons
+  void MC_CollEff();
+  void MC_CollEff_Optical();
+
+- In the collection efficiency plot the statistical uncertainty of the MC for 10^6 photons was too big, it was comparable or bigger than the data uncertainty. Therefore I will simulate now 10^7 photons by default.
+
 
 control "scripts":
 ------------------
