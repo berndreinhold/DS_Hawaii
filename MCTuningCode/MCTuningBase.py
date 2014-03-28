@@ -10,7 +10,7 @@ class MCTuning:
 
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
     def __init__(self):
-        self._nevents = 1e6
+        self._nevents = 1e7
         print "number of events: %.f" % self._nevents
         self._parameters()
         
@@ -32,7 +32,7 @@ class MCTuning:
     def _parameters(self):
         #parameters:
         self._par1_name="GridSteelRindScale"
-        self._par1_min = 0.7
+        self._par1_min = 1.2
         self._par1_max = 1.3
         self._par1_step=0.1
         self._par1_linlog="lin" #linear or log scale, default is "lin", if "lin": step is applied additively, if "log": step is applied multiplicatively
@@ -156,7 +156,7 @@ class MCTuning:
         os.system("mkdir %s" % self._output_dir)
         
         self._sJobLabel_Prefix= self._par1_name
-        fOut = open("%s/%s.txt" % (self._output_dir, self._sJobLabel_Prefix), 'w') #aggregate file: parameter, chi2, can only be filled, if _OneConfig() is run
+        fOut = open("%s/chi2_%s.txt" % (self._output_dir, self._sJobLabel_Prefix), 'w') #aggregate file: parameter, chi2, can only be filled, if _OneConfig() is run
         for i in self._valuelist:
             #print i
             format_string = "%s_"
@@ -164,7 +164,7 @@ class MCTuning:
             self._sJobLabel = format_string % (self._sJobLabel_Prefix, i)
             print "sJobLabel: ", self._sJobLabel
 
-            if 1: #data production
+            if 0: #data production
                 self._DSOptics(i)
                 self._G4DS()
                 self._G4ROOTER()
