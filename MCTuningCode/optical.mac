@@ -11,10 +11,10 @@
 # options: debugging, development, trace, routine, warning, error
 # default: routine
 #/ds/manager/log development
-/ds/manager/log trace
+/ds/manager/log routine
 /ds/manager/verbosity -1
 /ds/manager/checkoverlap 0
-/ds/manager/eventcounter 1000
+/ds/manager/eventcounter 50000
 /ds/manager/writephotons 0
 /ds/manager/writedeposits 1
 /ds/manager/writedaughters 0
@@ -25,7 +25,7 @@
 
 # Define output file name
 #/run/filename /sps/dchooz/reinhold/DS/data/Ar39_1M
-/run/filename /sps/dchooz/reinhold/DS/data/Optical_10M
+/run/filename /scratch/darkside/reinhol1/Optical_1M
 
 #/ds/physics/HPRangeCuts false
 
@@ -70,4 +70,4 @@
 
 
 # Define the number of events
-/run/beamOn 10000000
+/run/beamOn 1000000
