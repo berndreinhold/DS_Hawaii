@@ -29,20 +29,33 @@ void TopBottom() {
   //asymm_raw->Draw("colz");
 
   //identical, finally!
-  TH2D *asymm_new = new TH2D("asymm_new","",asymm_raw->GetNbinsX(), hX->GetXaxis()->GetBinLowEdge(1),hX->GetXaxis()->GetBinUpEdge(hX->GetNbinsX()), asymm_raw->GetNbinsY(), hY->GetXaxis()->GetBinLowEdge(1),hY->GetXaxis()->GetBinUpEdge(hY->GetNbinsX()));
+  //TH2D *asymm_new = new TH2D("asymm_new","",asymm_raw->GetNbinsX(), hX->GetXaxis()->GetBinLowEdge(1),hX->GetXaxis()->GetBinUpEdge(hX->GetNbinsX()), asymm_raw->GetNbinsY(), hY->GetXaxis()->GetBinLowEdge(1),hY->GetXaxis()->GetBinUpEdge(hY->GetNbinsX()));
 
   //refill the variable asymm (which is toplight/bottomlight) to top/(top+bottom) and also shift the z-coordinate
   //from Paolo/Davide's plotter.C
-  //TH2D *asymm_new = new TH2D("asymm_new","",asymm_raw->GetNbinsX(), 10-85,360-85, asymm_raw->GetNbinsY(), 0.1, 0.9);
+  TH2D *asymm_temp = new TH2D("asymm_temp","",asymm_raw->GetNbinsX(), 10-85,360-85, asymm_raw->GetNbinsY(), 0.1, 0.9);
+  TH2D *asymm_new = new TH2D("asymm_new","",asymm_raw->GetNbinsX(), 10-85,360-85, asymm_raw->GetNbinsY(), 0.1, 0.9);
 
 
 
   //TH2D *asymm_new = (TH2D *)asymm_raw->Clone();
-  for(int i=0;i<asymm_raw->GetNbinsX()+1;++i){
+  for(int i=0;i<asymm_raw->GetNbinsX()+2;++i){
     cout << "."; cout.flush();
-    for(int j=0;j<asymm_raw->GetNbinsY()+1;++j){
+    for(int j=0;j<asymm_raw->GetNbinsY()+2;++j){
       //      asymm_new->SetBinContent(i,j, asymm_raw->GetBinContent(i,j));
-      asymm_new->SetBinContent(i,j, asymm_raw->GetBinContent(i,j)/(asymm_raw->GetBinContent(i,j)+1));
+      asymm_temp->SetBinContent(i,j, asymm_raw->GetBinContent(i,j)/(asymm_raw->GetBinContent(i,j)+1));
+    }
+  }
+  cout << endl;
+
+
+  //now mirror it at the y-axis:
+  int nX=asymm_temp->GetNbinsX();
+  for(int j=0;j<asymm_temp->GetNbinsY()+2;++j){
+    cout << "."; cout.flush();
+    for(int i=0;i<nX+2;++i){
+      //      asymm_new->SetBinContent(i,j, asymm_raw->GetBinContent(i,j));
+      asymm_new->SetBinContent(i,j, asymm_temp->GetBinContent(nX+1-i,j)/(asymm_temp->GetBinContent(nX+1-i,j)+1));
     }
   }
   cout << endl;

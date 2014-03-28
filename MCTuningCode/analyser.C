@@ -36,16 +36,28 @@ cTopBottom::cTopBottom(string inname):bins(11),inMCname(inname) {
 
   outfilename=inMCname.substr(0, inMCname.length()-5)+"_output.root"; //inserts '_output'
   fOut=new TFile(outfilename.c_str(), "RECREATE");
-  t=new TNtuple("tOut","contains all the variables to make the Paolo's and Davide's plots (DocDB xxx) and to calculate the chi2 (this is new).","topbottom:dataMC:z:z_e:par1:par1_e:rms_par1:rms_par1_e:chi2:ndf");
+  t=new TNtuple("tOut","contains all the variables to make the Paolo's and Davide's plots (DocDB 831) and to calculate the chi2 (this is new).","topbottom:dataMC:z:z_e:par1:par1_e:rms_par1:rms_par1_e:chi2:ndf");
+
+  Setup_MCTree();
 
   fN_CollEff_Data=Form("%s/realdata.dat", getenv("DATA_G4DS"));
-  fN_TopBottom_Data="$DATA_G4DS/analysisKr2.root";
+  fN_TopBottom_Data="$DATA_G4DS/analysisKr2_new.root";
+
+  cc = new TCanvas("cc" ,"", 1000, 850);
+  cc->Divide(1,2);
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 cTopBottom::~cTopBottom() {
+
+  fOut->cd();
+  cc->Write();
+  t->Write();
+
   fOut->Close();
   cout << "outfile: " << outfilename << endl;
+
+  fMC->Close();
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -65,7 +77,11 @@ void cTopBottom::analyser() {
 
   //TGraph *grCollEff_MC=new TGraph(bins);
   //TH1F *hTopBottom_MC = new TH1F("hTopBottom_MC","",bins,-80,270); //top PMTs
-  Load_MC(); //fills 
+
+  
+  MC_CollEff_Optical();
+  MC_TopBottom_Optical();
+  
   //float chi2_colleff = Chi2_CollEff(grCollEff_data, grCollEff_MC); //number of points used in the chi2 as defined in MC, fit errors are ignored for now.
 
   //TH1F *hTopBottom_Data = new TH1F("hTopBottom_Data","",60,10-85,360-85);
@@ -73,26 +89,22 @@ void cTopBottom::analyser() {
   //float chi2_topbottom = Chi2_TopBottom(hTopBottom_Data, hTopBottom_MC); //number of points used in the chi2 as defined in data, errors are ignored for now.
 
   string picname=inMCname.substr(0, inMCname.length()-5); //reomoves the ".root"
-
-  TCanvas *cc = new TCanvas("cc" ,"", 1000, 850);
-  cc->Divide(1,2);
-  //Draw_CollEff(grCollEff_data, grCollEff_MC, cc);
-  //Draw_TopBottom(hTopBottom_Data, hTopBottom_MC, cc);
-
+  
+  cc->cd(1);
+  Draw_CollEff();
+  cc->cd(2);
+  Draw_TopBottom();
+  
   if(picname!=""){
     cc->SaveAs((picname+".C").c_str());
     cc->SaveAs((picname+".png").c_str());
   }
 
-  fOut->cd();
-  cc->Write();
-  t->Write();
-
   //store the chi2 of CoffEff and TopBottom in there
   ofstream f((picname+".txt").c_str());
   //f << chi2_colleff << ", " << chi2_topbottom << endl;
   f.close();
-
+  
 }
 
 /*
@@ -199,137 +211,39 @@ void cTopBottom::Load_TopBottom_Data(){
  //real data 2 
   //TH2D *asym = new TH2D("asym","",120,0,3750, 30,0, 3.3 );
   TFile *_file1 = TFile::Open(fN_TopBottom_Data.c_str());
-  TH2D *asymm = (TH2D*) _file1->Get("asymm");
-  TH1D *dim=(TH1D *)asymm->ProjectionX("dim",1,1); //just to get the dimensions correctly: the number of bins and the z-coordinate
+  TH2D *asymm = (TH2D*) _file1->Get("asymm_new");
+  //asymm_new was calculated from asymm-TH2D (in the script Refill_MCTuning_Data.C): asymm showed top/bottom, whereas asymm_new has top/(top+bottom) as variable, which is what we want to plot here.
+  //by calculating the correct variable first (rather than after the fit), the fit gets the mean and RMS with its uncertainties correct, rather than having to do error propagation manually.
+
+  TH1D *dim=(TH1D *)asymm->ProjectionX("dim",1,1); //just to get the dimensions in z (which is on the x-axis) correctly: the number of bins and the z-coordinate
  
   float z=0;
-  for (int i=1;i<dim->GetNbinsX();++i){  
+  int mergebins=4;   //merge 4 bins for better statistics
+  for (int i=1;i<dim->GetNbinsX() && i+mergebins<dim->GetNbinsX();i+=mergebins){  
     //toplight= asymm->ProjectionY("bb",i,i)->GetMean(); 
-    asymm->ProjectionY(Form("bb_%d",i),i,i);
+    asymm->ProjectionY(Form("bb_%d",i),i,i+mergebins-1); //list bin included (http://root.cern.ch/root/html/TH2.html#TH2:ProjectionY)
     TH1F *h = (TH1F *)gDirectory->Get(Form("bb_%d",i));
-    z=dim->GetXaxis()->GetBinCenter(i);
-    Fit_TopBottom(h, z, 1);
+    //z=dim->GetXaxis()->GetBinCenter(i+2); //since mergebins is 5 (even)
+    z=dim->GetXaxis()->GetBinUpEdge(i+1); //since mergebins is 4 (odd)
+
+    h->Fit("gaus","Q","",h->GetMean()-1.5*h->GetRMS(),h->GetMean()+1.5*h->GetRMS());
+    h->Write();
+    TF1 *g=(TF1*)h->GetFunction("gaus");
+    t->Fill(1, 1, z,0, g->GetParameter(1), g->GetParError(1), g->GetParameter(2), g->GetParError(2), g->GetChisquare(), g->GetNDF());
+    
   }
 
   _file1->Close();
 }
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-void cTopBottom::Fit_TopBottom(TH1F *h, float z, bool dataMC){
-
-  float toplight = 0;
-  float toplight_e = 0;
-  float topbottom = 0;
-  float topbottom_e = 0;
-  
-  h->Fit("gaus","Q","",h->GetMean()-1.5*h->GetRMS(),h->GetMean()+1.5*h->GetRMS());
-  TF1 *g=(TF1*)h->GetFunction("gaus");
-  //cout << Form("%f +- %f, %f +- %f, ", g->GetParameter(1), g->GetParError(1), g->GetParameter(2), g->GetParError(2)) << g->GetChisquare() << ", " << g->GetNDF() << endl;
-  toplight=g->GetParameter(1);
-  
-  //increase the uncertainty dx by sqrt(chi2/ndf);
-  //do that later
-  toplight_e = g->GetParError(1); //*sqrt(g->GetChisquare()/g->GetNDF());
-  
-  //error:
-  //dy/y = dx/x/(x+1)
-  topbottom = toplight/(toplight+1);
-  topbottom_e = topbottom*toplight_e/toplight/(toplight+1);
-  
-  //first argument is topbottom
-  //t->Fill(1, static_cast<int>(dataMC), z,0, g->GetParameter(1), g->GetParError(1), g->GetParameter(2), g->GetParError(2), g->GetChisquare(), g->GetNDF());
-  t->Fill(1, static_cast<int>(dataMC), z,0, topbottom, topbottom_e, 0, 0, g->GetChisquare(), g->GetNDF());
-
-  //hTopBottom_Fit->SetBinContent(61-i, toplight/(toplight+1) );
-
-}
-
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-void cTopBottom::Load_MC(){
+void cTopBottom::Setup_MCTree(){
   //Reset ROOT and connect tree file
-  TFile *_file0 = TFile::Open(inMCname.c_str());
-  TTree *dstree = (TTree*) _file0->Get("dstree");
+  fMC = TFile::Open(inMCname.c_str());
+  dstree = (TTree*) fMC->Get("dstree");
   
   
-  //Declaration of leaves types
-   Int_t           ev;
-   //Int_t           pdg;
-   //Float_t         ene0;
-   /*
-   Float_t         s1ene;
-   Float_t         s2ene;
-   Float_t         veto_visene;
-   Float_t         mu_visene;
-   Float_t         tpcene;
-   Float_t         vetoene;
-   Float_t         muene;
-   Float_t         ene;
-   Float_t         x;
-   Float_t         y;
-
-   */
-   Float_t         z;   
-   /*
-Float_t         radius;
-   Float_t         px;
-   Float_t         py;
-   Float_t         pz;
-   Float_t         bx;
-   Float_t         by;
-   Float_t         bz;
-   */
-   Int_t           npe;
-   /*
-     Int_t           munpe;
-   Int_t           vnpe;
-   Int_t           nph;
-   Int_t           ndaughters;
-   Int_t           ndeposits;
-   Int_t           nusers;
-   Int_t           dau_id[0];
-   Int_t           dau_pdg[0];
-   Int_t           dau_pid[0];
-   Int_t           dau_process[0];
-   Double_t        dau_time[0];
-   Float_t         dau_ene[0];
-   Float_t         dau_x[0];
-   Float_t         dau_y[0];
-   Float_t         dau_z[0];
-   Float_t         dau_r[0];
-   Float_t         dau_px[0];
-   Float_t         dau_py[0];
-   Float_t         dau_pz[0];
-   Int_t           dep_pdg[0];
-   Int_t           dep_mat[0];
-   Double_t        dep_time[0];
-   Float_t         dep_ene[0];
-   Float_t         dep_step[0];
-   Float_t         dep_x[0];
-   Float_t         dep_y[0];
-   Float_t         dep_z[0];
-   Float_t         dep_r[0];
-   Int_t           userint1[1];
-   Int_t           userint2[1];
-   Float_t         userfloat1[1];
-   Float_t         userfloat2[1];
-   Double_t        userdouble0[1];
-   Double_t        pe_time[259];
-   */
-   Int_t           pe_pmt[259];
-   /*
-   Double_t        vpe_time[0];
-   Int_t           vpe_pmt[0];
-   Double_t        mupe_time[0];
-   Int_t           mupe_pmt[0];
-   Int_t           ph_volume[0];
-   Int_t           ph_pid[0];
-   Float_t         ph_wl[0];
-   Float_t         ph_x[0];
-   Float_t         ph_y[0];
-   Float_t         ph_z[0];
-   Double_t        ph_time[0];
-*/
    // Set branch addresses.
    dstree->SetBranchAddress("ev",&ev);
    /*dstree->SetBranchAddress("pdg",&pdg);
@@ -405,38 +319,116 @@ Float_t         radius;
 // dstree->SetBranchStatus("*",0);  // disable all branches
 // TTreePlayer->SetBranchStatus("branchname",1);  // activate branchname
 
-   Long64_t nentries = dstree->GetEntries();
+}
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+void cTopBottom::MC_CollEff(){
 
    //get the dimensions of npe from the dstree itself
    dstree->Draw("npe>>dim", "", "goff");
    TH1F *dim = (TH1F *)gDirectory->Get("dim"); //just to get the dimensions correct below
 
    TH2F *hCollEff_MC = new TH2F("hCollEff_MC","",bins,-80,270, dim->GetXaxis()->GetNbins(), dim->GetMean()-4*dim->GetRMS(), dim->GetMean()+4*dim->GetRMS());
-   //TH1F *ht = (TH1F *)hTopBottom->Clone();
-   //TH1F *hb = (TH1F *)hTopBottom->Clone();
 
-   //where are these numbers coming from?
+   //where are these numbers coming from? Where did Paolo and Davide get these from?
   double midpos =  (275+83)/2.;
   double offset = 275.;
 
+   Long64_t nentries = dstree->GetEntries();
    Long64_t nbytes = 0;
    for (Long64_t ik=0; ik<nentries;ik++) {
       nbytes += dstree->GetEntry(ik);
       hCollEff_MC->Fill(z,npe);
-      /*
-      for(int i=0;i<npe;++i) {
-        if(pe_pmt[i] < 19) ht->Fill(z);
-	else               hb->Fill(z);
-      }
-      */
    }
 
    float zCoord=0;
-   for(int i=0;i<hCollEff_MC->GetXaxis()->GetNbins();++i){
-     hCollEff_MC->ProjectionY(Form("xx_%d",i),i,i);
-     TH1F *h=(TH1F *)gDirectory->Get(Form("xx_%d",i));
+   for(int i=1;i<hCollEff_MC->GetXaxis()->GetNbins()+1;++i){
+     hCollEff_MC->ProjectionY(Form("hCollEff_MC_%d",i),i,i);
+     TH1F *h=(TH1F *)gDirectory->Get(Form("hCollEff_MC_%d",i));
      zCoord = hCollEff_MC->GetXaxis()->GetBinCenter(i); //to distinguish it from the 'z' variable in the dstree
-     Fit_TopBottom(h,(offset - zCoord)/midpos, 0); //THIS IS WRONG TOPBOTTOM should be COLLEFF
+     h->Fit("gaus","Q","",h->GetMean()-1.5*h->GetRMS(),h->GetMean()+1.5*h->GetRMS());
+     TF1 *g=(TF1*)h->GetFunction("gaus");
+     //cout << Form("%f +- %f, %f +- %f, ", g->GetParameter(1), g->GetParError(1), g->GetParameter(2), g->GetParError(2)) << g->GetChisquare() << ", " << g->GetNDF() << endl;
+  
+     //first argument is topbottom, second is dataMC
+     t->Fill(0, 0, (offset - zCoord)/midpos, 0, g->GetParameter(1), g->GetParError(1), g->GetParameter(2), g->GetParError(2), g->GetChisquare(), g->GetNDF());
+
+   }
+
+}
+
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+void cTopBottom::MC_CollEff_Optical(){
+
+   TH1F *hCollEff_MC = new TH1F("hCollEff_MC","",bins,-80,270);
+
+   //where are these numbers coming from? Where did Paolo and Davide get these from?
+  double midpos =  (275+83)/2.;
+  double offset = 275.;
+
+   Long64_t nentries = dstree->GetEntries();
+   Long64_t nbytes = 0;
+   for (Long64_t ik=0; ik<nentries;ik++) {
+      nbytes += dstree->GetEntry(ik);
+      hCollEff_MC->Fill(z,npe);
+   }
+
+   hCollEff_MC->Sumw2();
+   hCollEff_MC->Scale(1./hCollEff_MC->GetBinContent(hCollEff_MC->FindBin(99.))); //99. is the midpoint 
+
+   float zCoord=0;
+   for(int i=1;i<hCollEff_MC->GetXaxis()->GetNbins()+1;++i){
+     zCoord = hCollEff_MC->GetBinCenter(i);
+     //first argument is topbottom, second is dataMC
+     t->Fill(0, 0, (offset - zCoord)/midpos, 0, hCollEff_MC->GetBinContent(i), hCollEff_MC->GetBinError(i), 0,0,0,0);
+
+   }
+
+}
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+void cTopBottom::MC_TopBottom(){
+  //this could be used for krypton, but not for optical photons
+   Long64_t nentries = dstree->GetEntries();
+   cout << "MC tree entries: " << nentries << endl;
+
+   TH2F *hTB  = new TH2F("hTB","",bins,-80,270, 100, 0.1, 0.9);
+
+  int fT=0;//PE in top PMTs
+  int fB=0;//PE in bottom PMTs
+
+   Long64_t nbytes = 0;
+   for (Long64_t ik=0; ik<nentries;ik++) {
+      nbytes += dstree->GetEntry(ik);
+      fT=0;
+      fB=0;
+      for(int i=0;i<npe;++i) { //this loop takes long
+        if(pe_pmt[i] < 19) fT++; //PMT number
+	else               fB++;
+      }
+      if(fT+fB!=npe) cout << Form("fT+fB: %d, npe: %d", fT+fB, npe) << endl;
+      if(fB+fT>0) hTB->Fill(z,fT*1.0/(fT+fB));
+      
+   }
+
+   fOut->cd();
+   float zCoord=0;
+   //TopBottom
+   for(int i=1;i<hTB->GetXaxis()->GetNbins()+1;++i){
+     hTB->ProjectionY(Form("hTB_%d",i),i,i);
+     TH1F *h=(TH1F *)gDirectory->Get(Form("hTB_%d",i));
+     zCoord = hTB->GetXaxis()->GetBinCenter(i); //to distinguish it from the 'z' variable in the dstree
+     cout << "h->GetEntries():" << h->GetEntries() << ", zCoord: " << zCoord << endl;
+     cout << "h->GetMean():" << h->GetMean() << ", h->GetRMS(): " << h->GetRMS() << endl;
+
+     h->Fit("gaus","V","",h->GetMean()-1.5*h->GetRMS(),h->GetMean()+1.5*h->GetRMS());
+     TF1 *g=(TF1*)h->GetFunction("gaus");
+     //cout << Form("%f +- %f, %f +- %f, ", g->GetParameter(1), g->GetParError(1), g->GetParameter(2), g->GetParError(2)) << g->GetChisquare() << ", " << g->GetNDF() << endl;
+     //first argument is topbottom, second: dataMC
+     t->Fill(1, 0, zCoord,0, g->GetParameter(1), g->GetParError(1), g->GetParameter(2), g->GetParError(2), g->GetChisquare(), g->GetNDF());
+     //t->Fill(1, 0, zCoord,0, topbottom, topbottom_e, 0, 0, g->GetChisquare(), g->GetNDF());
+
    }
 
    /*
@@ -454,74 +446,150 @@ Float_t         radius;
   }
    */
 
-   _file0->Close();
 }
 
-/*
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+void cTopBottom::MC_TopBottom_Optical(){
+   Long64_t nentries = dstree->GetEntries();
+   cout << "MC tree entries: " << nentries << endl;
+
+   TH1F *hT  = new TH1F("hT","",bins,-80,270);
+   TH1F *hTB  = new TH1F("hTB","",bins,-80,270);
+
+   Long64_t nbytes = 0;
+   for (Long64_t ik=0; ik<nentries;ik++) {
+      nbytes += dstree->GetEntry(ik);
+      for(int i=0;i<npe;++i) { //this loop takes long
+        if(pe_pmt[i] < 19) hT->Fill(z);
+	hTB->Fill(z);
+      }
+      //if(fT+fB!=npe) cout << Form("fT+fB: %d, npe: %d", fT+fB, npe) << endl;
+      //if(fB+fT>0) hTB->Fill(z,fT*1.0/(fT+fB));
+      
+   }
+
+   hT->Sumw2();
+   hT->Divide(hTB);
+
+   float zCoord=0;
+   for(int i=1;i<hT->GetNbinsX();++i){
+     zCoord = hT->GetBinCenter(i); //to distinguish it from the 'z' variable in the dstree
+     //first argument is topbottom, second: dataMC
+     t->Fill(1, 0, zCoord,0, hT->GetBinContent(i), hT->GetBinError(i), 0,0,0,0);
+     //t->Fill(1, 0, zCoord,0, topbottom, topbottom_e, 0, 0, g->GetChisquare(), g->GetNDF());
+
+   }
+
+}
+
+
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-void cTopBottom::Draw_CollEff(TGraphErrors *grData, TGraph *grMC, TCanvas *cc){
-
-  cc->cd(1);
-
-  
-  grMC->SetMarkerColor(2);
-  grMC->SetMarkerStyle(2);
-  grMC->SetLineColor(2);
-  grMC->SetLineWidth(2);
-  //hnew->GetYaxis()->SetRangeUser(0.85, 1.15);
-
+void cTopBottom::Draw_CollEff(){
 
   TMultiGraph *mg=new TMultiGraph();
+  mg->SetNameTitle("mgCollEff","collection efficiency");
+  //MC:
+  t->Draw("z:par1:z_e:par1_e","topbottom==0 && dataMC==0","goff");
+
+  TGraphErrors *grMC=new TGraphErrors(t->GetSelectedRows(),t->GetV1(),t->GetV2(),t->GetV3(),t->GetV4());
+  grMC->SetNameTitle("grCollEff_MC", "collection efficiency (MC)");
+
+  grMC->SetMarkerColor(kRed);
+  grMC->SetMarkerStyle(2); 
+  grMC->SetLineColor(2);
+  grMC->SetLineWidth(2);
   mg->Add(grMC, "pl");
 
-  grData->SetMarkerColor(4);
+  //DATA:
+  t->Draw("z:par1:z_e:par1_e","topbottom==0 && dataMC==1");
+  TGraphErrors *grData=new TGraphErrors(t->GetSelectedRows(),t->GetV1(),t->GetV2(),t->GetV3(),t->GetV4());
+  grData->SetNameTitle("grCollEff_Data", "collection efficiency (data)");
+
+  grData->SetMarkerColor(kBlue);
   grData->SetLineColor(4);
   grData->SetMarkerStyle(7);
-  grData->SetLineWidth(1);
-
+  grData->SetLineWidth(2);
   mg->Add(grData, "p");
 
   mg->Draw("a");
   mg->GetYaxis()->SetRangeUser(0.85,1.15);
   //mg->GetYaxis()->SetMaximum(1.15);
   mg->Draw("a");
-  //grData->Draw("p");
+
+  TPaveText *ptTop1 = new TPaveText(0.2,0.8,0.21,0.81,"bcNDC");
+  ptTop1->SetName("txtTop1");
+  ptTop1->SetBorderSize(0);
+  ptTop1->SetFillColor(0);
+  ptTop1->SetLineWidth(2);
+  ptTop1->SetTextSize(0.05);
+  ptTop1->AddText("top");
+  ptTop1->Draw();
+
+  TPaveText *ptBottom2 = new TPaveText(0.8,0.3,0.81,0.31,"bcNDC");
+  ptBottom2->SetName("txtBottom11");
+  ptBottom2->SetBorderSize(0);
+  ptBottom2->SetFillColor(0);
+  ptBottom2->SetLineWidth(2);
+  ptBottom2->SetTextSize(0.05);
+  ptBottom2->AddText("bottom");
+  ptBottom2->Draw();
+  
+  fOut->cd();
+  mg->Write();
+  grMC->Write();
+  grData->Write();
 
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-void Draw_TopBottom(TH1F *hData, TH1F *hMC, TCanvas *cc){
+void cTopBottom::Draw_TopBottom(){
   
-   TPaveText *ptTop1 = new TPaveText(0.2,0.8,0.21,0.81,"bcNDC");
-   ptTop1->SetName("txtTop1");
-   ptTop1->SetBorderSize(0);
-   ptTop1->SetFillColor(0);
-   ptTop1->SetLineWidth(2);
-   ptTop1->SetTextSize(0.05);
-   ptTop1->AddText("top");
-   ptTop1->Draw();
+  TMultiGraph *mg=new TMultiGraph();
+  mg->SetNameTitle("mgTopBottom","ratio of light in top and bottom PMTs (S1)");
+  //MC:
+  t->Draw("z:par1:z_e:par1_e","topbottom==1 && dataMC==0");
 
-   TPaveText *ptBottom2 = new TPaveText(0.8,0.3,0.81,0.31,"bcNDC");
-   ptBottom2->SetName("txtBottom11");
-   ptBottom2->SetBorderSize(0);
-   ptBottom2->SetFillColor(0);
-   ptBottom2->SetLineWidth(2);
-   ptBottom2->SetTextSize(0.05);
-   ptBottom2->AddText("bottom");
-   ptBottom2->Draw();
+  TGraphErrors *grMC=new TGraphErrors(t->GetSelectedRows(),t->GetV1(),t->GetV2(),t->GetV3(),t->GetV4());
+  grMC->SetNameTitle("grTopBottom_MC", "top-bottom PMT ratio (MC)");
 
-  
-  //hfinal->GetYaxis()->SetRangeUser(0,3.3);
-  cc->cd(2);
-  hMC->SetMarkerStyle(2);
-  hMC->SetMarkerColor(2);
-  hMC->SetLineColor(2);
-  hMC->GetYaxis()->SetRangeUser(0.1, 0.9);
-  hMC->Draw("PL"); 
-  hData->Draw("pl same");
-  //hData->SetLineColor(4);
-  //hData->Draw("");
-  //_file0->Close();
+  grMC->SetMarkerColor(kRed);
+  grMC->SetMarkerStyle(2); 
+  grMC->SetLineColor(2);
+  grMC->SetLineWidth(2);
+  mg->Add(grMC, "pl");
+
+  //DATA:
+  t->Draw("z:par1:z_e:par1_e","topbottom==1 && dataMC==1");
+
+  vector<float> vZ;
+  vector<float> vZ_e;
+  vector<float> vPar1;
+  vector<float> vPar1_e;
+
+  //fill vector: ignore element with index 0 and revert the sequence:
+
+  for(int i=t->GetSelectedRows()-1;i>0;--i){
+    vZ.push_back(t->GetV1()[i]);
+    vPar1.push_back(t->GetV2()[i]);
+    vZ_e.push_back(t->GetV3()[i]);
+    vPar1_e.push_back(t->GetV4()[i]);
+  }
+
+  int nEvents=t->GetSelectedRows()-1;
+  TGraphErrors *grData=new TGraphErrors(nEvents,&vZ[0],&vPar1[0],&vZ_e[0],&vPar1_e[0]);
+  grData->SetNameTitle("grTopBottom_Data", "top-bottom PMT ratio (data)");
+
+  grData->SetMarkerColor(kBlue);
+  grData->SetLineColor(4);
+  grData->SetMarkerStyle(7);
+  grData->SetLineWidth(2);
+  mg->Add(grData, "p");
+
+  mg->Draw("a");
+  mg->GetYaxis()->SetRangeUser(0.1,0.9);
+  mg->Draw("a");
   
    TPaveText *pt1 = new TPaveText(0.2,0.8,0.21,0.81,"bcNDC");
    pt1->SetName("txtBottom2");
@@ -541,6 +609,11 @@ void Draw_TopBottom(TH1F *hData, TH1F *hMC, TCanvas *cc){
    ptTop2->AddText("top");
    ptTop2->Draw();
 
+  fOut->cd();
+  mg->Write();
+  grMC->Write();
+  grData->Write();
+
 }
-*/
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
