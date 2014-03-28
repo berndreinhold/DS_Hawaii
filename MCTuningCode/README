@@ -11,6 +11,8 @@ python main_script.py &> GridSteelRindScale_output.log &
 - from the data in the ntuple a chi2 is calculated between data and MC. It also produces a textfile with one line: the parameter(s) varied, the chi2 and ndf
 - plot.py (analysis_step3.py) collects the chi2, ndf for all parameter values and plots the chi2 as a function of the parameter for TopBottom and CollEff separately (and possibly future other indicators).
 
+there is quite complicated refilling of data going on. I decided to refill the data TH2D histogram once and for all with Refill_MCTuning_Data.C
+
 control "scripts":
 ------------------
 main-script.py, which calls:
