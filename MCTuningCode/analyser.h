@@ -32,7 +32,7 @@ class cTopBottom{
   //plotter.C provided by Paolo Agnes, APC (March 2014)
   //modified to allow for a chi2 analysis and easier plotting by using multigraph /multi histogram -> automatic choice of correct axes ranges
   
-  float Chi2(const int topbottom); 
+  void Chi2(const int topbottom); 
 
   
 
@@ -44,14 +44,20 @@ class cTopBottom{
   TFile *fMC;
   TFile *fOut; //=new TFile(outfilename.c_str());
   TNtuple *t; //=new TNtuple("tOut","contains all the variables to make the Paolo's and Davide's plots (DocDB xxx) and to calculate the chi2 (this is new).","topbottom:dataMC:z:z_e:par1:par1_e:rms_par1:rms_par1_e:chi2:ndf");
-  TTree *dstree;
-
   TCanvas *cc;
 
   std::string fN_CollEff_Data; //=Form("%s/realdata.dat", getenv("DATA_G4DS"));
   std::string fN_TopBottom_Data; //="$DATA_G4DS/analysisKr2.root";
 
- private: //DSTree
+  //Chi2 for coll eff and top/bottom:
+  float chi2_colleff;
+  float chi2_topbottom;
+  int ndf_colleff;
+  int ndf_topbottom;
+
+
+  TTree *dstree;
+
   //Declaration of leaves types
    Int_t           ev;
    //Int_t           pdg;

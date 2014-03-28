@@ -32,7 +32,7 @@ int main(int argc, char* argv[]){
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-cTopBottom::cTopBottom(string inname):bins(11),inMCname(inname) {
+cTopBottom::cTopBottom(string inname):bins(11),inMCname(inname),chi2_colleff(0),chi2_topbottom(0),ndf_colleff(0),ndf_topbottom(0) {
 
   outfilename=inMCname.substr(0, inMCname.length()-5)+"_output.root"; //inserts '_output'
   fOut=new TFile(outfilename.c_str(), "RECREATE");
@@ -87,9 +87,9 @@ void cTopBottom::analyser() {
 
 
   cout << "coll eff:" << endl;  
-  float chi2_colleff = Chi2(0); //number of points used in the chi2 as defined in MC, errors are used as found in the ntuple
+  Chi2(0); //number of points used in the chi2 as defined in MC, errors are used as found in the ntuple
   cout << "top/bottom:" << endl;  
-  float chi2_topbottom = Chi2(1); 
+  Chi2(1); 
   
   cc->cd(1);
   gPad->SetGrid(1,1);
@@ -106,7 +106,7 @@ void cTopBottom::analyser() {
 
   //store the chi2 of CoffEff and TopBottom in there
   ofstream f((picname+".txt").c_str());
-  f << chi2_colleff << ", " << chi2_topbottom << endl;
+  f << Form("%.3f %.3f %d %d", chi2_colleff, chi2_topbottom, ndf_colleff, ndf_topbottom) << endl;
   f.close();
   
 }
@@ -114,7 +114,7 @@ void cTopBottom::analyser() {
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //TODO: REVIEW - certain assumptions, which might be changed in the future
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-float cTopBottom::Chi2(const int topbottom){
+void cTopBottom::Chi2(const int topbottom){
 
   float uncert_data=0;
   float uncert_MC=0;
@@ -161,13 +161,19 @@ float cTopBottom::Chi2(const int topbottom){
       */
   }
   string prefix = "coll eff";
-  if(topbottom) prefix = "top/bottom";
+  if(topbottom){
+    prefix = "top/bottom";
+    chi2_topbottom=chi2;
+    ndf_topbottom=static_cast<int>(vX.size());
+  } else {
+    chi2_colleff=chi2;
+    ndf_colleff=static_cast<int>(vX.size());
+  }
   cout << Form("%s chi2: %.2f (ndf: %d)",prefix.c_str(), chi2, static_cast<int>(vX.size())) << endl;
 
   delete grData;
   delete grMC;
 
-  return chi2;
 }
 
 /*
