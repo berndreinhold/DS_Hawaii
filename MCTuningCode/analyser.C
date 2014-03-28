@@ -43,8 +43,14 @@ cTopBottom::cTopBottom(string inname):bins(11),inMCname(inname) {
   fN_CollEff_Data=Form("%s/realdata.dat", getenv("DATA_G4DS"));
   fN_TopBottom_Data="$DATA_G4DS/analysisKr2_new.root";
 
-  cc = new TCanvas("cc" ,"", 1000, 850);
+  cc = new TCanvas("cc" ,"", 800, 1000);
+  cout << gPad << endl;
   cc->Divide(1,2);
+
+  cc->cd(1);
+  cout << gPad << endl;
+  cc->cd(2);
+  cout << gPad << endl;
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -70,31 +76,29 @@ void cTopBottom::analyser() {
   //////////////////////////////////////////////////////////
   gStyle->SetOptStat(0);
   gStyle->SetOptFit(11111);
+  //gStyle->SetPadGridX(kTRUE);
+  //gStyle->SetPadGridY(kTRUE);
+  //gROOT->ProcessLine(".x $HOME/rootlogon.C");
 
   Load_CollEff_Data();
-  //TGraphErrors *grCollEff_data = new TGraphErrors(36); //filled in Load_CollEff_Data
-  //cout << grCollEff_data << endl;
-
-  //TGraph *grCollEff_MC=new TGraph(bins);
-  //TH1F *hTopBottom_MC = new TH1F("hTopBottom_MC","",bins,-80,270); //top PMTs
-
-  
+  Load_TopBottom_Data(); //fills
   MC_CollEff_Optical();
   MC_TopBottom_Optical();
-  
-  //float chi2_colleff = Chi2_CollEff(grCollEff_data, grCollEff_MC); //number of points used in the chi2 as defined in MC, fit errors are ignored for now.
 
-  //TH1F *hTopBottom_Data = new TH1F("hTopBottom_Data","",60,10-85,360-85);
-  Load_TopBottom_Data(); //fills
-  //float chi2_topbottom = Chi2_TopBottom(hTopBottom_Data, hTopBottom_MC); //number of points used in the chi2 as defined in data, errors are ignored for now.
 
-  string picname=inMCname.substr(0, inMCname.length()-5); //reomoves the ".root"
+  cout << "coll eff:" << endl;  
+  float chi2_colleff = Chi2(0); //number of points used in the chi2 as defined in MC, errors are used as found in the ntuple
+  cout << "top/bottom:" << endl;  
+  float chi2_topbottom = Chi2(1); 
   
   cc->cd(1);
+  gPad->SetGrid(1,1);
   Draw_CollEff();
   cc->cd(2);
+  gPad->SetGrid(1,1);
   Draw_TopBottom();
   
+  string picname=inMCname.substr(0, inMCname.length()-5); //reomoves the ".root"
   if(picname!=""){
     cc->SaveAs((picname+".C").c_str());
     cc->SaveAs((picname+".png").c_str());
@@ -102,42 +106,75 @@ void cTopBottom::analyser() {
 
   //store the chi2 of CoffEff and TopBottom in there
   ofstream f((picname+".txt").c_str());
-  //f << chi2_colleff << ", " << chi2_topbottom << endl;
+  f << chi2_colleff << ", " << chi2_topbottom << endl;
   f.close();
   
 }
 
-/*
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-float Chi2_CollEff(TGraphErrors *grData, TGraph *grMC){
-  float chi2=0;
+//TODO: REVIEW - certain assumptions, which might be changed in the future
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+float cTopBottom::Chi2(const int topbottom){
 
-  float uncert=0;
+  float uncert_data=0;
+  float uncert_MC=0;
+  //query data and MC
+  t->Draw("z:par1:z_e:par1_e",Form("topbottom==%d && dataMC==0",topbottom),"goff");
+  vector<float> vX, vXe, vY, vYe;
+
+  for(int i=0;i<t->GetSelectedRows();++i){
+    vX.push_back(t->GetV1()[i]);
+    vY.push_back(t->GetV2()[i]);
+    vXe.push_back(t->GetV3()[i]);
+    vYe.push_back(t->GetV4()[i]);
+  }
+  TGraphErrors *grMC=new TGraphErrors(vX.size(),&vX[0],&vY[0],&vXe[0],&vYe[0]);
+  grMC->SetNameTitle("grChi2_MC", "collection efficiency (MC)");
+
+  t->Draw("z:par1:z_e:par1_e",Form("topbottom==%d && dataMC==1",topbottom),"goff");
+  TGraphErrors *grData=new TGraphErrors(t->GetSelectedRows(),t->GetV1(),t->GetV2(),t->GetV3(),t->GetV4());
+  grData->SetNameTitle("grChi2_data", "collection efficiency (data)");
+
+
   //average uncertainty in data
   for(int i=0;i<grData->GetN();++i){
-    uncert+=grData->GetEY()[i];
+    uncert_data+=grData->GetEY()[i];
   }
-  uncert/=grData->GetN();
-  cout << "average uncert.: " << uncert << endl;
+  uncert_data/=grData->GetN();
+  cout << "average uncert. (data): " << uncert_data << endl;
 
-
+  //average uncertainty in MC:
   for(int i=0;i<grMC->GetN();++i){
-    cout << Form("%d, %f, %f, %f, %f", i, grMC->GetX()[i], grMC->GetY()[i], grData->Eval(grMC->GetX()[i]), TMath::Power(grMC->GetY()[i]-grData->Eval(grMC->GetX()[i]),2)) << endl;
-    chi2+=TMath::Power(grMC->GetY()[i]-grData->Eval(grMC->GetX()[i]),2)/TMath::Power(uncert,2);
-*/    /*
+    uncert_MC+=grMC->GetEY()[i];
+  }
+  uncert_MC/=grMC->GetN();
+  cout << "average uncert. (MC): " << uncert_MC << endl;
+
+  float chi2=0;
+  for(int i=0;i<grMC->GetN();++i){
+    //cout << Form("%d, %f, %f, %f, %f", i, grMC->GetX()[i], grMC->GetY()[i], grData->Eval(grMC->GetX()[i]), TMath::Power(grMC->GetY()[i]-grData->Eval(grMC->GetX()[i]),2)) << endl;
+    chi2+=TMath::Power(grMC->GetY()[i]-grData->Eval(grMC->GetX()[i]),2)/(TMath::Power(uncert_data,2)+TMath::Power(uncert_MC,2));
+
+    /*
     cout << Form("%d, %f, %f, %f", i, hMC->GetBinCenter(i), hMC->GetBinContent(i), grData->Eval(hMC->GetBinCenter(i)), TMath::Power(hMC->GetBinContent(i)-grData->Eval(hMC->GetBinCenter(i)),2)) << endl;
     chi2+=TMath::Power(hMC->GetBinContent(i)-grData->Eval(hMC->GetBinCenter(i)),2);
-      *//*
+      */
   }
-  cout << "chi2: " << chi2 << endl;
+  string prefix = "coll eff";
+  if(topbottom) prefix = "top/bottom";
+  cout << Form("%s chi2: %.2f (ndf: %d)",prefix.c_str(), chi2, static_cast<int>(vX.size())) << endl;
+
+  delete grData;
+  delete grMC;
 
   return chi2;
 }
 
+/*
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 float Chi2_TopBottom(TH1F *hData, TH1F *hMC){
   float chi2=0;
-	*//*
+*//*
   float uncert=0;
   //average uncertainty in data
   for(int i=0;i<grData->GetN();++i){
@@ -145,7 +182,7 @@ float Chi2_TopBottom(TH1F *hData, TH1F *hMC){
   }
   uncert/=grData->GetN();
   cout << "average uncert.: " << uncert << endl;
-	  *//*
+  *//*
 
   float yData;
   for(int i=0;i<hMC->GetXaxis()->GetNbins();++i){
@@ -161,7 +198,7 @@ float Chi2_TopBottom(TH1F *hData, TH1F *hMC){
 
   return chi2;
 }
-	    */
+    */    
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 void cTopBottom::Load_CollEff_Data(){
@@ -217,6 +254,7 @@ void cTopBottom::Load_TopBottom_Data(){
 
   TH1D *dim=(TH1D *)asymm->ProjectionX("dim",1,1); //just to get the dimensions in z (which is on the x-axis) correctly: the number of bins and the z-coordinate
  
+  fOut->cd();
   float z=0;
   int mergebins=4;   //merge 4 bins for better statistics
   for (int i=1;i<dim->GetNbinsX() && i+mergebins<dim->GetNbinsX();i+=mergebins){  
@@ -487,6 +525,8 @@ void cTopBottom::MC_TopBottom_Optical(){
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 void cTopBottom::Draw_CollEff(){
+  cc->cd(1);
+  cout << gPad << endl;
 
   TMultiGraph *mg=new TMultiGraph();
   mg->SetNameTitle("mgCollEff","collection efficiency");
@@ -503,7 +543,7 @@ void cTopBottom::Draw_CollEff(){
   mg->Add(grMC, "pl");
 
   //DATA:
-  t->Draw("z:par1:z_e:par1_e","topbottom==0 && dataMC==1");
+  t->Draw("z:par1:z_e:par1_e","topbottom==0 && dataMC==1", "goff");
   TGraphErrors *grData=new TGraphErrors(t->GetSelectedRows(),t->GetV1(),t->GetV2(),t->GetV3(),t->GetV4());
   grData->SetNameTitle("grCollEff_Data", "collection efficiency (data)");
 
@@ -514,6 +554,8 @@ void cTopBottom::Draw_CollEff(){
   mg->Add(grData, "p");
 
   mg->Draw("a");
+  mg->GetXaxis()->SetTitle("Z/Z0 (top=0,bottom=2)");
+  mg->GetYaxis()->SetTitle("npe/npe0 (Z/Z0=1)");
   mg->GetYaxis()->SetRangeUser(0.85,1.15);
   //mg->GetYaxis()->SetMaximum(1.15);
   mg->Draw("a");
@@ -545,9 +587,11 @@ void cTopBottom::Draw_CollEff(){
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 void cTopBottom::Draw_TopBottom(){
-  
+  cc->cd(2);
+  cout << gPad << endl;
+
   TMultiGraph *mg=new TMultiGraph();
-  mg->SetNameTitle("mgTopBottom","ratio of light in top and bottom PMTs (S1)");
+  mg->SetNameTitle("mgTopBottom","ratio of light in top and (top+bottom) PMTs (S1)");
   //MC:
   t->Draw("z:par1:z_e:par1_e","topbottom==1 && dataMC==0");
 
@@ -588,6 +632,8 @@ void cTopBottom::Draw_TopBottom(){
   mg->Add(grData, "p");
 
   mg->Draw("a");
+  mg->GetXaxis()->SetTitle("Z [mm]");
+  mg->GetYaxis()->SetTitle("PE_{top}/total PE");
   mg->GetYaxis()->SetRangeUser(0.1,0.9);
   mg->Draw("a");
   

@@ -31,10 +31,10 @@ class cTopBottom{
   void Draw_TopBottom();
   //plotter.C provided by Paolo Agnes, APC (March 2014)
   //modified to allow for a chi2 analysis and easier plotting by using multigraph /multi histogram -> automatic choice of correct axes ranges
-  /*
-  float Chi2_CollEff(TGraphErrors *grData, TGraph *grMC); 
-  float Chi2_TopBottom(TH1F *hData, TH1F *hMC); 
-*/  
+  
+  float Chi2(const int topbottom); 
+
+  
 
  private:  
   const int bins;
