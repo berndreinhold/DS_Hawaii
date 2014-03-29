@@ -10,7 +10,7 @@ class MCTuning:
 
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
     def __init__(self):
-        self._nevents = 1e7
+        self._nevents = 1e5
         print "number of events: %.f" % self._nevents
         self._parameters()
         
@@ -21,8 +21,10 @@ class MCTuning:
         
         #g4ds related
         self._g4ds_dir = "%s/Linux-g++/" % os.environ['MY_G4DS']
-        self._g4ds_output_prefix = "Optical" #.fil and .root are appended below
-        self._macro_prefix = "optical" #optical.mac
+        #self._g4ds_output_prefix = "Optical" #.fil and .root are appended below
+        #self._macro_prefix = "optical" #optical.mac
+        self._g4ds_output_prefix = "83mKr" #.fil and .root are appended below
+        self._macro_prefix = "83mKr" #83mKr.mac
 
         #output file for chi2 and figures produced in analysis code
         self._analysis_output_prefix = self._g4ds_output_prefix
@@ -32,7 +34,7 @@ class MCTuning:
     def _parameters(self):
         #parameters:
         self._par1_name="GridSteelRindScale"
-        self._par1_min = 1.2
+        self._par1_min = 0.7
         self._par1_max = 1.3
         self._par1_step=0.1
         self._par1_linlog="lin" #linear or log scale, default is "lin", if "lin": step is applied additively, if "log": step is applied multiplicatively
@@ -156,7 +158,7 @@ class MCTuning:
         os.system("mkdir %s" % self._output_dir)
         
         self._sJobLabel_Prefix= self._par1_name
-        fOut = open("%s/chi2_%s.txt" % (self._output_dir, self._sJobLabel_Prefix), 'w') #aggregate file: parameter, chi2, can only be filled, if _OneConfig() is run
+        fOut = open("%s/chi2_%s_%s.txt" % (self._output_dir, self._g4ds_output_prefix, self._sJobLabel_Prefix), 'w') #aggregate file: parameter, chi2, can only be filled, if _OneConfig() is run
         for i in self._valuelist:
             #print i
             format_string = "%s_"
@@ -164,21 +166,21 @@ class MCTuning:
             self._sJobLabel = format_string % (self._sJobLabel_Prefix, i)
             print "sJobLabel: ", self._sJobLabel
 
-            if 0: #data production
+            if 1: #data production
                 self._DSOptics(i)
                 self._G4DS()
                 self._G4ROOTER()
                 self._electronics_sim()
 
             #analysis
-            self._OneConfig()
-
-            #these files have been created in analyser.C
-            f = open("%s/%s_%s.txt" % (self._output_dir, self._g4ds_output_prefix, self._sJobLabel))
-            for line in f:
-                line = (self._par1_format + ", %s") % (i, line)
-                fOut.write(line)
-            f.close()
+            if 0:
+                self._OneConfig()
+                #these files have been created in analyser.C
+                f = open("%s/%s_%s.txt" % (self._output_dir, self._g4ds_output_prefix, self._sJobLabel))
+                for line in f:
+                    line = (self._par1_format + " %s") % (i, line)
+                    fOut.write(line)
+                f.close()
 
         fOut.close()
 
