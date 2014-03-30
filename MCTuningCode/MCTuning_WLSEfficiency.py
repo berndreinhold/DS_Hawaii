@@ -6,10 +6,10 @@ import os
 import string
 import MCTuningBase
 
-class MCTuning_FusedSilicaUVAbs(MCTuningBase.MCTuning):
+class MCTuning_WLSEfficiency(MCTuningBase.MCTuning):
     """
     produce MC with varying parameters and analyse based on Paolo Agnes' code
-    in this case FusedSilicaUVAbs is modified
+    in this case WLSEfficiency is modified
     """
 
     #def __init__(self): #see base class
@@ -17,19 +17,19 @@ class MCTuning_FusedSilicaUVAbs(MCTuningBase.MCTuning):
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% depends on the actual parameter
     def _parameters(self):
         #parameters:
-        self._par1_name="FusedSilicaUVAbs"
-        self._par1_min = 1e-8
-        self._par1_max = 1e-1
-        self._par1_step=5
-        self._par1_linlog="log" # "lin" and "log" as possible values
-        self._par1_format="%.1e"
+        self._par1_name="WLSEfficiency"
+        self._par1_min = 0
+        self._par1_max = 2
+        self._par1_step=0.1
+        self._par1_linlog="lin" # "lin" and "log" as possible values
+        self._par1_format="%.1f"
         self._fill_valuelist()
 
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     def _DSOptics(self, par1_currentvalue):
         """
         here the DSOptics.dat file is modified and stored in a different location. An environmental variable is set, so that g4ds finds this modified DSOptics.dat file.
-        in this case FusedSilicaUVAbs is modified
+        in this case WLSEfficiency is modified
 
         """
 
