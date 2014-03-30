@@ -39,8 +39,8 @@
 #Define the EM physics list (standard livermore)
 /ds/physics/em_list livermore
 
-/ds/physics/killS1S2 1
-#/ds/physics/killS2 0
+#/ds/physics/killS1S2 1
+/ds/physics/killS2 1
 #/ds/physics/scaleS2 3
 
 /ds/physics/DriftField        0  V/cm
