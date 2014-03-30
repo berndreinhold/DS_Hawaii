@@ -1,0 +1,12 @@
+Test application of Geant4.10 created March 25, 2014 by E. Edkins.
+
+Simulations produce a cubic world volume of air, 10 meters on each side, and a cylindrical detector volume of water, 1 meter diameter and 1 meter high. 
+
+By default, a 6 MeV electron is produced via G4ParticleGun, 'fired' in the +z direction.
+
+Visualization is enabled (if available).  
+
+There is no procedure implemented for the output of any data.
+
+testApp may be run via macro by making: testApp runExample.mac
+
