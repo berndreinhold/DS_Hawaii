@@ -104,7 +104,7 @@ void cTopBottom::analyser() {
     cc->SaveAs((picname+".png").c_str());
   }
 
-  //store the chi2 of CoffEff and TopBottom in there
+  //store the chi2 of CollEff and TopBottom in there
   ofstream f((picname+".txt").c_str());
   f << Form("%.3f %.3f %d %d", chi2_colleff, chi2_topbottom, ndf_colleff, ndf_topbottom) << endl;
   f.close();

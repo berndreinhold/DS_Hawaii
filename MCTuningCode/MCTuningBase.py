@@ -4,13 +4,16 @@ import sys
 import os
 #os._exit(-1) to exit unconditionally
 import string
+import shutil
+import time
+
 
 class MCTuning:
     """produce MC with varying parameters and analyse based on Paolo Agnes' code"""
 
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
-    def __init__(self):
-        self._nevents = 1e7
+    def __init__(self, out_prefix, ev=1e6):
+        self._nevents = ev
         print "number of events: %.f" % self._nevents
         self._parameters()
         
@@ -21,8 +24,10 @@ class MCTuning:
         
         #g4ds related
         self._g4ds_dir = "%s/Linux-g++/" % os.environ['MY_G4DS']
-        self._g4ds_output_prefix = "Optical" #.fil and .root are appended below
-        self._macro_prefix = "optical" #optical.mac
+        #self._g4ds_output_prefix = "Optical" #.fil and .root are appended below
+        #self._g4ds_output_prefix = "83mKr" #.fil and .root are appended below
+        self._g4ds_output_prefix = out_prefix
+        self._macro_prefix = self._g4ds_output_prefix
 
         #output file for chi2 and figures produced in analysis code
         self._analysis_output_prefix = self._g4ds_output_prefix
@@ -32,7 +37,7 @@ class MCTuning:
     def _parameters(self):
         #parameters:
         self._par1_name="GridSteelRindScale"
-        self._par1_min = 1.2
+        self._par1_min = 0.7
         self._par1_max = 1.3
         self._par1_step=0.1
         self._par1_linlog="lin" #linear or log scale, default is "lin", if "lin": step is applied additively, if "log": step is applied multiplicatively
@@ -154,9 +159,11 @@ class MCTuning:
         #create dir
         self._output_dir += "/" + self._par1_name + "/"
         os.system("mkdir %s" % self._output_dir)
-        
+
         self._sJobLabel_Prefix= self._par1_name
-        fOut = open("%s/chi2_%s.txt" % (self._output_dir, self._sJobLabel_Prefix), 'w') #aggregate file: parameter, chi2, can only be filled, if _OneConfig() is run
+        self._MoveFiles() #has to come after the self._output_dir is updated
+        
+        fOut = open("%s/chi2_%s_%s.txt" % (self._output_dir, self._g4ds_output_prefix, self._sJobLabel_Prefix), 'w') #aggregate file: parameter, chi2, can only be filled, if _OneConfig() is run
         for i in self._valuelist:
             #print i
             format_string = "%s_"
@@ -171,41 +178,73 @@ class MCTuning:
                 self._electronics_sim()
 
             #analysis
-            self._OneConfig()
-
-            #these files have been created in analyser.C
-            f = open("%s/%s_%s.txt" % (self._output_dir, self._g4ds_output_prefix, self._sJobLabel))
-            for line in f:
-                line = (self._par1_format + ", %s") % (i, line)
-                fOut.write(line)
-            f.close()
+            if 0:
+                self._OneConfig()
+                #these files have been created in analyser.C
+                f = open("%s/%s_%s.txt" % (self._output_dir, self._g4ds_output_prefix, self._sJobLabel))
+                for line in f:
+                    line = (self._par1_format + " %s") % (i, line)
+                    fOut.write(line)
+                f.close()
 
         fOut.close()
 
         print "output dir: ", self._output_dir
 
 
-#    #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
-#    def loop_1par(self):
-#        self._sJobLabel_Prefix= self._par1_name
-#        fOut = open(self._sJobLabel_Prefix+".txt", 'w') #aggregate file: parameter, chi2
-#        for i in range(int(self._par1_min*100), int(self._par1_max*100)+1, int(self._par1_step*100)): #multiply by 100, since range expects integers, the +1 in the end value results in that value also being tested, rather than it being excluded
-#            #print i
-#            self._sJobLabel = "%s_%.2f" % (self._sJobLabel_Prefix, i*0.01)
-#            print "sJobLabel: ", self._sJobLabel
+    #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
+    def _MoveFiles(self):
+        _allfiles = os.listdir(self._output_dir)
+        _files = []
+        for _file in _allfiles:
+            if _file.endswith(".fil"):
+                _files.append(_file)
+            if _file.endswith("_v1.fil"):
+               print "WARNING: something went wrong. there is a file, that ends on '_v1.fil': ", _file
+               print "this should not happen under normal circumstances. Please investigate."
+               #sys.exit(0)
+               
+        if len(_files) == 0:
+            return
 
-#            #self._DSOptics(i*0.01)
-#            #self._G4DS()
-#            #self._G4ROOTER()
-#            #self._electronics_sim()
-#            self._OneConfig()
+        if len(self._valuelist) == 0:
+            print "valuelist is empty. Something went wrong. Exit."
+            sys.exit(0)
+            
+        _expected_filelist = []
+        
+        for i in self._valuelist:
+            format_string = "%s_"
+            format_string += self._par1_format
+            self._sJobLabel = format_string % (self._sJobLabel_Prefix, i)
+            _expected_filelist.append("%s_%s.fil" % (self._g4ds_output_prefix, self._sJobLabel))
 
-#            #these files have been created in analyser.C
-#            f = open("%s/%s_%s.txt" % (self._output_dir, self._g4ds_output_prefix, self._sJobLabel))
-#            for line in f:
-#                line = "%.2f, %s" % (i*0.01, line)
-#                fOut.write(line)
-#            f.close()
+        #print _expected_filelist
 
-#        fOut.close()
+        if len(_files)< len(self._valuelist):
+            print "Only a subset has been produced:"
+            _fileset = set(_files).intersection(_expected_filelist)
+            print _fileset
+            print "Is production currently ongoing? Do nothing and wait."
+            print "last modification times: "
+            for _file in _files:
+                print "%s: %s" % (_file, time.ctime(os.path.getmtime(self._output_dir+_file)))
+            sys.exit(0)
 
+        else:
+            overlap = set(_files).intersection(_expected_filelist)
+            if len(overlap)==len(_expected_filelist): #the file lists are identical
+                #while 1: #create dir
+                i=1
+                while i:
+                   if os.path.isdir(self._output_dir+"/v%d" % i):
+                       i+=1
+                   else:
+                       os.mkdir(self._output_dir+"/v%d" % i)
+                       break
+
+
+                for _file in os.listdir(self._output_dir+"/*.*"):
+                    os.move(_file, self._output_dir+"/v%d" % i)
+
+                print "files have been moved to: %s" % (self._output_dir+"/v%d" % i)
