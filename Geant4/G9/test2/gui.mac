@@ -6,7 +6,7 @@
 #
 # Add icons of general interest
 #
-#/control/execute icons.mac
+/control/execute icons.mac
 #
 # File menu :
 /gui/addMenu file File
@@ -19,24 +19,24 @@
 /gui/addButton run run1 "/control/execute run.mac"
 #
 # Gun menu :
-/gui/addMenu gun Gun
-/gui/addButton gun "e-"      "/gun/particle e-"
-/gui/addButton gun "e+"      "/gun/particle e+"
-/gui/addButton gun "pi0"     "/gun/particle pi0"
-/gui/addButton gun "pi+"     "/gun/particle pi+"
-/gui/addButton gun "neutron" "/gun/particle neutron"
-/gui/addButton gun "proton"  "/gun/particle proton"
-/gui/addButton gun "Random Primary type"  "/tutorial/generator/randomizePrimary true"
-/gui/addButton gun "p=100 MeV" "/tutorial/generator/momentum 0.1 GeV"
-/gui/addButton gun "p=500 MeV" "/tutorial/generator/momentum 0.5 GeV"
-/gui/addButton gun "p=1 GeV" "/tutorial/generator/momentum 1 GeV"
-/gui/addButton gun "p=5 GeV" "/tutorial/generator/momentum 5 GeV"
-/gui/addButton gun "sigma_p=0 MeV" "/tutorial/generator/sigmaMomentum 0 MeV"
-/gui/addButton gun "sigma_p=50 MeV" "/tutorial/generator/sigmaMomentum 50 MeV"
-/gui/addButton gun "sigma_p=100 MeV" "/tutorial/generator/sigmaMomentum 100 MeV"
-/gui/addButton gun "sigma_angle=0 rad" "/tutorial/generator/sigmaAngle 0 rad"
-/gui/addButton gun "sigma_angle=1 mrad" "/tutorial/generator/sigmaAngle 0.001 rad"
-/gui/addButton gun "sigma_angle=10 mrad" "/tutorial/generator/sigmaAngle 0.01 rad"
+/gui/addMenu gps GPS
+/gui/addButton gps "e-"      "/gps/particle e-"
+/gui/addButton gps "e+"      "/gps/particle e+"
+/gui/addButton gps "pi0"     "/gps/particle pi0"
+/gui/addButton gps "pi+"     "/gps/particle pi+"
+/gui/addButton gps "neutron" "/gps/particle neutron"
+#/gui/addButton gps "proton"  "/gps/particle proton"
+#/gui/addButton gps "Random Primary type"  "/tutorial/generator/randomizePrimary true"
+#/gui/addButton gps "p=100 MeV" "/tutorial/generator/momentum 0.1 GeV"
+#/gui/addButton gps "p=500 MeV" "/tutorial/generator/momentum 0.5 GeV"
+#/gui/addButton gps "p=1 GeV" "/tutorial/generator/momentum 1 GeV"
+#/gui/addButton gps "p=5 GeV" "/tutorial/generator/momentum 5 GeV"
+#/gui/addButton gps "sigma_p=0 MeV" "/tutorial/generator/sigmaMomentum 0 MeV"
+#/gui/addButton gps "sigma_p=50 MeV" "/tutorial/generator/sigmaMomentum 50 MeV"
+#/gui/addButton gps "sigma_p=100 MeV" "/tutorial/generator/sigmaMomentum 100 MeV"
+#/gui/addButton gps "sigma_angle=0 rad" "/tutorial/generator/sigmaAngle 0 rad"
+#/gui/addButton gps "sigma_angle=1 mrad" "/tutorial/generator/sigmaAngle 0.001 rad"
+#/gui/addButton gps "sigma_angle=10 mrad" "/tutorial/generator/sigmaAngle 0.01 rad"
 #
 # Field menu :
 /gui/addMenu field Field

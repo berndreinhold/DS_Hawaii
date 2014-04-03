@@ -1,9 +1,0 @@
-First test application for Geant4.9.6, create March 26, 2014 by E. Edkins.
-
-Simulation creates a cylindrical world volume of water, 10 meters diameter by 11 meters height, and a cylindrical 'detector' volume of psuedocumene, 4 meters diameter by 4 meters height.
-
-No particles are simulated by default - must run via macro. Use of run.mac allows user to record chosen values for given types of particles (/score/quantity/...), and dump these values to a text file. Must have a separate text file for each value written, or each successive value will overwrite the previous. 
-
-Particles are produced with G4GeneralParticleSource. Controlled via macro commands = /gps/...
-
-
