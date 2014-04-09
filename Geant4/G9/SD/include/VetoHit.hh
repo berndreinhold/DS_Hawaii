@@ -41,7 +41,7 @@ class VetoHit : public G4VHit
 	void SetPos       (G4ThreeVector xyz)		{ fPos = xyz; };
 	void SetTime      (G4double time)     	     	{ fTime = time; };
 	void SetLogicV    (G4LogicalVolume* lvolume) 	{ fLogicV = lvolume; };
-	void SetVolName	  (G4String* volName)	{ fVolName = volName; };
+	void SetVolName	  (G4String volName)	{ fVolName = volName; };
 	//void SetVolume	  (G4VPhysicalVolume* volume)	{ fLogicV = volume; };
     	
 
@@ -51,7 +51,7 @@ class VetoHit : public G4VHit
 	G4ThreeVector GetPos() const 		  { return fPos; };
 	G4double GetTime() const                  { return fTime; };
  	const G4LogicalVolume* GetLogV() const    { return fLogicV; };
-	const G4String* GetVolName() const { return fVolName; };
+	G4String GetVolName() const { return fVolName; };
 	//const G4VPhysicalVolume* GetPhysV() const { return fLogicV; };
 
   private:
@@ -60,7 +60,7 @@ class VetoHit : public G4VHit
 	G4ThreeVector		 fPos;
 	G4double		 fTime;
 	const G4LogicalVolume*	 fLogicV;
-	const G4String* 	 fVolName;
+	G4String 	 fVolName;
 	//const G4VPhysicalVolume* fLogicV;
 
 };

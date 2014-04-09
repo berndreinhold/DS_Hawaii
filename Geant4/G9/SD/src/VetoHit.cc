@@ -24,7 +24,7 @@ VetoHit::VetoHit()
   fEdep(0.),
   fPos(G4ThreeVector(0)),
   fLogicV(0),
-  fVolName(0),
+  fVolName(""),
   fTime(0.)
 {}
 
@@ -90,11 +90,12 @@ void VetoHit::Print()
 {
   G4cout
 	<< " trackID: " << fTrackID 
-        << " LogicalVolume: " << fLogicV
-  	<< " Volume Name: " << fVolName 
-        << " Edep: " << std::setw(7) << G4BestUnit(fEdep,"Energy") 
-        << " Position: " << std::setw(7) << G4BestUnit(fPos,"Length")
-        << " Time: " << fTime << " sec" << G4endl; 
+        //<< " LogicalVolume: " << fLogicV
+  	<< ";  Volume Name: " << fVolName 
+        << ";  Edep: " << std::setw(7) << G4BestUnit(fEdep,"Energy") 
+        << ";  Position: " << std::setw(7) << G4BestUnit(fPos,"Length")
+        << ";  Time: " << fTime << " sec" << G4endl;
+	G4cout << G4endl; 
 }
 
 //.....oooOO0OOooo.....oooOO0OOooo.....oooOO0OOooo.....oooOO0OOooo.....oooOO0OOooo.....

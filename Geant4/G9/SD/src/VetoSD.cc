@@ -58,8 +58,9 @@ G4bool VetoSD::ProcessHits(G4Step* step, G4TouchableHistory*)
   newHit->SetPos (step->GetPreStepPoint()->GetPosition());
   newHit->SetTime (step->GetPreStepPoint()->GetGlobalTime());
   newHit->SetLogicV (step->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume());
-  //newHit->SetName (step->GetTrack()->GetVolume()->GetName());
-  newHit->SetVolName (step->GetPreStepPoint()->GetPhysicalVolume()->GetName());
+  //newHit->SetVolName (step->GetTrack()->GetVolume()->GetName());
+  //G4String* bla = new G4String(step->GetPreStepPoint()->GetPhysicalVolume()->GetName());
+  newHit->SetVolName (step->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName());
   //newHit->SetName (step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetName());
 
   fHitsCollection->insert( newHit );

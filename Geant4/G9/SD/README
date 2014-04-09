@@ -4,20 +4,8 @@ Detector geometry: world volume = cylinder (10 m diameter, 11 m height) of water
 
 Scoring: veto = sensitive volume.
 
-Hit info: track id, kinetic energy, position, time, volume.
+Hit info: track id, kinetic energy, position, time, volume name.
 
 Retrieves info on hits and dumps result to screen.
 
-On-going problem: cannot resolve retrieval of volume name, only get volume address. Uncommenting line 62 of VetoSD.cc will yield error:
-
-/home/erinbeth/G9.6.3/SD/src/VetoSD.cc: In member function ‘virtual G4bool VetoSD::ProcessHits(G4Step*, G4TouchableHistory*)’:
-/home/erinbeth/G9.6.3/SD/src/VetoSD.cc:62:78: error: no matching function for call to ‘VetoHit::SetVolName(const G4String&)’
-   newHit->SetVolName (step->GetPreStepPoint()->GetPhysicalVolume()->GetName());
-                                                                              ^
-/home/erinbeth/G9.6.3/SD/src/VetoSD.cc:62:78: note: candidate is:
-In file included from /home/erinbeth/G9.6.3/SD/include/VetoSD.hh:7:0,
-                 from /home/erinbeth/G9.6.3/SD/src/VetoSD.cc:3:
-/home/erinbeth/G9.6.3/SD/include/VetoHit.hh:44:7: note: void VetoHit::SetVolName(G4String*)
-  void SetVolName   (G4String* volName) { fVolName = volName; };
-       ^
 
