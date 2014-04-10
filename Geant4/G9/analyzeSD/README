@@ -1,0 +1,10 @@
+Geant4.9.6.p03 application analyzeSD.
+
+DETECTOR GEOMETRY: world volume = cylinder (10 m diameter, 11 m height) of water; veto = sphere (4 m diameter) of psuedocumene; tpc = cylinder (64 cm diameter, 74 cm height) of liquid argon.
+
+SCORING: Sensitive detectors = veto, tpc.
+
+HIT INFO: For veto and active volumes: energy deposited, particle name, track id, parent id, position, time, kinetic energy, volume.
+
+Data is output into a ROOT file called analysisSD_output (this name can be changed via macro)
+
