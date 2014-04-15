@@ -19,7 +19,7 @@ class MCTuning_WLSEfficiency(MCTuningBase.MCTuning):
         #parameters:
         self._par1_name="WLSEfficiency"
         self._par1_min = 0
-        self._par1_max = 2
+        self._par1_max = 3
         self._par1_step=0.1
         self._par1_linlog="lin" # "lin" and "log" as possible values
         self._par1_format="%.1f"
