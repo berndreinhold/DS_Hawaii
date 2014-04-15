@@ -5,7 +5,7 @@ export DS50data=/ds50/data
 export MY_G4DS=/ds50/app/user/reinhol1/work/montecarlo/g4ds/
 
 echo "PWD is $PWD"
-OLDPWD=$PWD
+export OLDPWD=$PWD
 # Establish external products 
 source ${DS50app}/products/setup
 

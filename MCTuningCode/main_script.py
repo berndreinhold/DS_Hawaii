@@ -29,14 +29,14 @@ def main():
 
         
     #x = MCT.MCTuning_FusedSilicaUVAbs("83mKr", 1e4)
-    x = MCT.MCTuning("83mKr", output_dir, code_dir, g4ds_dir, 1e4)
+    #x = MCT.MCTuning("83mKr", output_dir, code_dir, g4ds_dir, 1e4)
     #x = MCT.MCTuning_WLSEfficiency("83mKr", output_dir, code_dir, 1e4)
-    x.loop_1par() #switch on and off certain analysis steps in the MCTuningBase.py
+    #x.loop_1par() #switch on and off certain analysis steps in the MCTuningBase.py
 
     #x = MCT.MCTuning_FusedSilicaUVAbs("Optical", 1e6)
-    #x = MCT.MCTuning("Optical", output_dir, code_dir, g4ds_dir, 1e6)
+    x = MCT.MCTuning("Optical", output_dir, code_dir, g4ds_dir, 1e5)
     #x = MCT.MCTuning_WLSEfficiency("Optical", output_dir, code_dir, 1e6)
-    #x.loop_1par() 
+    x.loop_1par() 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if __name__ == "__main__":
