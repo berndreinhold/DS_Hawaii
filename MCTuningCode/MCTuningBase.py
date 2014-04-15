@@ -12,18 +12,21 @@ class MCTuning:
     """produce MC with varying parameters and analyse based on Paolo Agnes' code"""
 
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
-    def __init__(self, out_prefix, ev=1e6):
+    def __init__(self, out_prefix, out_dir, anacode_dir, g4ds_dir, ev=1e6):
         self._nevents = ev
         print "number of events: %.f" % self._nevents
         self._parameters()
         
         #general:
         #self._output_dir is used for the output of G4DS and other analysis stages, but also for the macro file and DSOptics.dat file.
-        self._output_dir = "/scratch/darkside/reinhol1/"
-        self._code_dir = "/ds50/app/user/reinhol1/work/DS_Hawaii/MCTuningCode/"
+        #self._output_dir = "/scratch/darkside/reinhol1/"
+        #self._code_dir = "/ds50/app/user/reinhol1/work/DS_Hawaii/MCTuningCode/"
+        self._output_dir = out_dir
+        self._code_dir = anacode_dir
         
         #g4ds related
-        self._g4ds_dir = "%s/Linux-g++/" % os.environ['MY_G4DS']
+        #self._g4ds_dir = "%s/Linux-g++/" % os.environ['MY_G4DS']
+        self._g4ds_dir = "%s/Linux-g++/" % g4ds_dir 
         #self._g4ds_output_prefix = "Optical" #.fil and .root are appended below
         #self._g4ds_output_prefix = "83mKr" #.fil and .root are appended below
         self._g4ds_output_prefix = out_prefix
@@ -38,7 +41,7 @@ class MCTuning:
         #parameters:
         self._par1_name="GridSteelRindScale"
         self._par1_min = 0.7
-        self._par1_max = 1.3
+        self._par1_max = 0.8 #1.3
         self._par1_step=0.1
         self._par1_linlog="lin" #linear or log scale, default is "lin", if "lin": step is applied additively, if "log": step is applied multiplicatively
         self._par1_format="%.1f" #used in loop_1par() below to add it to the output file
@@ -78,7 +81,9 @@ class MCTuning:
         self._macro_file()
         #self._optics_file()
         cwd = os.getcwd()
-        os.system("cd %s; ./g4ds %s; cd %s" % (self._g4ds_dir, self._sMacroFile, cwd))
+        cmd_list="cd %s; ./g4ds %s; cd %s" % (self._g4ds_dir, self._sMacroFile, cwd)
+        print cmd_list
+        os.system(cmd_list)
 
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all (not in all generality, but for now)
     def _macro_file(self):
@@ -171,7 +176,7 @@ class MCTuning:
             self._sJobLabel = format_string % (self._sJobLabel_Prefix, i)
             print "sJobLabel: ", self._sJobLabel
 
-            if 0: #data production
+            if 1: #data production
                 self._DSOptics(i)
                 self._G4DS()
                 self._G4ROOTER()
