@@ -1,0 +1,11 @@
+Geant9.6.p03 application SD
+
+Detector geometry: world volume = cylinder (10 m diameter, 11 m height) of water; veto = sphere (4 m diameter) of scintillator (psuedocumene).
+
+Scoring: veto = sensitive volume.
+
+Hit info: track id, kinetic energy, position, time, volume name.
+
+Retrieves info on hits and dumps result to screen.
+
+

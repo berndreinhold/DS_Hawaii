@@ -16,7 +16,7 @@
 /gui/addMenu run Run
 /gui/addButton run "beamOn 1" "/run/beamOn 1"
 /gui/addButton run "beamOn 100" "/run/beamOn 100"
-/gui/addButton run run1 "/control/execute run.mac"
+/gui/addButton run run1 "/control/execute run1.mac"
 #
 # Gun menu :
 /gui/addMenu gps GPS
@@ -25,7 +25,10 @@
 /gui/addButton gps "pi0"     "/gps/particle pi0"
 /gui/addButton gps "pi+"     "/gps/particle pi+"
 /gui/addButton gps "neutron" "/gps/particle neutron"
-#/gui/addButton gps "proton"  "/gps/particle proton"
+/gui/addButton gps "proton"  "/gps/particle proton"
+/gui/addButton gps "1 keV"   "/gps/energy 1 keV"
+/gui/addButton gps "1 Mev"   "/gps/energy 1 MeV"
+/gui/addButton gps "10 MeV"  "/gps/energy 10 MeV"
 #/gui/addButton gps "Random Primary type"  "/tutorial/generator/randomizePrimary true"
 #/gui/addButton gps "p=100 MeV" "/tutorial/generator/momentum 0.1 GeV"
 #/gui/addButton gps "p=500 MeV" "/tutorial/generator/momentum 0.5 GeV"
@@ -59,4 +62,4 @@
 /gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"
 #
 # User defined icon :
-#/gui/addIcon "Run beam on" user_icon "/run/beamOn 1" run.png 
+/gui/addIcon "Run beam on" user_icon "/run/beamOn 1" run.png 

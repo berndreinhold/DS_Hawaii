@@ -42,9 +42,6 @@ int main(int argc, char** argv)
   //primary generator action - mandatory user action class
   runManager->SetUserAction(new test2PrimaryGeneratorAction());
 
-   //initialize the Geant4 kernel
-   runManager->Initialize();
-
  #ifdef G4VIS_USE
    //visualization manager construction
    G4VisManager* visManager = new G4VisExecutive;
@@ -61,18 +58,20 @@ int main(int argc, char** argv)
       UImanager->ApplyCommand(command+filename);
    }
    else {
+       //initialize the Geant4 kernel
+       runManager->Initialize();
       //start interactive session
- #ifdef G4UI_UDE
+ #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
  #ifdef G4VIS_USE
       UImanager->ApplyCommand("/control/execute init_vis.mac");
  #else
       UImanager->ApplyCommand("/control/execute init.mac");
  #endif
-      /*if (ui->IsGUI())
+      if (ui->IsGUI())
  	UImanager->ApplyCommand("/control/execute gui.mac");
       ui->SessionStart();
-      delete ui;*/
+      delete ui;
  #endif
     }
 

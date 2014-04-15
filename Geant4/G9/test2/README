@@ -6,4 +6,7 @@ No particles are simulated by default - must run via macro. Use of run.mac allow
 
 Particles are produced with G4GeneralParticleSource. Controlled via macro commands = /gps/...
 
+----------------------
+April 3, 2014.
 
+Fixed issue with gui interface.

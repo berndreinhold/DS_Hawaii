@@ -46,6 +46,8 @@ set(TESTAPP_SCRIPTS
   init_vis.mac
   run.mac
   vis.mac
+  gui.mac
+  icons.mac
   )
 
 foreach(_script ${TESTAPP_SCRIPTS})
