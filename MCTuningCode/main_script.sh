@@ -27,6 +27,7 @@ cd $OLDPWD
     echo "OSG_WN_TMP: $OSG_WN_TMP"
     echo "CONDOR_TMP: $CONDOR_TMP"
     echo "CONDOR_EXEC: $CONDOR_EXEC"
-    echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+    echo "PROCESS: $PROCESS" #https://cdcvs.fnal.gov/redmine/projects/ifront/wiki/Jobsub_command_reference
+    #echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
 
 python /ds50/app/user/reinhol1/work/DS_Hawaii/MCTuningCode/main_script.py
