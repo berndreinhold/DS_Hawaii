@@ -6,16 +6,29 @@ import os
 import string
 import shutil
 import time
-
+import math
+import Util
 
 class MCTuning:
     """produce MC with varying parameters and analyse based on Paolo Agnes' code"""
 
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
-    def __init__(self, out_prefix, out_dir, anacode_dir, g4ds_dir, ev=1e6):
-        self._nevents = ev
+    def __init__(self, out_prefix, ev, job_index=-1, out_dir="", anacode_dir="", g4ds_dir=""):
+        #check all directories, that they end on '/'
+        if not out_dir.endswith("/"): out_dir+="/"
+        if not anacode_dir.endswith("/"): anacode_dir+="/"
+        if not g4ds_dir.endswith("/"): g4ds_dir+="/"
+
+        self._simulation_type=out_prefix #Optical or 83mKr 
+
+        self._nevents = ev #nevents is written into the G4DS macro
         print "number of events: %.f" % self._nevents
         self._parameters()
+
+        #this is the configuration mode in which nothing more is needed
+        if job_index<0:
+            return
+        self._fill_valuelist(job_index)
         
         #general:
         #self._output_dir is used for the output of G4DS and other analysis stages, but also for the macro file and DSOptics.dat file.
@@ -35,27 +48,43 @@ class MCTuning:
         #output file for chi2 and figures produced in analysis code
         self._analysis_output_prefix = self._g4ds_output_prefix
 
-
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% depends on the actual parameter
     def _parameters(self):
         #parameters:
         self._par1_name="GridSteelRindScale"
+
+        #this is for the whole parameter scan
         self._par1_min = 0.7
-        self._par1_max = 0.8 #1.3
+        self._par1_max = 1.3
         self._par1_step=0.1
         self._par1_linlog="lin" #linear or log scale, default is "lin", if "lin": step is applied additively, if "log": step is applied multiplicatively
         self._par1_format="%.1f" #used in loop_1par() below to add it to the output file
-        self._fill_valuelist()
 
-    #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
-    def _fill_valuelist(self):
+        self._fill_valuelist_all()
+
+    #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+    def NJobs(self):
+        """ requires self._valuelist_all to be filled"""
+        time_per_1k_ev = Util.time_per_1k_ev(self._simulation_type)
+        total_nevents=len(self._valuelist_all)*self._nevents
+        total_time = 1.*time_per_1k_ev*total_nevents/1000 #in seconds
+        time_per_job=4*3600; #sec
+
+        if time_per_1k_ev*self._nevents/1000/time_per_job>1:
+            print "WARNING: this job will take about %.1f h. But a typical run should not take longer than 4h. resize the number of events per job" % (time_per_1k_ev*self._nevents/1000/3600)
+        
+
+        return int(math.ceil(total_time/time_per_job))
+
+    #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% valuelist for the whole parameter scan (if there are more than one job submission)
+    def _fill_valuelist_all(self):
         i=self._par1_min
-        self._valuelist=[]
+        self._valuelist_all=[]
 
         #add step:
         if self._par1_linlog=="lin":
             while i<self._par1_max:
-                self._valuelist.append(i)
+                self._valuelist_all.append(i)
                 i=i+self._par1_step
 
         #multiply by step:
@@ -64,17 +93,46 @@ class MCTuning:
                 print "self._par1_step has to be bigger than 1" % self._par1_step
                 os.exit(-1)
             while i<self._par1_max:
-                self._valuelist.append(i)
+                self._valuelist_all.append(i)
                 i=i*self._par1_step
 
         else:
             print "something went wrong: _par1_linlog: %s, _par1_step: %f" % (self._par1_linlog, self._par1_step)
 
-        print "value list:(%d elements)" % len(self._valuelist)
-        print self._valuelist
-        if len(self._valuelist)>10:
-            print "warning, the valuelist contains more than 10 elements: ", len(self._valuelist)
+        print "value list:(%d elements)" % len(self._valuelist_all)
+        print self._valuelist_all
+        if len(self._valuelist_all)>10:
+            print "warning, the valuelist_all contains more than 10 elements: ", len(self._valuelist_all)
 
+
+    #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% valuelist for one Fermigrid job
+    def _fill_valuelist(self, index):
+        """
+        fill _valuelist from _valuelist_all, based on number of jobs to split this parameter scan into.
+        index is provided by the jobsub -N variable
+
+        consider self._valuelist_all = [0,1,2,3,4,5,6], njobs=4 and index=1
+        in this case math.ceil(len(self._valuelist_all)/njobs) becomes 2
+        and self._valuelist should be [2,3]
+
+        for njobs=3, self._valuelist is [6] -> therefore the math.ceil-function.
+        works also, if njobs is 1.
+        """
+        self._valuelist = []
+        
+        njobs=self.NJobs()
+        if index>=njobs:
+            print "index >= self.Njobs(). This should not happen under normal circumstances. Please investigate. index: %d, self.Njobs(): %d" % (index, njobs)
+            os._exit(-1)
+
+        i=0
+        step = int(math.ceil(len(self._valuelist_all)/njobs)) #python seems to do funny things with precision of numbers. Sometimes 1 is 0.9999999999999999 and then a int(1) and float(1.) comparison can be problematic. that's why the cast to int above.
+        for value in self._valuelist_all:
+            if i>=index*step and i< (index+1)*step:
+                self._valuelist.append(value)
+            i+=1
+
+        print self._valuelist
 
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
     def _G4DS(self):
@@ -150,7 +208,7 @@ class MCTuning:
 
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
     def _electronics_sim(self):
-        print "eletronics sim not yet implemented."
+        print "eletronics sim not yet included."
 
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
     def _OneConfig(self):
@@ -162,8 +220,9 @@ class MCTuning:
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
     def loop_1par(self):
         #create dir
-        self._output_dir += "/" + self._par1_name + "/"
-        os.system("mkdir %s" % self._output_dir)
+        #self._output_dir += "/" + self._par1_name + "/"
+        #os.system("mkdir %s" % self._output_dir)
+        #jobsub complained when creating a subdirectoyr on the worker node and try to transfer it at the end. therefore eliminated it here and adapted output paths in submit_jobsub.py
 
         self._sJobLabel_Prefix= self._par1_name
         self._MoveFiles() #has to come after the self._output_dir is updated
