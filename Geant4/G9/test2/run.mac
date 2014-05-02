@@ -1,0 +1,81 @@
+# Macro file for example tutorial
+# 
+# Can be run in batch, without graphic
+# or interactively: Idle> /control/execute run.mac
+#
+########################################
+#
+# define scoring mesh
+#
+/score/create/boxMesh boxMesh_1
+#
+#Create a mesh large as the box
+/score/mesh/boxSize 200. 200. 200. cm
+#Position it over the box
+#/score/mesh/translate/xyz 0 0 8 m
+#mesh voxel size of 5cm
+/score/mesh/nBin 30 6 10
+#
+/score/quantity/energyDeposit eDep
+/score/quantity/nOfStep nOfStepGamma
+/score/quantity/nOfSecondary nOfSecondaryGamma
+/score/quantity/nOfCollision nOfCollisionGamma
+/score/filter/particle gammaFilter gamma
+/score/quantity/nOfStep nOfStepEMinus
+/score/quantity/nOfSecondary nOfSecondaryEMinus
+/score/quantity/nOfCollision nOfCollisionEMinus
+/score/filter/particle eMinusFilter e-
+/score/quantity/nOfStep nOfStepEPlus
+/score/filter/particle ePlusFilter e+
+#
+/score/close
+#
+/score/list
+# Use this open statement to create an OpenGL view:
+/vis/open OGLSQt
+
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+
+# Draw geometry:
+/vis/drawVolume
+/vis/scene/create
+/vis/sceneHandler/attach
+/vis/viewer/flush
+
+# Draw smooth trajectories at end of event
+/vis/scene/add/trajectories smooth
+
+# Draw hits at end of event:
+/vis/scene/add/hits
+
+# To superimpose all of the events from a given run:
+/vis/scene/endOfEventAction accumulate
+
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+
+#/vis/disable
+/run/verbose 1
+/gps/particle e-
+/run/beamOn 100
+#/vis/enable
+
+#/vis/viewer/panTo -7 0 m
+#/vis/viewer/zoom 7
+#/vis/viewer/set/viewpointThetaPhi 45 20
+#/control/execute draw.mac
+
+###############################################################
+#
+# Dump scores to a file
+#
+/score/dumpQuantityToFile boxMesh_1 nOfSecondaryEMinus nOfSecondaryEMinus.txt
+/score/dumpQuantityToFile boxMesh_1 nOfCollisionEMinus nOfCollisionEMinus.txt
+/score/dumpQuantityToFile boxMesh_1 nOfSecondaryGamma nOfSecondaryGamma.txt
+/score/dumpQuantityToFile boxMesh_1 nOfCollisionGamma nOfCollisionGamma.txt
+
+

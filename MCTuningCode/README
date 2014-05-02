@@ -1,0 +1,40 @@
+@author Bernd Reinhold (UHawaii), bernd@hawaii.edu
+@date March 25, 2014
+@analysis chain used to do MC tuning of G4DS
+
+
+
+configure one of the MCTuning*.py scripts and call as:
+-----------------------------------------------------
+python main_script.py &> GridSteelRindScale_output.log &
+
+- this produces MC starting with G4DS
+- then calls analyser.exe, which produces an output ntuple
+- from the data in the ntuple a chi2 is calculated between data and MC. It also produces a textfile with one line: the parameter(s) varied, the chi2 and ndf
+- plot.py (analysis_step3.py) collects the chi2, ndf for all parameter values and plots the chi2 as a function of the parameter for TopBottom and CollEff separately (and possibly future other indicators).
+
+there is quite complicated refilling of data going on. I decided to refill the data TH2D histogram once and for all with Refill_MCTuning_Data.C
+
+- In the optical.mac individual photons are simulated throughout the TPC volume. Unlike for Krypton or Argon, where all light originates in one poilt (to first order).
+- An optical photon per event makes the calculation of PE and top/bottom asymmetries different than for gamma or electron sources. Therefore there are different functions for optical photons and for (future) gamma sources:
+  void MC_TopBottom(); //krypton85
+  void MC_TopBottom_Optical(); //optical photons
+  void MC_CollEff();
+  void MC_CollEff_Optical();
+
+- In the collection efficiency plot the statistical uncertainty of the MC for 10^6 photons was too big, it was comparable or bigger than the data uncertainty. Therefore I will simulate now 10^7 photons by default.
+
+- Added code to simulate Krypton
+
+control "scripts":
+------------------
+main-script.py, which calls:
+MCTuningBase.py
+MCTuning_*.py
+
+Makefile
+
+mass production @ Fermilab:
+---------------------------
+- call as: python submit_jobsub.py, which hands main_script.sh off to jobsub. Jobsub seems to require a bash-script rather than a python script. Without that constraint main_script.sh would not be necessary.
+- main_script.sh calls main_script.py while setting the environment up for main_script.py
