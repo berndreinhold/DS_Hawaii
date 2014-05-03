@@ -1,0 +1,2 @@
+@abstract this code is based on the darkart/analysis/analysis.C macro. It is used to analyse physics runs (rather than laser or calibration runs), i.e. Argon and Krypton.
+@date May 2014
