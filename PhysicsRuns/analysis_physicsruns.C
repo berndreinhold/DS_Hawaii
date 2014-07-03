@@ -38,25 +38,55 @@
 using namespace std;
 using namespace darkart;
 
+
 // Forward declaration
-void LoopOverChain(TChain* tpc_chain, TString outFileName = "analysis.root");
+void analysis(TString outPath, TString outFileName);
+void analysis(TString outPath, TString outFileName, TString Inputfilelist);
+void LoopOverChain(TChain* tpc_chain, TString outPath="", TString outFileName = "analysis.root");
 
 
 
 
-void analysis() {
+void analysis(TString outPath, TString outFileName) {
 
   TChain* tpc_chain = new TChain("treeBuilder/Events");
   string tpc_path = "/ds50/data/test_processing/darkart_release3/Run";
+
+  
   std::vector<int> run_id_list;
-  //run_id_list.push_back(5370);
-  run_id_list.push_back(7470);
+  run_id_list.push_back(5370);
+  run_id_list.push_back(5372);
+  run_id_list.push_back(5373);
+  run_id_list.push_back(5375);
+  run_id_list.push_back(5376);
+  run_id_list.push_back(5378);
+  run_id_list.push_back(5379);
+  run_id_list.push_back(5381);
+  run_id_list.push_back(5382);
+  run_id_list.push_back(5384);
+  run_id_list.push_back(5385);
+  run_id_list.push_back(5387);
+  run_id_list.push_back(5388);
+  run_id_list.push_back(5390);
+  run_id_list.push_back(5391);
+  run_id_list.push_back(5393);
+  run_id_list.push_back(5396);
+  run_id_list.push_back(5398);
+  run_id_list.push_back(5399);
+  run_id_list.push_back(5401);
+  run_id_list.push_back(5402);
+  run_id_list.push_back(5404);
+  run_id_list.push_back(5405);
+  run_id_list.push_back(5407);
+  run_id_list.push_back(5408);
+  run_id_list.push_back(5410);
+  run_id_list.push_back(5412);
+  //run_id_list.push_back(7470);
   //run_id_list.push_back(5373);
 
   std::cout<<"WARNING: Database access disabled ! Make sure to check run list manually on the ELOG"<<std::endl;
   std::ostringstream os;
-  for(vector<int>::const_iterator it = run_id_list.begin(); it != run_id_list.end(); it++)
-    {
+  for(vector<int>::const_iterator it = run_id_list.begin(); it != run_id_list.end(); it++){
       os.str("");
       os << tpc_path << setw(6) << setfill('0') << *it
          << "/Run"<< setw(6) << setfill('0') << *it <<".root";
@@ -64,22 +94,24 @@ void analysis() {
       tpc_chain->Add(os.str().c_str());
     }
     
-  LoopOverChain(tpc_chain);
+  //tpc_chain->Add("/scratch/darkside/reinhol1/LaserRunNumber/run5303_withLaserNumber.root");
+
+  LoopOverChain(tpc_chain, outPath, outFileName);
 }
 
 
-void analysis(TString Inputfilelist, TString outFileName) {
+void analysis(TString Inputfilelist, TString outPath, TString outFileName) {
 
   TChain* tpc_chain = new TChain("treeBuilder/Events");
 
   std::cout<<"WARNING: Database access disabled ! Make sure to check run list manually on the ELOG"<<std::endl;
 
   Bool_t IsChained = AddFile2Chain(Inputfilelist, *tpc_chain);
-  if (IsChained) LoopOverChain(tpc_chain, outFileName);
+  if (IsChained) LoopOverChain(tpc_chain, outPath, outFileName);
   else std::cout<<"Cannot chain files!! Please check input file list."<<std::endl;
 }
 
-void LoopOverChain(TChain* tpc_chain, TString outFileName)
+void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
 {
   const Double_t t_drift_min = 10.; //[us]
   const Double_t t_drift_max = 373.3; //[us]
@@ -104,7 +136,7 @@ void LoopOverChain(TChain* tpc_chain, TString outFileName)
   ofstream outfile;
   TString fOutliers(outFileName);
   fOutliers.Replace(fOutliers.Length()-5, 5, "_outliers.txt"); //replace .root w/ _outliers.txt
-  outfile.open(fOutliers.Data());
+  outfile.open(outPath+"/"+fOutliers.Data());
 
 #if defined(XYLOCATOR) 
   //XY
@@ -129,8 +161,8 @@ void LoopOverChain(TChain* tpc_chain, TString outFileName)
   ///////////////////////     Declare histograms     ///////////////////////
   //////////////////////////////////////////////////////////////////////////
   
-  std::cout << "Saving output to "<<outFileName.Data()<<std::endl;
-  TFile* f = new TFile(outFileName.Data(), "RECREATE");
+    std::cout << "Saving output to "<< outPath << "/" << outFileName.Data()<<std::endl;
+  TFile* f = new TFile(outPath+"/"+outFileName.Data(), "RECREATE");
   TH1F* t_drift_hist                = new TH1F("t_drift_hist", "Drift Time", 400, 0., 400.);
   TH1F* s1_startime_hist            = new TH1F("s1_startime_hist", "Drift Time", 5000, -10., 10.);
   TH1F* total_s1_hist               = new TH1F("total_s1_hist", "S1 Spectrum", 10000, 0, 10000);
@@ -225,6 +257,9 @@ void LoopOverChain(TChain* tpc_chain, TString outFileName)
   Double_t ypos;
   Double_t s1_top_bottom;
   Double_t s2_top_bottom;
+
+  TNtuple *tN=new TNtuple("tN","output", "run_ID:eventID:event_time:event_dt:total_s1:total_s1_corr:total_s2:total_s2_corr:total_f90:t_drift:bary_x:bary_y"); 
+
       
   TTree* outliers = new TTree("outliers", "TTree containing information on outliers");
   outliers->Branch("runID", &run_id);
@@ -262,7 +297,7 @@ void LoopOverChain(TChain* tpc_chain, TString outFileName)
   /////////////////     BEGIN LOOP OVER EVENTS       ///////////////////////
   //////////////////////////////////////////////////////////////////////////
   //tpc_events = tpc_events - 50; // Skip last few events because end of some (very few) runs are problematic.
-  for (int n = 0; n < 10000 /*tpc_events*/; n++)
+  for (int n = 0; n < tpc_events; n++)
     {
         
       //Load the event
@@ -479,6 +514,8 @@ void LoopOverChain(TChain* tpc_chain, TString outFileName)
       xy_hist                     ->Fill(xpos, ypos);
       r_hist                      ->Fill(rpos);
 
+      tN->Fill(run_id, event_id, event_time, event_dt, total_s1,total_s1_corr,total_s2,total_s2_corr,total_f90,t_drift,bary_x,bary_y); 
+
     }//End loop over events
     
   std::cout<<"Run time: "<<LivetimeTotal+InhibitTimeTotal
@@ -529,14 +566,16 @@ int main(int argc, char **argv) {
   
   if ( argc == 1 ) {
     std::cout << "\n==========> analysis <=============" << std::endl;
-    analysis();
+    string outPath="/scratch/darkside/reinhol1/data/Calib/";
+    string outName="39Ar_run5370_5412.root";
+    analysis(outPath, outName);
   } else if ( argc == 3 ) {
     std::cout << "\n==========> analysis with file list & outputname <=============" << std::endl;
-    analysis(argv[1], argv[2]);
+    analysis(argv[1], argv[2], argv[3]);
   } else {
     std::cout << "Usage:" <<argc<< std::endl;
     std::cout << "./analysis" << std::endl;
-    std::cout << "OR ./analysis filelist.txt output.root" << std::endl;
+    std::cout << "OR ./analysis filelist.txt outpath output.root" << std::endl;
     return 0;
   }
 

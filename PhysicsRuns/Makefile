@@ -22,6 +22,7 @@ all: $(TARGET)
 	$(CC) $(CXXFLAGS) $(CXXLIBS) -L$(INCDIR) $(INCDIR)$(DICTNAME).so $(INCDIR)xylocator/xylocator.C $(INCDIR)xylocator/xy_pmtdata.C $< -o $@
 
 $(OBJS): $(SRCS)
+	@echo "compile $(OBJS)"
 	$(CC) $(CXXFLAGS) -c $^
 
 
@@ -30,5 +31,6 @@ $(INCDIR)$(DICTNAME).so:
 
 
 clean:
-	rm  -r $(OBJS)
+	rm  -f $(OBJS)
+	rm  -f $(TARGET)
 
