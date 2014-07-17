@@ -38,22 +38,91 @@
 using namespace std;
 using namespace darkart;
 
+//global variables:
+float drift_HV=200;
+float isotope=39; //argon 39,
+
 
 // Forward declaration
-void analysis(TString outPath, TString outFileName);
+void analysis(TString ountPath, TString outFileName);
 void analysis(TString outPath, TString outFileName, TString Inputfilelist);
 void LoopOverChain(TChain* tpc_chain, TString outPath="", TString outFileName = "analysis.root");
 
 
+#ifndef __CINT__
+int main(int argc, char **argv) {
+
+  std::clock_t begin = std::clock();
+  
+  if ( argc == 1 ) {
+    std::cout << "\n==========> analysis <=============" << std::endl;
+    string outPath="/scratch/darkside/reinhol1/data/Calib/";
+    //string outName="39Ar_run5370_5412.root";
+    //string outName="39Ar_drift200_run5440_5489.root";
+    string outName="39Ar_drift0_run5305_7327.root";
+    //string outName="83mKr_drift200_run5274_5340.root";
+    //string outName="83mKr_drift0_run5317_5321.root";
+    analysis(outPath, outName);
+  } else if ( argc == 3 ) {
+    std::cout << "\n==========> analysis with file list & outputname <=============" << std::endl;
+    analysis(argv[1], argv[2], argv[3]);
+  } else {
+    std::cout << "Usage:" <<argc<< std::endl;
+    std::cout << "./analysis" << std::endl;
+    std::cout << "OR ./analysis filelist.txt outpath output.root" << std::endl;
+    return 0;
+  }
+
+  std::clock_t end = std::clock();
+  double elapsed = double(end - begin) / CLOCKS_PER_SEC;
+  std::cout << "==> Application finished in " << elapsed << " s."<<std::endl;
+
+  return 0;
+}
+#endif /* __CINT __ */
 
 
 void analysis(TString outPath, TString outFileName) {
 
   TChain* tpc_chain = new TChain("treeBuilder/Events");
-  string tpc_path = "/ds50/data/test_processing/darkart_release3/Run";
-
-  
+  //string tpc_path = "/ds50/data/test_processing/darkart_release3/Run"; //BlueArc
+  string tpc_path = "/scratch/darkside/reconstructed/tpc/v1_00_00/Run"; //email Alden, July 14, 2014, "reconstructed data"
   std::vector<int> run_id_list;
+
+
+  //Krypton
+  //isotope=83;
+  /*
+  drift_HV=200;
+  run_id_list.push_back(5274);
+  run_id_list.push_back(5275);
+  run_id_list.push_back(5276);
+  run_id_list.push_back(5277);
+
+  run_id_list.push_back(5330);
+  run_id_list.push_back(5340);
+  */
+  /*
+  drift_HV=0;
+  run_id_list.push_back(5317);
+  run_id_list.push_back(5321);
+  */
+  /*
+  drift_HV=100;
+  run_id_list.push_back(5333);
+  run_id_list.push_back(5334);
+  */  
+  /*
+  drift_HV=150;
+  run_id_list.push_back(5337);
+  run_id_list.push_back(5338);
+  */
+
+
+  isotope=39;
+    /*
+      //drift field 200
+  //argon 39 - block 1 from http://blackhole.lngs.infn.it/wordpress50/g2-proposal-runs
   run_id_list.push_back(5370);
   run_id_list.push_back(5372);
   run_id_list.push_back(5373);
@@ -81,8 +150,48 @@ void analysis(TString outPath, TString outFileName) {
   run_id_list.push_back(5408);
   run_id_list.push_back(5410);
   run_id_list.push_back(5412);
-  //run_id_list.push_back(7470);
-  //run_id_list.push_back(5373);
+    */
+
+  /*
+  //argon 39 - block 2 from http://blackhole.lngs.infn.it/wordpress50/g2-proposal-runs
+  //drift field 200
+  //log says: acquisition window is 570 us
+  run_id_list.push_back(5440);
+  run_id_list.push_back(5441);
+  run_id_list.push_back(5444);
+  run_id_list.push_back(5445);
+  run_id_list.push_back(5449);
+  run_id_list.push_back(5450);
+  run_id_list.push_back(5452);
+  run_id_list.push_back(5453);
+  run_id_list.push_back(5455);
+  run_id_list.push_back(5456);
+  run_id_list.push_back(5460);
+  run_id_list.push_back(5461);
+
+  run_id_list.push_back(5464);
+  run_id_list.push_back(5468);
+  run_id_list.push_back(5469);
+  run_id_list.push_back(5471);
+  run_id_list.push_back(5472);
+  run_id_list.push_back(5473);
+  run_id_list.push_back(5475);
+
+  run_id_list.push_back(5481);
+  run_id_list.push_back(5484);
+  run_id_list.push_back(5485);
+  run_id_list.push_back(5488);
+  run_id_list.push_back(5489);
+  */
+
+  //null field
+  //from  Masa: https://docs.google.com/spreadsheet/ccc?key=0AqL-s7FlZ7sRdG9OT1BwRXR6a0pObnd3QWJxYVZxd2c&usp=sharing#gid=0
+  drift_HV=0;
+  run_id_list.push_back(5305);
+  run_id_list.push_back(7325);
+  run_id_list.push_back(7326);
+  run_id_list.push_back(7327);
+
 
   std::cout<<"WARNING: Database access disabled ! Make sure to check run list manually on the ELOG"<<std::endl;
   std::ostringstream os;
@@ -150,11 +259,11 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
   TFile* max_s1_frac_thresh_file = new TFile("/ds50/app/user/${USER}/work/darkart/analysis/max_s1_frac_cut_fixed_acceptance_full_stats.root");
 
   // Open ROOT file with xytree's.
-  TFile* xytree_file = new TFile("/ds50/data/test_processing/darkart_release3/xytree.root");
+  /*  TFile* xytree_file = new TFile("/ds50/data/test_processing/darkart_release3/xytree.root");
   TTree* xytree = NULL;
   int xytree_run_id, xytree_event_id;
   double xytree_xpos, xytree_ypos;
-
+  */
   
   
   //////////////////////////////////////////////////////////////////////////
@@ -253,12 +362,12 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
   
   Double_t bary_x;
   Double_t bary_y;
-  Double_t xpos;
-  Double_t ypos;
+  Double_t xpos=0;
+  Double_t ypos=0;
   Double_t s1_top_bottom;
   Double_t s2_top_bottom;
 
-  TNtuple *tN=new TNtuple("tN","output", "run_ID:eventID:event_time:event_dt:total_s1:total_s1_corr:total_s2:total_s2_corr:total_f90:t_drift:bary_x:bary_y"); 
+  TNtuple *tN=new TNtuple("tN","output", "run_ID:eventID:event_time:event_dt:total_s1:total_s1_corr:total_s2:total_s2_corr:total_f90:t_drift:bary_x:bary_y:drift_HV:isotope"); 
 
       
   TTree* outliers = new TTree("outliers", "TTree containing information on outliers");
@@ -307,6 +416,8 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
       event_id = event->event_info.event_id;
       event_time = event->event_info.timestamp_sec;
 
+      /*
+      //disabled after seg-fault for old (?!) runs
       // For externally stored xy values: retrieve the correct xytree in xytree_file. 
       if (run_id != xytree_run_id) {
         xytree_file->cd();
@@ -320,6 +431,8 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
         xytree->SetBranchAddress("xpos", &xytree_xpos);
         xytree->SetBranchAddress("ypos", &xytree_ypos);
       }
+      */
+
       
       Double_t acquiWindow = (1.*event->sumchannel.channel.nsamps)/(1.*event->sumchannel.channel.sample_rate);
       if ( n % 10000 == 0)
@@ -398,10 +511,12 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
       bary_y = event->pulses[s2_pulse_id].position.bary_y;
 
 #ifndef XYLOCATOR
+      /*
       // Read x,y values from external file
       xytree->GetEntry(event_id);
       xpos = xytree_xpos;
       ypos = xytree_ypos;
+      */
 #else
       // XY RECON
       for (Int_t ch = 0; ch < N_CHANNELS; ch++) {
@@ -514,7 +629,7 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
       xy_hist                     ->Fill(xpos, ypos);
       r_hist                      ->Fill(rpos);
 
-      tN->Fill(run_id, event_id, event_time, event_dt, total_s1,total_s1_corr,total_s2,total_s2_corr,total_f90,t_drift,bary_x,bary_y); 
+      tN->Fill(run_id, event_id, event_time, event_dt, total_s1,total_s1_corr,total_s2,total_s2_corr,total_f90,t_drift,bary_x,bary_y, drift_HV, isotope); 
 
     }//End loop over events
     
@@ -558,32 +673,4 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
 
 
 
-
-#ifndef __CINT__
-int main(int argc, char **argv) {
-
-  std::clock_t begin = std::clock();
-  
-  if ( argc == 1 ) {
-    std::cout << "\n==========> analysis <=============" << std::endl;
-    string outPath="/scratch/darkside/reinhol1/data/Calib/";
-    string outName="39Ar_run5370_5412.root";
-    analysis(outPath, outName);
-  } else if ( argc == 3 ) {
-    std::cout << "\n==========> analysis with file list & outputname <=============" << std::endl;
-    analysis(argv[1], argv[2], argv[3]);
-  } else {
-    std::cout << "Usage:" <<argc<< std::endl;
-    std::cout << "./analysis" << std::endl;
-    std::cout << "OR ./analysis filelist.txt outpath output.root" << std::endl;
-    return 0;
-  }
-
-  std::clock_t end = std::clock();
-  double elapsed = double(end - begin) / CLOCKS_PER_SEC;
-  std::cout << "==> Application finished in " << elapsed << " s."<<std::endl;
-
-  return 0;
-}
-#endif /* __CINT __ */
 
