@@ -19,7 +19,7 @@ all: $(TARGET)
 #%: %.o: leads to an error because of the second ':':  *** mixed implicit and static pattern rules.  Stop.
 %: %.o $(INCDIR)$(DICTNAME).so
 	echo $(OBJS)
-	$(CC) $(CXXFLAGS) $(CXXLIBS) -L$(INCDIR) $(INCDIR)$(DICTNAME).so $(INCDIR)xylocator/xylocator.C $(INCDIR)xylocator/xy_pmtdata.C $< -o $@
+	$(CC) $(CXXFLAGS) $(CXXLIBS) -L$(INCDIR) $(INCDIR)$(DICTNAME).so $(INCDIR)xylocator/xylocator.C $(INCDIR)xylocator/xy_pmtdata.C $< -o $@.exe
 
 $(OBJS): $(SRCS)
 	@echo "compile $(OBJS)"
