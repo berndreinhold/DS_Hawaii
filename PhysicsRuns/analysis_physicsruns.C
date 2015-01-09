@@ -39,15 +39,16 @@ using namespace std;
 using namespace darkart;
 
 //global variables:
-float drift_HV=200;
+int drift_HV=200;
 float isotope=39; //argon 39,
 
 
 // Forward declaration
-void analysis(TString ountPath, TString outFileName);
-void analysis(TString outPath, TString outFileName, TString Inputfilelist);
-void LoopOverChain(TChain* tpc_chain, TString outPath="", TString outFileName = "analysis.root");
-
+void analysis(TString outPath, TString outFileName, int drift_HV);
+//void analysis(TString outPath, TString outFileName, TString Inputfilelist);
+void LoopOverChain(TChain* tpc_chain, TString outPath="", TString outFileName = "analysis.root", int drift_HV=200);
+void my_max_s1(EventData* event, Int_t const s1_pulse_id, Int_t & max_s1_chan, Double_t & max_s1);
+void my_top_bottom_ratio(EventData* event, Int_t const s1_pulse_id, Double_t & s1_top_bottom);
 
 #ifndef __CINT__
 int main(int argc, char **argv) {
@@ -59,13 +60,20 @@ int main(int argc, char **argv) {
     string outPath="/scratch/darkside/reinhol1/data/Calib/";
     //string outName="39Ar_run5370_5412.root";
     //string outName="39Ar_drift200_run5440_5489.root";
-    string outName="39Ar_drift0_run5305_7327.root";
+    //string outName="39Ar_drift0_run5305_7327.root";
     //string outName="83mKr_drift200_run5274_5340.root";
     //string outName="83mKr_drift0_run5317_5321.root";
-    analysis(outPath, outName);
-  } else if ( argc == 3 ) {
+
+    //string outName="83mKr_drift0_run7283_7316.root";
+    //string outName="83mKr_drift100_run7299_7304.root";
+    //string outName="83mKr_drift200_run7278_7296.root";
+
+    string outName="83mKr_driftHV%d_run%d_%d.root"; //run numbers are inserted in the analysis()-function, where the runlist is available.
+    analysis(outPath, outName, drift_HV);
+    /*  } else if ( argc == 3 ) {
     std::cout << "\n==========> analysis with file list & outputname <=============" << std::endl;
     analysis(argv[1], argv[2], argv[3]);
+    */
   } else {
     std::cout << "Usage:" <<argc<< std::endl;
     std::cout << "./analysis" << std::endl;
@@ -82,44 +90,57 @@ int main(int argc, char **argv) {
 #endif /* __CINT __ */
 
 
-void analysis(TString outPath, TString outFileName) {
+void analysis(TString outPath, TString outFileName, int drift_HV) {
 
   TChain* tpc_chain = new TChain("treeBuilder/Events");
   //string tpc_path = "/ds50/data/test_processing/darkart_release3/Run"; //BlueArc
-  string tpc_path = "/scratch/darkside/reconstructed/tpc/v1_00_00/Run"; //email Alden, July 14, 2014, "reconstructed data"
+  // v1_00_00 before, v1_00_02 did not have the krypton runs.
+  string tpc_path = "/scratch/darkside/reconstructed/tpc/v1_00_01/Run"; //email Alden, July 14, 2014, "reconstructed data"
   std::vector<int> run_id_list;
 
 
   //Krypton
   //isotope=83;
+  
   /*
   drift_HV=200;
-  run_id_list.push_back(5274);
-  run_id_list.push_back(5275);
-  run_id_list.push_back(5276);
-  run_id_list.push_back(5277);
+  run_id_list.push_back(7278);
+  run_id_list.push_back(7280);
+  run_id_list.push_back(7290);
+  run_id_list.push_back(7293);
+  run_id_list.push_back(7296);
+  */
+  
 
-  run_id_list.push_back(5330);
-  run_id_list.push_back(5340);
-  */
-  /*
-  drift_HV=0;
-  run_id_list.push_back(5317);
-  run_id_list.push_back(5321);
-  */
-  /*
-  drift_HV=100;
-  run_id_list.push_back(5333);
-  run_id_list.push_back(5334);
-  */  
-  /*
+  
   drift_HV=150;
   run_id_list.push_back(5337);
   run_id_list.push_back(5338);
+  
+
+  /*
+  drift_HV=100;
+  run_id_list.push_back(7299);
+  run_id_list.push_back(7302);
+  run_id_list.push_back(7303);
+  run_id_list.push_back(7304);
+*/      
+
+
+  /*
+  drift_HV=0;
+  run_id_list.push_back(7283);
+  run_id_list.push_back(7286);
+  run_id_list.push_back(7287);
+  run_id_list.push_back(7308);
+  run_id_list.push_back(7310);
+  run_id_list.push_back(7313);
+  run_id_list.push_back(7316);
   */
+  
 
 
-  isotope=39;
+  //isotope=39;
     /*
       //drift field 200
   //argon 39 - block 1 from http://blackhole.lngs.infn.it/wordpress50/g2-proposal-runs
@@ -186,12 +207,14 @@ void analysis(TString outPath, TString outFileName) {
 
   //null field
   //from  Masa: https://docs.google.com/spreadsheet/ccc?key=0AqL-s7FlZ7sRdG9OT1BwRXR6a0pObnd3QWJxYVZxd2c&usp=sharing#gid=0
-  drift_HV=0;
-  run_id_list.push_back(5305);
-  run_id_list.push_back(7325);
+  /*  
+      drift_HV=0;
+  //run_id_list.push_back(5305);
+    
+      run_id_list.push_back(7325);
   run_id_list.push_back(7326);
   run_id_list.push_back(7327);
-
+  */
 
   std::cout<<"WARNING: Database access disabled ! Make sure to check run list manually on the ELOG"<<std::endl;
   std::ostringstream os;
@@ -202,13 +225,15 @@ void analysis(TString outPath, TString outFileName) {
       std::cout<<"Adding file: "<<os.str().c_str()<<std::endl;
       tpc_chain->Add(os.str().c_str());
     }
+
+  outFileName=Form(outFileName,drift_HV,*(run_id_list.begin()),*(run_id_list.end()-1));
     
   //tpc_chain->Add("/scratch/darkside/reinhol1/LaserRunNumber/run5303_withLaserNumber.root");
 
-  LoopOverChain(tpc_chain, outPath, outFileName);
+  LoopOverChain(tpc_chain, outPath, outFileName, drift_HV);
 }
 
-
+/*
 void analysis(TString Inputfilelist, TString outPath, TString outFileName) {
 
   TChain* tpc_chain = new TChain("treeBuilder/Events");
@@ -216,20 +241,33 @@ void analysis(TString Inputfilelist, TString outPath, TString outFileName) {
   std::cout<<"WARNING: Database access disabled ! Make sure to check run list manually on the ELOG"<<std::endl;
 
   Bool_t IsChained = AddFile2Chain(Inputfilelist, *tpc_chain);
-  if (IsChained) LoopOverChain(tpc_chain, outPath, outFileName);
+  if (IsChained) LoopOverChain(tpc_chain, outPath, outFileName, drift_HV);
   else std::cout<<"Cannot chain files!! Please check input file list."<<std::endl;
 }
-
-void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
+*/
+void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName, int drift_HV)
 {
   const Double_t t_drift_min = 10.; //[us]
-  const Double_t t_drift_max = 373.3; //[us]
+  Double_t t_drift_max = 373.3; //[us]
   const Double_t t_drift_delta = 10; //[us]
-  const Double_t t_s3_sep_min = 372.; //372.; //[us]
-  const Double_t t_s3_sep_max = 400.; //390.; //[us]
+  Double_t t_s3_sep_min = 372.; //372.; //[us]
+  Double_t t_s3_sep_max = 400.; //390.; //[us]
   const Double_t electron_lifetime = 4733; //3338; //[us]
   const Int_t N_CHANNELS = 38;
-    
+
+ if (drift_HV == 100){
+      t_drift_max = 650.4;//665.;
+  } else if (drift_HV == 150){
+      t_drift_max = 464.3;//470.;
+  } else if (drift_HV == 200){
+      t_drift_max = 373.3;//376.;
+  }
+ 
+ //somehow used in identify_pulses - need to understand the purpose of that
+ t_s3_sep_min = t_drift_max - 2;
+ t_s3_sep_max = t_drift_max + 25;
+
+
   Int_t tpc_events = tpc_chain->GetEntries();
   if (tpc_events == 0)
     {
@@ -327,45 +365,45 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
     }
 
   //DEFINE PARAMETERS
-  Int_t run_id;
-  Int_t event_id;
-  Double_t event_time;
-  Double_t event_dt;
+  Int_t run_id=0;
+  Int_t event_id=0;
+  Double_t event_time=0;
+  Double_t event_dt=0;
 
-  Double_t s1_start_time;
-  Double_t s1_duration;
-  Double_t s2_start_time;
-  Double_t s2_duration;
-  Double_t t_drift;
+  Double_t s1_start_time=0;
+  Double_t s1_duration=0;
+  Double_t s2_start_time=0;
+  Double_t s2_duration=0;
+  Double_t t_drift=0;
 
-  Double_t total_s1;  
-  Double_t total_s1_corr;
-  Double_t total_s1_90;
-  Double_t total_s1_90_corr;
-  Double_t total_s1_20;
-  Double_t total_f90;
-  Double_t total_f20;
+  Double_t total_s1=0;  
+  Double_t total_s1_corr=0;
+  Double_t total_s1_90=0;
+  Double_t total_s1_90_corr=0;
+  Double_t total_s1_20=0;
+  Double_t total_f90=0;
+  Double_t total_f20=0;
   
-  Double_t total_s2;
-  Double_t total_s2_corr;
-  Double_t total_s2_f90;
-  Double_t total_s2_f20;
+  Double_t total_s2=0;
+  Double_t total_s2_corr=0;
+  Double_t total_s2_f90=0;
+  Double_t total_s2_f20=0;
 
-  Double_t s2_over_s1;
-  Double_t s2_over_s1_corr;
+  Double_t s2_over_s1=0;
+  Double_t s2_over_s1_corr=0;
   
-  Int_t max_s1_chan, max_s2_chan;
-  Double_t max_s1, max_s2;
-  Double_t max_s1_frac;
-  Double_t max_s2_frac;
-  Double_t max_s1_peak_time;
+  Int_t max_s1_chan=0, max_s2_chan=0;
+  Double_t max_s1=0, max_s2=0;
+  Double_t max_s1_frac=0;
+  Double_t max_s2_frac=0;
+  Double_t max_s1_peak_time=0;
   
-  Double_t bary_x;
-  Double_t bary_y;
+  Double_t bary_x=0;
+  Double_t bary_y=0;
   Double_t xpos=0;
   Double_t ypos=0;
-  Double_t s1_top_bottom;
-  Double_t s2_top_bottom;
+  Double_t s1_top_bottom=0;
+  Double_t s2_top_bottom=0;
 
   TNtuple *tN=new TNtuple("tN","output", "run_ID:eventID:event_time:event_dt:total_s1:total_s1_corr:total_s2:total_s2_corr:total_f90:t_drift:bary_x:bary_y:drift_HV:isotope"); 
 
@@ -459,7 +497,7 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
         cout << "Event=" << event->event_info.event_id<<" has LOWER # of Channels"<<endl;
         continue;
       }
-        
+      
       //Make sure the baseline was found on the sum channel
       if (event->sumchannel.baseline.found_baseline == false)
         continue;
@@ -469,46 +507,54 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
       ds50analysis::identify_pulses(event, n_phys_pulses, s1_pulse_id, s2_pulse_id, t_s3_sep_min, t_s3_sep_max);
 
       
-      //Make sure there are 2 pulses
-      if (n_phys_pulses != 2)
+      //Make sure there are 2 pulses, but only if there is a drift field
+      if (drift_HV>0 && n_phys_pulses != 2)
         continue;
         
       //CALCULATE PARAMETERS
       total_s1 = event->pulses[s1_pulse_id].param.fixed_int1;
         
       s1_start_time = event->sumchannel.pulses[s1_pulse_id].pulse.start_time;
-      s2_start_time = event->sumchannel.pulses[s2_pulse_id].pulse.start_time;
-      t_drift = s2_start_time - s1_start_time;
-
+      if(drift_HV>0){
+	s2_start_time = event->sumchannel.pulses[s2_pulse_id].pulse.start_time;
+	t_drift = s2_start_time - s1_start_time;
+      }
       s1_duration = event->sumchannel.pulses[s1_pulse_id].pulse.end_time - event->sumchannel.pulses[s1_pulse_id].pulse.start_time;
-      s2_duration = event->sumchannel.pulses[s2_pulse_id].pulse.end_time - event->sumchannel.pulses[s2_pulse_id].pulse.start_time;
+      if(drift_HV>0) s2_duration = event->sumchannel.pulses[s2_pulse_id].pulse.end_time - event->sumchannel.pulses[s2_pulse_id].pulse.start_time;
 
       total_s1_corr = total_s1*ds50analysis::s1_corr_factor(t_drift_max, t_drift);
       total_s1_90 = event->pulses[s1_pulse_id].param.f90*event->pulses[s1_pulse_id].param.npe;
       total_s1_90_corr = total_s1_90*ds50analysis::s1_corr_factor(t_drift_max, t_drift);
-      total_s1_20 = event->pulses[s1_pulse_id].param.f_param[1];/**event->pulses[s1_pulse_id].param.npe; BUG IN darkart*/
+      if(drift_HV>0) total_s1_20 = event->pulses[s1_pulse_id].param.f_param[1];/**event->pulses[s1_pulse_id].param.npe; BUG IN darkart*/ //gave segfaults for drift_HV==0
       total_f90 = total_s1_90/total_s1;
-      total_f20 = total_s1_20/total_s1;
+      if(drift_HV>0) total_f20 = total_s1_20/total_s1;
         
-      total_s2 = event->pulses[s2_pulse_id].param.fixed_int2;
-      total_s2_corr = total_s2/TMath::Exp(-t_drift/electron_lifetime);
-      total_s2_f20 = event->pulses[s2_pulse_id].param.f_param[1]/total_s2;/**event->pulses[s2_pulse_id].param.npe; BUG IN darkart*/
-      total_s2_f90 = event->pulses[s2_pulse_id].param.f90*event->pulses[s2_pulse_id].param.npe/total_s2;
-
-      s2_over_s1 = total_s2/total_s1;
-      s2_over_s1_corr = total_s2_corr/total_s1_corr;
-
+      if(drift_HV>0){
+	total_s2 = event->pulses[s2_pulse_id].param.fixed_int2;
+	total_s2_corr = total_s2/TMath::Exp(-t_drift/electron_lifetime);
+	total_s2_f20 = event->pulses[s2_pulse_id].param.f_param[1]/total_s2;/**event->pulses[s2_pulse_id].param.npe; BUG IN darkart*/
+	total_s2_f90 = event->pulses[s2_pulse_id].param.f90*event->pulses[s2_pulse_id].param.npe/total_s2;
+	
+	s2_over_s1 = total_s2/total_s1;
+	s2_over_s1_corr = total_s2_corr/total_s1_corr;
+      }
       max_s1_chan = -1; max_s2_chan = -1;
-      max_s1 = -1.; max_s2 = -1.;
-      ds50analysis::max_s1_s2(event, s1_pulse_id, s2_pulse_id, max_s1_chan, max_s1, max_s2_chan, max_s2);
+      max_s1 = -1.; 
+      max_s2 = -1.;
+      if(drift_HV>0) ds50analysis::max_s1_s2(event, s1_pulse_id, s2_pulse_id, max_s1_chan, max_s1, max_s2_chan, max_s2);
+      else my_max_s1(event, s1_pulse_id, max_s1_chan, max_s1);
 
       max_s1_frac = max_s1/total_s1;
-      max_s2_frac = max_s2/total_s2;
+      if(drift_HV>0) max_s2_frac = max_s2/total_s2;
       max_s1_peak_time =  event->getChannelByID(max_s1_chan).pulses[s1_pulse_id].param.peak_time;
 
-      ds50analysis::top_bottom_ratio(event, s1_pulse_id, s2_pulse_id, s1_top_bottom, s2_top_bottom);
-      bary_x = event->pulses[s2_pulse_id].position.bary_x;
-      bary_y = event->pulses[s2_pulse_id].position.bary_y;
+      if(drift_HV>0){
+	ds50analysis::top_bottom_ratio(event, s1_pulse_id, s2_pulse_id, s1_top_bottom, s2_top_bottom);
+	bary_x = event->pulses[s2_pulse_id].position.bary_x;
+	bary_y = event->pulses[s2_pulse_id].position.bary_y;
+      } else {
+	my_top_bottom_ratio(event, s1_pulse_id, s1_top_bottom);
+      }
 
 #ifndef XYLOCATOR
       /*
@@ -571,8 +617,8 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
       if (total_f90 < 0.05)
         continue;
         
-      //Remove events near grid or cathode
-      if (t_drift < t_drift_min || t_drift > t_drift_max - t_drift_delta)
+      //Remove events near grid or cathode, but only if there is a drift field
+      if (drift_HV>0 && (t_drift < t_drift_min || t_drift > t_drift_max - t_drift_delta))
         continue;
 
       // Cut on large max_s1_frac. Threshold is defined bin by bin.
@@ -598,15 +644,16 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
       ///////////////////////
       //  FILL HISTOGRAMS  //
       ///////////////////////
-      
-      for (int j = 0; j < n_hists; j++)
-        {
-          if (total_s1_corr > j*s1_slice_width && total_s1_corr <= (j+1)*s1_slice_width) {
-            logs2s1_corr_f90_hist[j]->Fill(total_f90, TMath::Log10(s2_over_s1_corr));
-            xy_hists[j]->Fill(xpos, ypos);
-            r_hists[j]->Fill(rpos);
-          }
-        }
+	if(drift_HV>0){
+	  for (int j = 0; j < n_hists; j++)
+	    {
+	      if (total_s1_corr > j*s1_slice_width && total_s1_corr <= (j+1)*s1_slice_width) {
+		logs2s1_corr_f90_hist[j]->Fill(total_f90, TMath::Log10(s2_over_s1_corr));
+		xy_hists[j]->Fill(xpos, ypos);
+		r_hists[j]->Fill(rpos);
+	      }
+	    }
+	}
       max_frac_s1_hist->Fill(total_s1, max_s1_frac);
 
       
@@ -629,7 +676,7 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
       xy_hist                     ->Fill(xpos, ypos);
       r_hist                      ->Fill(rpos);
 
-      tN->Fill(run_id, event_id, event_time, event_dt, total_s1,total_s1_corr,total_s2,total_s2_corr,total_f90,t_drift,bary_x,bary_y, drift_HV, isotope); 
+      tN->Fill(run_id, event_id, event_time, event_dt, total_s1,total_s1_corr,total_s2,total_s2_corr,total_f90,t_drift,bary_x,bary_y, 1.0*drift_HV, isotope); 
 
     }//End loop over events
     
@@ -672,5 +719,39 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName)
 }
 
 
+//adapted from void ds50analysis::max_s1_s2(EventData* event, ...);
+void my_max_s1(EventData* event, Int_t const s1_pulse_id, Int_t & max_s1_chan, Double_t & max_s1){
+  const Int_t nchans = event->channels.size();
+  for (Int_t ch = 0; ch < nchans; ch++)
+    {
+      ChannelData const& channel = event->getChannelByID(ch);
+      Double_t s1 = -channel.pulses[s1_pulse_id].param.fixed_int1 / channel.pmt.spe_mean;
+      if (s1 > max_s1)
+        {
+          max_s1 = s1;
+          max_s1_chan = ch;
+        }
+    }
+  
+}
 
+//adapted from void ds50analysis::top_bottom_ratio(EventData* event, ...);
+void my_top_bottom_ratio(EventData* event, Int_t const s1_pulse_id, Double_t & s1_top_bottom){
+  const Int_t nchans = event->channels.size();
+  double s1_top = 0, s1_bot = 0;
+  for (Int_t ch = 0; ch < nchans; ch++)
+  {
+      ChannelData const& channel = event->getChannelByID(ch);
+      if (ch < 19)
+      {
+          s1_bot += -channel.pulses[s1_pulse_id].param.fixed_int1 / channel.pmt.spe_mean;
+      }
+      else
+      {
+          s1_top += -channel.pulses[s1_pulse_id].param.fixed_int1 / channel.pmt.spe_mean;
+      }
+      
+  }
+  s1_top_bottom = s1_top/s1_bot;
+}
 
