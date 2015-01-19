@@ -1,36 +1,43 @@
+#TARGET = xytree_generator
+#TARGET = analysis_physicsruns #analysis_crosscheck
 TARGET = analysis_physicsruns
-#DEP=$(TARGET:.out=.d)
-SRCS = $(TARGET).C
-#OBJS = $(addsuffix .o, $(notdir $(basename $(SRCS))))
-OBJS = $(TARGET).o
-DICTNAME = DarkArtDict
-INCDIR =  /ds50/app/user/${USER}/work/darkart/analysis/
 
+SRCS = $(TARGET).C
+DICTNAME = DarkArtDict
+#DARKARTDIR = ../darkart/Products
+INCDIR = /ds50/app/user/reinhol1/work/darkart/
+DARKARTHEADERS = $(INCDIR)/darkart/Products/EventData.hh
+OBJS = $(addsuffix .o, $(notdir $(basename $(SRCS))))
 ROOTCFLAGS = $(shell $(ROOTSYS)/bin/root-config --cflags)
-ROOTLIBS   = $(shell $(ROOTSYS)/bin/root-config --libs) -lProof -lHistPainter #-lMemStat
-#ROOTLDFLAGS = $(shell $(ROOTSYS)/bin/root-config --ldflags)
-CXXFLAGS   =  -I${INCDIR} $(ROOTCFLAGS) -Wall -fPIC -g #-pthread 
+ROOTLIBS   = $(shell $(ROOTSYS)/bin/root-config --libs) -lProof -lHistPainter -lMinuit #-lMemStat
+ROOTLDFLAGS = $(shell $(ROOTSYS)/bin/root-config --ldflags)
+ROOTCINT = $(ROOTSYS)/bin/rootcint
+CXXFLAGS   = $(ROOTCFLAGS) -Wall -fPIC -g #-pthread 
 CXXLIBS    = $(ROOTLIBS)
 CC = g++ 
 
 
-all: $(TARGET) 
+all: $(DICTNAME).so $(TARGET) 
+#all: $(TARGET)
 
-#%: %.o: leads to an error because of the second ':':  *** mixed implicit and static pattern rules.  Stop.
-%: %.o $(INCDIR)$(DICTNAME).so
-	echo $(OBJS)
-	$(CC) $(CXXFLAGS) $(CXXLIBS) -L$(INCDIR) $(INCDIR)$(DICTNAME).so $(INCDIR)xylocator/xylocator.C $(INCDIR)xylocator/xy_pmtdata.C $< -o $@.exe
+%: %.o
+	$(CC) $(CXXFLAGS) $(CXXLIBS) $(DICTNAME).so $< -o $@.exe
 
 $(OBJS): $(SRCS)
-	@echo "compile $(OBJS)"
+	$(CC) $(CXXFLAGS) -I$(INCDIR) -c $^
+
+XYReconstructor.o: XYReconstructor/XYReconstructor.cxx
 	$(CC) $(CXXFLAGS) -c $^
 
+XYRecHelper.o: XYReconstructor/XYRecHelper.cxx
+	$(CC) $(CXXFLAGS) -c $^
 
-$(INCDIR)$(DICTNAME).so: 
-	cd $(INCDIR) && make 
+$(DICTNAME).cxx: 
+	$(ROOTCINT) -f $@ -c -p $(SRCS) XYReconstructor/XYReconstructor.h XYReconstructor/XYRecHelper.h $(DARKARTHEADERS) LinkDef.h
 
+$(DICTNAME).so: $(DICTNAME).cxx XYReconstructor.o XYRecHelper.o
+	$(CC) -shared -o $@ $(ROOTLDFLAGS) $(CXXFLAGS) $(CXXLIBS) -I$(ROOTSYS)/include $^
 
 clean:
-	rm  -f $(OBJS)
-	rm  -f $(TARGET)
+	rm  -r $(OBJS) $(DEP) $(SOBJS)  $(DICTNAME).so $(DICTNAME).cxx $(DICTNAME).h XYReconstructor.o XYRecHelper.o
 
