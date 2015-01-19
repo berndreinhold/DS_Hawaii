@@ -24,16 +24,22 @@
 #include "TNtuple.h"
 #include "TAxis.h"
 
-#include "../darkart/Products/EventData.hh"
-#include "analysis_lib.hh"
+//use full paths because of CINT not understanding its include directories (or me not knowing how to organize them correctly) -f [src file] -c -I[includedir] - Jan 10, 2015
+#include "darkart/Products/EventData.hh"
+#include "analysis/analysis_lib.hh"
+//#include "/ds50/app/user/reinhol1/work/darkart/darkart/Products/EventData.hh"
+//#include "/ds50/app/user/reinhol1/work/darkart/analysis/analysis_lib.hh"
+
+//#include "../darkart/Products/EventData.hh"
+//#include "analysis_lib.hh"
 
 //#define XYLOCATOR //Use xylocator for all events
-#if defined(XYLOCATOR)
-#include "xylocator/xylocator.hh"
-#ifdef __MAKECINT__
-#pragma link C++ class map<int,double>;
-#endif
-#endif
+//#if defined(XYLOCATOR)
+//#include "xylocator/xylocator.hh"
+//#ifdef __MAKECINT__
+//#pragma link C++ class map<int,double>;
+//#endif
+//#endif
 
 using namespace std;
 using namespace darkart;
@@ -95,12 +101,18 @@ void analysis(TString outPath, TString outFileName, int drift_HV) {
   TChain* tpc_chain = new TChain("treeBuilder/Events");
   //string tpc_path = "/ds50/data/test_processing/darkart_release3/Run"; //BlueArc
   // v1_00_00 before, v1_00_02 did not have the krypton runs.
-  string tpc_path = "/scratch/darkside/reconstructed/tpc/v1_00_01/Run"; //email Alden, July 14, 2014, "reconstructed data"
+  //string tpc_path = "/scratch/darkside/reconstructed/tpc/v1_00_01/Run"; //email Alden, July 14, 2014, "reconstructed data"
+  string tpc_path = "/ds50/data/test_processing/v1_00_01/"; //Krypton runs
+  //string tpc_path = "/ds50/data/test_processing/v1_01_04/"; //calibration data
+
+  TChain* tpc_chainXY = new TChain("xytree");
+
+
   std::vector<int> run_id_list;
 
 
   //Krypton
-  //isotope=83;
+  isotope=83;
   
   /*
   drift_HV=200;
@@ -110,38 +122,37 @@ void analysis(TString outPath, TString outFileName, int drift_HV) {
   run_id_list.push_back(7293);
   run_id_list.push_back(7296);
   */
-  
-
-  
+ 
+  /*
   drift_HV=150;
   run_id_list.push_back(5337);
   run_id_list.push_back(5338);
-  
+  */
 
-  /*
+  /* 
   drift_HV=100;
   run_id_list.push_back(7299);
   run_id_list.push_back(7302);
   run_id_list.push_back(7303);
   run_id_list.push_back(7304);
-*/      
+  */
 
-
-  /*
+  
   drift_HV=0;
   run_id_list.push_back(7283);
   run_id_list.push_back(7286);
   run_id_list.push_back(7287);
   run_id_list.push_back(7308);
-  run_id_list.push_back(7310);
-  run_id_list.push_back(7313);
-  run_id_list.push_back(7316);
+  /*
+    run_id_list.push_back(7310);
+    run_id_list.push_back(7313);
+    run_id_list.push_back(7316);
   */
   
 
-
+  /*
   //isotope=39;
-    /*
+    
       //drift field 200
   //argon 39 - block 1 from http://blackhole.lngs.infn.it/wordpress50/g2-proposal-runs
   run_id_list.push_back(5370);
@@ -151,6 +162,8 @@ void analysis(TString outPath, TString outFileName, int drift_HV) {
   run_id_list.push_back(5376);
   run_id_list.push_back(5378);
   run_id_list.push_back(5379);
+*/ 
+ /*
   run_id_list.push_back(5381);
   run_id_list.push_back(5382);
   run_id_list.push_back(5384);
@@ -171,7 +184,7 @@ void analysis(TString outPath, TString outFileName, int drift_HV) {
   run_id_list.push_back(5408);
   run_id_list.push_back(5410);
   run_id_list.push_back(5412);
-    */
+  */  
 
   /*
   //argon 39 - block 2 from http://blackhole.lngs.infn.it/wordpress50/g2-proposal-runs
@@ -216,20 +229,32 @@ void analysis(TString outPath, TString outFileName, int drift_HV) {
   run_id_list.push_back(7327);
   */
 
-  std::cout<<"WARNING: Database access disabled ! Make sure to check run list manually on the ELOG"<<std::endl;
+  //std::cout<<"WARNING: Database access disabled ! Make sure to check run list manually on the ELOG"<<std::endl;
   std::ostringstream os;
   for(vector<int>::const_iterator it = run_id_list.begin(); it != run_id_list.end(); it++){
       os.str("");
-      os << tpc_path << setw(6) << setfill('0') << *it
+      os << tpc_path << "Run"<< setw(6) << setfill('0') << *it
          << "/Run"<< setw(6) << setfill('0') << *it <<".root";
       std::cout<<"Adding file: "<<os.str().c_str()<<std::endl;
       tpc_chain->Add(os.str().c_str());
+
+      os.str("");
+      os << setw(6) << setfill('0') << *it;
+      //tpc_chainXY->Add(Form("/ds50/data/test_processing/darkart_release3/xytree_v10b.root/run%sxytree",os.str().c_str()));
+      if(drift_HV>0) tpc_chainXY->Add(Form("/scratch/darkside/reinhol1/data/XY/Kr/xytree_Kr_driftHV%d_run%d_%d.root/run%sxytree",drift_HV, run_id_list.at(0), run_id_list.at(run_id_list.size()-1), os.str().c_str()));
+      //tpc_chainXY->Add(Form("/ds50/data/test_processing/darkart_release3/xytree_v07.root/run%sxytree",os.str().c_str()));
+
     }
+
+  cout << "entries(tpc_chain): " << tpc_chain->GetEntries(); 
+  if(drift_HV>0) cout << ", entries(tpc_chainXY): " << tpc_chainXY->GetEntries(); 
+  cout << endl;
 
   outFileName=Form(outFileName,drift_HV,*(run_id_list.begin()),*(run_id_list.end()-1));
     
   //tpc_chain->Add("/scratch/darkside/reinhol1/LaserRunNumber/run5303_withLaserNumber.root");
 
+  if(drift_HV>0) tpc_chain->AddFriend(tpc_chainXY);
   LoopOverChain(tpc_chain, outPath, outFileName, drift_HV);
 }
 
@@ -278,13 +303,34 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName, int 
     
   EventData* event = NULL;
   tpc_chain->SetBranchAddress("EventData", &event);
-    
+
+
+  //add the XY tree  
+  int run_id_xy=0;
+  int event_id_xy=0;
+  double xpos_MasaXY=-999;
+  double ypos_MasaXY=-999;
+  double chi2_xy=-1;
+  double s2_xy_corr=9999;
+
+  if(drift_HV>0){
+    tpc_chain->SetBranchAddress("xytree.run_id", &run_id_xy);
+    tpc_chain->SetBranchAddress("xytree.event_id", &event_id_xy);
+    tpc_chain->SetBranchAddress("xytree.xpos", &xpos_MasaXY);
+    tpc_chain->SetBranchAddress("xytree.ypos", &ypos_MasaXY);
+    tpc_chain->SetBranchAddress("xytree.chi2", &chi2_xy);
+    tpc_chain->SetBranchAddress("xytree.s2_xy_corr", &s2_xy_corr);
+  } else {
+    cout << "" << endl;
+  }
+
   //CREATE OUTPUT FILES
   ofstream outfile;
   TString fOutliers(outFileName);
   fOutliers.Replace(fOutliers.Length()-5, 5, "_outliers.txt"); //replace .root w/ _outliers.txt
   outfile.open(outPath+"/"+fOutliers.Data());
 
+  /*
 #if defined(XYLOCATOR) 
   //XY
   TFile* xyl_f = new TFile("xylocator/xylocations.root");
@@ -292,6 +338,7 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName, int 
   double evt_x,evt_y;
   xylocator* xyl = (xylocator*)xyl_f->Get("lyx");
 #endif
+  */
 
   // Open ROOT file with max_s1/total_s1 thresholds
   TFile* max_s1_frac_thresh_file = new TFile("/ds50/app/user/${USER}/work/darkart/analysis/max_s1_frac_cut_fixed_acceptance_full_stats.root");
@@ -405,9 +452,8 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName, int 
   Double_t s1_top_bottom=0;
   Double_t s2_top_bottom=0;
 
-  TNtuple *tN=new TNtuple("tN","output", "run_ID:eventID:event_time:event_dt:total_s1:total_s1_corr:total_s2:total_s2_corr:total_f90:t_drift:bary_x:bary_y:drift_HV:isotope"); 
+  TNtuple *tN=new TNtuple("tN","output", "run_ID:eventID:event_time:event_dt:total_s1:total_s1_corr:total_s2:total_s2_corr:total_f90:t_drift:drift_HV:isotope:xpos_Masa:ypos_Masa:s2_xy_corr"); 
 
-      
   TTree* outliers = new TTree("outliers", "TTree containing information on outliers");
   outliers->Branch("runID", &run_id);
   outliers->Branch("eventID", &event_id);
@@ -454,6 +500,14 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName, int 
       event_id = event->event_info.event_id;
       event_time = event->event_info.timestamp_sec;
 
+      if(drift_HV>0 && (run_id!=run_id_xy || event_id!=event_id_xy)) cout << Form("inconsistency in tree alignment: %d %d %d %d", run_id, run_id_xy, event_id, event_id_xy) << endl;  
+
+      if(n%10000==0){
+	if(drift_HV>0) cout << Form("%d %d %d %d", run_id, run_id_xy, event_id, event_id_xy) << endl; 
+	else cout << Form("%d %d", run_id, event_id) << endl; 
+      }
+
+      //run_id_XY = run_id
       /*
       //disabled after seg-fault for old (?!) runs
       // For externally stored xy values: retrieve the correct xytree in xytree_file. 
@@ -676,7 +730,8 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName, int 
       xy_hist                     ->Fill(xpos, ypos);
       r_hist                      ->Fill(rpos);
 
-      tN->Fill(run_id, event_id, event_time, event_dt, total_s1,total_s1_corr,total_s2,total_s2_corr,total_f90,t_drift,bary_x,bary_y, 1.0*drift_HV, isotope); 
+      //same filling for driftHV=0 and >0, xpos_MasaXY, ypos_MasaXY are then -999, s2_xy_corr is 9999
+      tN->Fill(run_id, event_id, event_time, event_dt, total_s1,total_s1_corr,total_s2,total_s2_corr,total_f90,t_drift,1.0*drift_HV, isotope, xpos_MasaXY, ypos_MasaXY, s2_xy_corr); 
 
     }//End loop over events
     
