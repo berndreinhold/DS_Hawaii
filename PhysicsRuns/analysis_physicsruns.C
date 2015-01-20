@@ -25,10 +25,10 @@
 #include "TAxis.h"
 
 //use full paths because of CINT not understanding its include directories (or me not knowing how to organize them correctly) -f [src file] -c -I[includedir] - Jan 10, 2015
-#include "darkart/Products/EventData.hh"
-#include "analysis/analysis_lib.hh"
-//#include "/ds50/app/user/reinhol1/work/darkart/darkart/Products/EventData.hh"
-//#include "/ds50/app/user/reinhol1/work/darkart/analysis/analysis_lib.hh"
+//#include "darkart/Products/EventData.hh"
+//#include "analysis/analysis_lib.hh"
+#include "/ds50/app/user/reinhol1/work/darkart/darkart/Products/EventData.hh"
+#include "/ds50/app/user/reinhol1/work/darkart/analysis/analysis_lib.hh"
 
 //#include "../darkart/Products/EventData.hh"
 //#include "analysis_lib.hh"

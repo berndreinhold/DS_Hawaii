@@ -26,18 +26,21 @@ all: $(DICTNAME).so $(TARGET)
 $(OBJS): $(SRCS)
 	$(CC) $(CXXFLAGS) -I$(INCDIR) -c $^
 
-XYReconstructor.o: XYReconstructor/XYReconstructor.cxx
-	$(CC) $(CXXFLAGS) -c $^
+#XYReconstructor.o: XYReconstructor/XYReconstructor.cxx
+#	$(CC) $(CXXFLAGS) -c $^
 
-XYRecHelper.o: XYReconstructor/XYRecHelper.cxx
-	$(CC) $(CXXFLAGS) -c $^
+#XYRecHelper.o: XYReconstructor/XYRecHelper.cxx
+#	$(CC) $(CXXFLAGS) -c $^
 
 $(DICTNAME).cxx: 
-	$(ROOTCINT) -f $@ -c -p $(SRCS) XYReconstructor/XYReconstructor.h XYReconstructor/XYRecHelper.h $(DARKARTHEADERS) LinkDef.h
+#	$(ROOTCINT) -f $@ -c -p $(SRCS) XYReconstructor/XYReconstructor.h XYReconstructor/XYRecHelper.h $(DARKARTHEADERS) LinkDef.h
+	$(ROOTCINT) -f $@ -c -p $(SRCS) $(DARKARTHEADERS) LinkDef.h
 
-$(DICTNAME).so: $(DICTNAME).cxx XYReconstructor.o XYRecHelper.o
+#$(DICTNAME).so: $(DICTNAME).cxx XYReconstructor.o XYRecHelper.o
+#	$(CC) -shared -o $@ $(ROOTLDFLAGS) $(CXXFLAGS) $(CXXLIBS) -I$(ROOTSYS)/include $^
+$(DICTNAME).so: $(DICTNAME).cxx
 	$(CC) -shared -o $@ $(ROOTLDFLAGS) $(CXXFLAGS) $(CXXLIBS) -I$(ROOTSYS)/include $^
 
 clean:
-	rm  -r $(OBJS) $(DEP) $(SOBJS)  $(DICTNAME).so $(DICTNAME).cxx $(DICTNAME).h XYReconstructor.o XYRecHelper.o
+	rm  -r $(OBJS) $(DEP) $(SOBJS)  $(DICTNAME).so $(DICTNAME).cxx $(DICTNAME).h #XYReconstructor.o XYRecHelper.o
 
