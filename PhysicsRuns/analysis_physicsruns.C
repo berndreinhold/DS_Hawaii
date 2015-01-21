@@ -28,7 +28,8 @@
 //#include "darkart/Products/EventData.hh"
 //#include "analysis/analysis_lib.hh"
 #include "/ds50/app/user/reinhol1/work/darkart/darkart/Products/EventData.hh"
-#include "/ds50/app/user/reinhol1/work/darkart/analysis/analysis_lib.hh"
+//#include "/ds50/app/user/reinhol1/work/darkart/analysis/analysis_lib.hh"
+#include "/ds50/app/user/reinhol1/work/darkart/analysis/APR2014PAPER/analysis_apr2014paper_lib.hh"
 
 //#include "../darkart/Products/EventData.hh"
 //#include "analysis_lib.hh"
@@ -110,10 +111,12 @@ void analysis(TString outPath, TString outFileName, int drift_HV) {
 
   std::vector<int> run_id_list;
 
+  isotope=57; //Co57
 
+  /*
   //Krypton
   isotope=83;
-  
+  */
   /*
   drift_HV=200;
   run_id_list.push_back(7278);
@@ -137,13 +140,17 @@ void analysis(TString outPath, TString outFileName, int drift_HV) {
   run_id_list.push_back(7304);
   */
 
-  
+  /*
   drift_HV=0;
   run_id_list.push_back(7283);
   run_id_list.push_back(7286);
   run_id_list.push_back(7287);
   run_id_list.push_back(7308);
+  */
+
+
   /*
+    //not used
     run_id_list.push_back(7310);
     run_id_list.push_back(7313);
     run_id_list.push_back(7316);
@@ -320,9 +327,27 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName, int 
     tpc_chain->SetBranchAddress("xytree.ypos", &ypos_MasaXY);
     tpc_chain->SetBranchAddress("xytree.chi2", &chi2_xy);
     tpc_chain->SetBranchAddress("xytree.s2_xy_corr", &s2_xy_corr);
+    tpc_chain->SetBranchAddress("xytree.s2_xy_corr", &s2_xy_corr);
   } else {
     cout << "" << endl;
   }
+
+  //open Richard's XY
+  TFile* s2_xycorr_file = new TFile("/ds50/app/user/reinhol1/work/darkart/analysis/APR2014PAPER/s2_xycorr.root");
+  if (s2_xycorr_file->IsZombie())
+  {
+      std::cout<<"Could not open S2 xy correction file"<<std::endl;
+      exit(-1);
+      //return;
+  }
+  TH2F* s2_corr_map = (TH2F*)s2_xycorr_file->Get("s2_map");
+  if (!s2_corr_map)
+  {
+      std::cout<<"Could not open S2 xy correction map"<<std::endl;
+      exit(-1);
+      //return;
+  }
+
 
   //CREATE OUTPUT FILES
   ofstream outfile;
@@ -452,7 +477,7 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName, int 
   Double_t s1_top_bottom=0;
   Double_t s2_top_bottom=0;
 
-  TNtuple *tN=new TNtuple("tN","output", "run_ID:eventID:event_time:event_dt:total_s1:total_s1_corr:total_s2:total_s2_corr:total_f90:t_drift:drift_HV:isotope:xpos_Masa:ypos_Masa:s2_xy_corr"); 
+  TNtuple *tN=new TNtuple("tN","output", "run_ID:eventID:event_time:event_dt:total_s1:total_s1_corr:total_s2:total_s2_corr:total_f90:t_drift:drift_HV:xpos_Masa:ypos_Masa:s2_xy_corr:s2_xy_corr_Richard"); 
 
   TTree* outliers = new TTree("outliers", "TTree containing information on outliers");
   outliers->Branch("runID", &run_id);
@@ -576,9 +601,11 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName, int 
       s1_duration = event->sumchannel.pulses[s1_pulse_id].pulse.end_time - event->sumchannel.pulses[s1_pulse_id].pulse.start_time;
       if(drift_HV>0) s2_duration = event->sumchannel.pulses[s2_pulse_id].pulse.end_time - event->sumchannel.pulses[s2_pulse_id].pulse.start_time;
 
-      total_s1_corr = total_s1*ds50analysis::s1_corr_factor(t_drift_max, t_drift);
+      total_s1_corr = total_s1;
+      if(run_id<6553) total_s1_corr *= ds50analysis::s1_corr_factor(t_drift_max, t_drift);
       total_s1_90 = event->pulses[s1_pulse_id].param.f90*event->pulses[s1_pulse_id].param.npe;
-      total_s1_90_corr = total_s1_90*ds50analysis::s1_corr_factor(t_drift_max, t_drift);
+      total_s1_90_corr = total_s1_90;
+      if(run_id<6553) total_s1_90_corr *=ds50analysis::s1_corr_factor(t_drift_max, t_drift);
       if(drift_HV>0) total_s1_20 = event->pulses[s1_pulse_id].param.f_param[1];/**event->pulses[s1_pulse_id].param.npe; BUG IN darkart*/ //gave segfaults for drift_HV==0
       total_f90 = total_s1_90/total_s1;
       if(drift_HV>0) total_f20 = total_s1_20/total_s1;
@@ -731,7 +758,10 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName, int 
       r_hist                      ->Fill(rpos);
 
       //same filling for driftHV=0 and >0, xpos_MasaXY, ypos_MasaXY are then -999, s2_xy_corr is 9999
-      tN->Fill(run_id, event_id, event_time, event_dt, total_s1,total_s1_corr,total_s2,total_s2_corr,total_f90,t_drift,1.0*drift_HV, isotope, xpos_MasaXY, ypos_MasaXY, s2_xy_corr); 
+      //tN->Fill(run_id, event_id, event_time, event_dt, total_s1,total_s1_corr,total_s2,total_s2_corr,total_f90,t_drift,1.0*drift_HV, isotope, xpos_MasaXY, ypos_MasaXY, s2_xy_corr); 
+      float s2_xy_corr_Richard=ds50analysis::s2_xy_corr_factor(xpos_MasaXY, ypos_MasaXY, s2_corr_map);
+
+      tN->Fill(run_id, event_id, event_time, event_dt, total_s1,total_s1_corr,total_s2,total_s2_corr,total_f90,t_drift,1.0*drift_HV, xpos_MasaXY, ypos_MasaXY, s2_xy_corr, s2_xy_corr_Richard); 
 
     }//End loop over events
     
