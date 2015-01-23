@@ -39,6 +39,11 @@
 using namespace darkart;
 using namespace std;
 
+string sSourceType="Kr";
+//string sSourceType="Co57";
+//string sSourceType="Ba133";
+//string sSourceType="Cs137";
+//string sSourceType="BGsub";
 
 // Forward declaration
 void LoopOverChain(TChain* tpc_chain, TString outFileName = "analysis.root");
@@ -376,15 +381,11 @@ void analysis() {
   run_id_list.push_back(7332);
 */
   //string output_dir="/scratch/darkside/reinhol1/data/XY/Kr/";
-  string output_dir="/scratch/darkside/reinhol1/data/XY/Co57/";
-  //string output_dir="/scratch/darkside/reinhol1/data/XY/Ba133/";
-  //string output_dir="/scratch/darkside/reinhol1/data/XY/Cs137/";
-  //string output_dir="/scratch/darkside/reinhol1/data/XY/BGsub/";
-  //string outfile_name=Form("xytree_Cs137_driftHV%d_run%d_%d.root",driftHV, run_id_list.at(0), run_id_list.at(run_id_list.size()-1));
-  //string outfile_name=Form("xytree_BGsub_driftHV%d_run%d_%d.root",driftHV, run_id_list.at(0), run_id_list.at(run_id_list.size()-1));
-  string outfile_name=Form("xytree_Co57_driftHV%d_run%d_%d.root",driftHV, run_id_list.at(0), run_id_list.at(run_id_list.size()-1));
+  string output_dir=Form("/scratch/darkside/reinhol1/data/XY/%s/", sSourceType.c_str());
+
+
   //string outfile_name=Form("xytree_Ba133_driftHV%d_run%d_%d.root",driftHV, run_id_list.at(0), run_id_list.at(run_id_list.size()-1));
-  //string outfile_name=Form("xytree_Kr_run%d_%d.root", run_id_list.at(0), run_id_list.at(run_id_list.size()-1));
+  //string outfile_name=Form("xytree_%s_run%d_%d.root", sSourceType.c_str(),run_id_list.at(0), run_id_list.at(run_id_list.size()-1));
 
   //std::cout<<"WARNING: Database access disabled ! Make sure to check run list manually on the ELOG"<<std::endl;
   std::ostringstream os;
