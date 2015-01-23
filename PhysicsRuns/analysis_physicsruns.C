@@ -48,6 +48,11 @@ using namespace darkart;
 //global variables:
 int driftHV=200;
 float isotope=39; //argon 39,
+string sSourceType="BGsub";
+//string sSourceType="Co57";
+//string sSourceType="Ba133";
+//string sSourceType="Cs137";
+//string sSourceType="Kr";
 
 
 // Forward declaration
@@ -57,7 +62,6 @@ void LoopOverChain(TChain* tpc_chain, TString outPath="", TString outFileName = 
 void my_max_s1(EventData* event, Int_t const s1_pulse_id, Int_t & max_s1_chan, Double_t & max_s1);
 void my_top_bottom_ratio(EventData* event, Int_t const s1_pulse_id, Double_t & s1_top_bottom);
 
-string sSourceType="BGsub";
 
 #ifndef __CINT__
 int main(int argc, char **argv) {
@@ -107,9 +111,9 @@ void analysis(TString outPath, TString outFileName, int driftHV) {
   //string tpc_path = "/ds50/data/test_processing/darkart_release3/Run"; //BlueArc
   // v1_00_00 before, v1_00_02 did not have the krypton runs.
   //string tpc_path = "/scratch/darkside/reconstructed/tpc/v1_00_01/Run"; //email Alden, July 14, 2014, "reconstructed data"
-  string tpc_path = "/scratch/darkside/reconstructed/tpc/v1_00_00/";
+  //string tpc_path = "/scratch/darkside/reconstructed/tpc/v1_00_00/";
   //string tpc_path = "/ds50/data/test_processing/v1_00_01/"; //Krypton runs
-  //string tpc_path = "/ds50/data/test_processing/v1_01_04/"; //calibration data
+  string tpc_path = "/ds50/data/test_processing/v1_01_04/"; //calibration data
 
   TChain* tpc_chainXY = new TChain("xytree");
 
@@ -160,19 +164,159 @@ void analysis(TString outPath, TString outFileName, int driftHV) {
     run_id_list.push_back(7313);
     run_id_list.push_back(7316);
   */
-  
 
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+
+  /*
+  driftHV=200;
+  //at 736100, not 731000
+  run_id_list.push_back(10065);
+  run_id_list.push_back(10068);
+  run_id_list.push_back(10069);
+  run_id_list.push_back(10070);
+  run_id_list.push_back(10071);
+  run_id_list.push_back(10072);
+  run_id_list.push_back(10073);
+  run_id_list.push_back(10074);
+  run_id_list.push_back(10077);
+  */
+  /*
+  driftHV=200;
+  run_id_list.push_back(10092);
+  run_id_list.push_back(10093);
+  run_id_list.push_back(10094);
+  run_id_list.push_back(10095);
+  run_id_list.push_back(10096);
+  run_id_list.push_back(10097);
+  run_id_list.push_back(10098);
+  run_id_list.push_back(10100);
+  run_id_list.push_back(10101);
+  run_id_list.push_back(10102);
+  */
+  /*
+  driftHV=150;
+  //really at position 736100? why?
+  run_id_list.push_back(10105);
+  run_id_list.push_back(10106);
+  run_id_list.push_back(10107);
+*/
+  /*
+  driftHV=150;
+  run_id_list.push_back(10109);
+  run_id_list.push_back(10110);
+  run_id_list.push_back(10111);
+  run_id_list.push_back(10112);
+  run_id_list.push_back(10113);
+  */
+  /*
+  driftHV=100;
+  run_id_list.push_back(10137);
+  run_id_list.push_back(10242);
+  run_id_list.push_back(10243);
+  run_id_list.push_back(10244);
+  run_id_list.push_back(10245);
+  */
+  /*
+  driftHV=0;
+  run_id_list.push_back(10213);
+  run_id_list.push_back(10214);
+  run_id_list.push_back(10215);
+  run_id_list.push_back(10216);
+  run_id_list.push_back(10217);
+  run_id_list.push_back(10218);
+  run_id_list.push_back(10219);
+  run_id_list.push_back(10220);
+  */
+
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  //Calibration data - Ba133
+  /*
+  driftHV=200;
+  run_id_list.push_back(10041);
+  run_id_list.push_back(10042);
+  run_id_list.push_back(10043);
+
+  run_id_list.push_back(10309);
+  run_id_list.push_back(10310);
+  */
+  /*
+  driftHV=150;
+  //run_id_list.push_back(10313); //very few events
+  run_id_list.push_back(10314);
+  run_id_list.push_back(10315);
+  run_id_list.push_back(10316);
+  run_id_list.push_back(10317);
+  run_id_list.push_back(10318);
+
+  run_id_list.push_back(10344);
+  //run_id_list.push_back(10345); //very few events
+  run_id_list.push_back(10346);
+  run_id_list.push_back(10347);
+  run_id_list.push_back(10348);
+  run_id_list.push_back(10349);
+  run_id_list.push_back(10350);
+  */
+  /*
+  driftHV=100;
+  run_id_list.push_back(10333);
+  run_id_list.push_back(10334);
+  run_id_list.push_back(10335);
+  run_id_list.push_back(10336);
+  */
+  /*
+  driftHV=0;
+  run_id_list.push_back(10304);
+  run_id_list.push_back(10305);
+  run_id_list.push_back(10306);
+  */  
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  //Calibration data - Cs137
+  /*  
+  driftHV=200;
+  run_id_list.push_back(10247);
+  run_id_list.push_back(10248);
+  run_id_list.push_back(10249);
+  run_id_list.push_back(10250);
+  run_id_list.push_back(10251);
+  run_id_list.push_back(10252);
+  */
+  /*  
+  driftHV=150;
+  run_id_list.push_back(10255);
+  run_id_list.push_back(10256);
+  //run_id_list.push_back(10257); //too few events
+  run_id_list.push_back(10258);
+  run_id_list.push_back(10259);
+  */
+  
+  /*
+  driftHV=100;
+  run_id_list.push_back(10267);
+  run_id_list.push_back(10268);
+  run_id_list.push_back(10269);
+  run_id_list.push_back(10270);
+  */
+  /*
+  //try to run xy on these
+  driftHV=0;
+  run_id_list.push_back(10262);
+  run_id_list.push_back(10263);
+  run_id_list.push_back(10264);
+  */
+
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
   //http://blackhole.lngs.infn.it/wordpress50/wp-content/uploads/2013/12/RecoilEnergy-compressed.pdf
   //https://docs.google.com/spreadsheets/d/1L1NM7-9qHXPQmO-PKkE7zyftKqIK7JQ8c6Ktu2FdzPg/edit?pli=1#gid=0
 
-
+  /*
   driftHV=200;
   run_id_list.push_back(7273);
   run_id_list.push_back(7274);
   run_id_list.push_back(7275);
- 
+  */
   /*
   //in /ds50/data/test_processing/darkart_release2/
   driftHV=150;
@@ -308,6 +452,19 @@ void analysis(TString outPath, TString outFileName, int driftHV) {
   run_id_list.push_back(7326);
   run_id_list.push_back(7327);
   */
+
+  driftHV=0;
+  run_id_list.push_back(10500);
+  run_id_list.push_back(10501);
+  run_id_list.push_back(10502);
+  run_id_list.push_back(10503);
+  run_id_list.push_back(10504);
+  run_id_list.push_back(10505);
+  run_id_list.push_back(10506);
+  run_id_list.push_back(10507);
+  run_id_list.push_back(10508);
+  run_id_list.push_back(10509);
+  run_id_list.push_back(10510);
 
   //std::cout<<"WARNING: Database access disabled ! Make sure to check run list manually on the ELOG"<<std::endl;
   std::ostringstream os;
@@ -599,7 +756,10 @@ void LoopOverChain(TChain* tpc_chain, TString outPath, TString outFileName, int 
       event_id = event->event_info.event_id;
       event_time = event->event_info.timestamp_sec;
 
-      if(driftHV>0 && (run_id!=run_id_xy || event_id!=event_id_xy)) cout << Form("inconsistency in tree alignment: %d %d %d %d", run_id, run_id_xy, event_id, event_id_xy) << endl;  
+      if(driftHV>0 && (run_id!=run_id_xy || event_id!=event_id_xy)){ 
+	cout << Form("inconsistency in tree alignment: %d %d %d %d", run_id, run_id_xy, event_id, event_id_xy) << endl;  
+      exit(-1);
+      }
 
       if(n%10000==0){
 	if(driftHV>0) cout << Form("%d %d %d %d", run_id, run_id_xy, event_id, event_id_xy) << endl; 
