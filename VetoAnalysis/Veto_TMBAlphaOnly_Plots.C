@@ -1,4 +1,4 @@
-Veto_TMBAlphaOnly(){
+Veto_TMBAlphaOnly_Plots(){
 
   string path="/scratch/darkside/reinhol1/Veto/DSTAwayData/";
   bool PPO_06 = false; //PPO_06 = false: 1.5 g/l, PPO_06 = true: 0.6 g/l

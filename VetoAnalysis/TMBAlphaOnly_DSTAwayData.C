@@ -8,7 +8,7 @@ void TMBAlphaOnly_DSTAwayData::Loop()
 {
 //   In a ROOT session, you can do:
 //      Root > .L TMBAlphaOnly_DSTAwayData.C
-//      Root > TMBAlphaOnly_DSTAwayData t
+//      Root > TMBAlphaOnly_DSTAwayData t(30, 200, 310); //time, lower end of alpha+gamma peak, upper end of alpha+gamma peak;
 //      Root > t.GetEntry(12); // Fill t data members with entry number 12
 //      Root > t.Show();       // Show values of entry 12
 //      Root > t.Show(16);     // Read and show values of entry 16
@@ -52,8 +52,10 @@ void TMBAlphaOnly_DSTAwayData::Loop()
       od2_timestamp=od_timestamp;
       od2_nclusters=od_nclusters;
       od2_wt_charge=od_wt_charge;
+      od2_timeCutAfterPrompt=_timeCutAfterPrompt; //argument to Loop();
+
       od2_nclusters_AfterTimeCut=0;
-      od2_nclusters_AfterTimeCut_20=0;
+      od2_nclusters_AfterTimeCut_AC=0;
 
       od2_cluster_charge = new vector<double>;
       od2_cluster_start = new vector<double>;
@@ -62,12 +64,12 @@ void TMBAlphaOnly_DSTAwayData::Loop()
       od2_cluster_pass_multcut = new vector<int>;
       od2_cluster_dtprompt = new vector<double>;
 
-      od2_cluster_charge_20 = new vector<double>;
-      od2_cluster_start_20 = new vector<double>;
-      od2_cluster_height_20 = new vector<double>;
-      od2_cluster_multiplicity_20 = new vector<double>;
-      od2_cluster_pass_multcut_20 = new vector<int>;
-      od2_cluster_dtprompt_20 = new vector<double>;
+      od2_cluster_charge_AC = new vector<double>;
+      od2_cluster_start_AC = new vector<double>;
+      od2_cluster_height_AC = new vector<double>;
+      od2_cluster_multiplicity_AC = new vector<double>;
+      od2_cluster_pass_multcut_AC = new vector<int>;
+      od2_cluster_dtprompt_AC = new vector<double>;
       /*
       od2_cluster_charge->clear();
       od2_cluster_start->clear();
@@ -76,12 +78,12 @@ void TMBAlphaOnly_DSTAwayData::Loop()
       od2_cluster_pass_multcut->clear();
       od2_cluster_dtprompt->clear();
 
-      od2_cluster_charge_20->clear();
-      od2_cluster_start_20->clear();
-      od2_cluster_height_20->clear();
-      od2_cluster_multiplicity_20->clear();
-      od2_cluster_pass_multcut_20->clear();
-      od2_cluster_dtprompt_20->clear();
+      od2_cluster_charge_AC->clear();
+      od2_cluster_start_AC->clear();
+      od2_cluster_height_AC->clear();
+      od2_cluster_multiplicity_AC->clear();
+      od2_cluster_pass_multcut_AC->clear();
+      od2_cluster_dtprompt_AC->clear();
       */
       if(od_cluster_dtprompt->size()){ //certain entries can have 0 size
 
@@ -95,16 +97,19 @@ void TMBAlphaOnly_DSTAwayData::Loop()
 	od2_cluster_pass_multcut->push_back(od_cluster_pass_multcut->at(0));
 	od2_cluster_dtprompt->push_back(od_cluster_dtprompt->at(0));
 	
-	//20
-	od2_cluster_charge_20->push_back(od_cluster_charge->at(0));
-	od2_cluster_start_20->push_back(od_cluster_start->at(0));
-	od2_cluster_height_20->push_back(od_cluster_height->at(0));
-	od2_cluster_multiplicity_20->push_back(od_cluster_multiplicity->at(0));
-	od2_cluster_pass_multcut_20->push_back(od_cluster_pass_multcut->at(0));
-	od2_cluster_dtprompt_20->push_back(od_cluster_dtprompt->at(0));
+	//timeCutAfterPrompt
+	od2_cluster_charge_AC->push_back(od_cluster_charge->at(0));
+	od2_cluster_start_AC->push_back(od_cluster_start->at(0));
+	od2_cluster_height_AC->push_back(od_cluster_height->at(0));
+	od2_cluster_multiplicity_AC->push_back(od_cluster_multiplicity->at(0));
+	od2_cluster_pass_multcut_AC->push_back(od_cluster_pass_multcut->at(0));
+	od2_cluster_dtprompt_AC->push_back(od_cluster_dtprompt->at(0));
 	
 	//cout << "od_eventID: " << od_eventID << ", od_cluster_dtprompt.size(): " << od_cluster_dtprompt->size() << endl;
-	
+	bool _vetoCut=false;
+	//basic check for the vetoCut below
+	if(_timeCutAfterPrompt-10<0)exit(-1);
+
 	for(int i=1;i<od_cluster_dtprompt->size();++i){
 	  od2_cluster_charge->push_back(od_cluster_charge->at(i));
 	  od2_cluster_start->push_back(od_cluster_start->at(i));
@@ -113,19 +118,28 @@ void TMBAlphaOnly_DSTAwayData::Loop()
 	  od2_cluster_pass_multcut->push_back(od_cluster_pass_multcut->at(i));
 	  od2_cluster_dtprompt->push_back(od_cluster_dtprompt->at(i));
 	  
-	  if(od_cluster_dtprompt->at(i)>=20){
-	    od2_cluster_charge_20->push_back(od_cluster_charge->at(i));
-	    od2_cluster_start_20->push_back(od_cluster_start->at(i));
-	    od2_cluster_height_20->push_back(od_cluster_height->at(i));
-	    od2_cluster_multiplicity_20->push_back(od_cluster_multiplicity->at(i));
-	    od2_cluster_pass_multcut_20->push_back(od_cluster_pass_multcut->at(i));
-	    od2_cluster_dtprompt_20->push_back(od_cluster_dtprompt->at(i));
+	  if(od_cluster_dtprompt->at(i)>=_timeCutAfterPrompt){
+	    _vetoCut=false;
+	    for(int j=i-1;j>=0;--j){
+	      if(_vetoCut) continue;
+	      _vetoCut=(od_cluster_dtprompt->at(j)>=_timeCutAfterPrompt-10 && od_cluster_dtprompt->at(j)<_timeCutAfterPrompt && od_cluster_charge->at(j)>_lowerPE && od_cluster_charge->at(j)<_upperPE); //this vetoCut cuts away after-ringing leaking into the window after _timeCutAfterPrompt, even though the origin of the after-ringing is before that window.
+	      //small impact, but it is there
+	    }
+	    
+	    if(!_vetoCut){
+	      od2_cluster_charge_AC->push_back(od_cluster_charge->at(i));
+	      od2_cluster_start_AC->push_back(od_cluster_start->at(i));
+	      od2_cluster_height_AC->push_back(od_cluster_height->at(i));
+	      od2_cluster_multiplicity_AC->push_back(od_cluster_multiplicity->at(i));
+	      od2_cluster_pass_multcut_AC->push_back(od_cluster_pass_multcut->at(i));
+	      od2_cluster_dtprompt_AC->push_back(od_cluster_dtprompt->at(i));
+	    }
 	  }
 	}
       } //end if
       od2_nclusters_AfterTimeCut=od2_cluster_charge->size();
-      od2_nclusters_AfterTimeCut_20=od2_cluster_charge_20->size();
-      //cout << Form("%d %d", od2_nclusters_AfterTimeCut,od2_nclusters_AfterTimeCut_20) << endl;
+      od2_nclusters_AfterTimeCut_AC=od2_cluster_charge_AC->size();
+      //cout << Form("%d %d", od2_nclusters_AfterTimeCut,od2_nclusters_AfterTimeCut_AC) << endl;
       tOut->Fill();
    }
    //tOut->Scan("*");

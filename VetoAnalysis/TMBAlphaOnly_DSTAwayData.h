@@ -27,6 +27,10 @@ public :
    TFile *fOut;
    TTree *tOut; //output tree
 
+   Int_t _timeCutAfterPrompt;
+   Float_t _lowerPE;
+   Float_t _upperPE;
+
    // Declaration of leaf types
    Int_t           od_eventID;
    Double_t        od_gps_fine;
@@ -55,7 +59,7 @@ public :
    TBranch        *b_od_cluster_pass_multcut;   //!
    TBranch        *b_od_cluster_dtprompt;   //!
 
-   //output tree tOut
+   //output tree tOut: od2_* compared to the original od_*
    // Declaration of leaf types
    Int_t           od2_eventID;
    Double_t        od2_gps_fine;
@@ -63,8 +67,10 @@ public :
    Double_t        od2_timestamp;
    Int_t           od2_nclusters;
    Int_t           od2_nclusters_AfterTimeCut; //this is new
-   Int_t           od2_nclusters_AfterTimeCut_20; //this is new
+   Int_t           od2_nclusters_AfterTimeCut_AC; //this is new
    Double_t        od2_wt_charge;
+   Int_t           od2_timeCutAfterPrompt; //ignore everything between (0, timeCutAfterPrompt)
+
    vector<double>  *od2_cluster_charge;
    vector<double>  *od2_cluster_start;
    vector<double>  *od2_cluster_height;
@@ -72,12 +78,12 @@ public :
    vector<int>     *od2_cluster_pass_multcut;
    vector<double>  *od2_cluster_dtprompt;
 
-   vector<double>  *od2_cluster_charge_20;
-   vector<double>  *od2_cluster_start_20;
-   vector<double>  *od2_cluster_height_20;
-   vector<double>  *od2_cluster_multiplicity_20;
-   vector<int>     *od2_cluster_pass_multcut_20;
-   vector<double>  *od2_cluster_dtprompt_20;
+   vector<double>  *od2_cluster_charge_AC;
+   vector<double>  *od2_cluster_start_AC;
+   vector<double>  *od2_cluster_height_AC;
+   vector<double>  *od2_cluster_multiplicity_AC;
+   vector<int>     *od2_cluster_pass_multcut_AC;
+   vector<double>  *od2_cluster_dtprompt_AC;
 
    // List of branches
    TBranch        *b_od2_eventID;   //!
@@ -86,8 +92,9 @@ public :
    TBranch        *b_od2_timestamp;   //!
    TBranch        *b_od2_nclusters;   //!
    TBranch        *b_od2_nclusters_AfterTimeCut;   //!
-   TBranch        *b_od2_nclusters_AfterTimeCut_20;   //!
+   TBranch        *b_od2_nclusters_AfterTimeCut_AC;   //!
    TBranch        *b_od2_wt_charge;   //!
+   TBranch        *b_od2_timeCutAfterPrompt;   //!
    TBranch        *b_od2_cluster_charge;   //!
    TBranch        *b_od2_cluster_start;   //!
    TBranch        *b_od2_cluster_height;   //!
@@ -95,15 +102,15 @@ public :
    TBranch        *b_od2_cluster_pass_multcut;   //!
    TBranch        *b_od2_cluster_dtprompt;   //!
 
-   TBranch        *b_od2_cluster_charge_20;   //!
-   TBranch        *b_od2_cluster_start_20;   //!
-   TBranch        *b_od2_cluster_height_20;   //!
-   TBranch        *b_od2_cluster_multiplicity_20;   //!
-   TBranch        *b_od2_cluster_pass_multcut_20;   //!
-   TBranch        *b_od2_cluster_dtprompt_20;   //!
+   TBranch        *b_od2_cluster_charge_AC;   //!
+   TBranch        *b_od2_cluster_start_AC;   //!
+   TBranch        *b_od2_cluster_height_AC;   //!
+   TBranch        *b_od2_cluster_multiplicity_AC;   //!
+   TBranch        *b_od2_cluster_pass_multcut_AC;   //!
+   TBranch        *b_od2_cluster_dtprompt_AC;   //!
 
 
-   TMBAlphaOnly_DSTAwayData(TTree *tree=0);
+   TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, Float_t lowerPE, Float_t upperPE, TTree *tree=0);
    virtual ~TMBAlphaOnly_DSTAwayData();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
@@ -118,7 +125,7 @@ public :
 #endif
 
 #ifdef TMBAlphaOnly_DSTAwayData_cxx
-TMBAlphaOnly_DSTAwayData::TMBAlphaOnly_DSTAwayData(TTree *tree) : fChain(0) 
+TMBAlphaOnly_DSTAwayData::TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, Float_t lowerPE, Float_t upperPE, TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
@@ -130,20 +137,23 @@ TMBAlphaOnly_DSTAwayData::TMBAlphaOnly_DSTAwayData(TTree *tree) : fChain(0)
       f->GetObject("DSTtree",tree);
 
    }
-   outfile_name="/scratch/darkside/reinhol1/Veto/DSTAwayData/DSTAwayData_PPO_15_AfterPulsesRejected.root";
+   
+   _timeCutAfterPrompt=timeCutAfterPrompt;
+   _lowerPE=lowerPE;
+   _upperPE=upperPE;
+   cout << "timeCutAfterPrompt: " << _timeCutAfterPrompt << endl;
+   cout << "[lowerPE, upperPE]: " << "[" << _lowerPE << ", " << _upperPE << "]" << endl;
+   outfile_name=Form("/scratch/darkside/reinhol1/Veto/DSTAwayData/DSTAwayData_PPO_15_AfterPulsesRejected_%d.root",_timeCutAfterPrompt);
    fOut=new TFile(outfile_name.c_str(), "RECREATE");
    tOut = new TTree("DSTtreeOut", "tree with rejecting after pulses");
    Init(tree);
 }
 
 void TMBAlphaOnly_DSTAwayData::SaveOutput(){
-  cout << "1. outfile: " << outfile_name << endl;
   fOut->cd();
-  cout << "2. outfile: " << outfile_name << endl;
   tOut->Write();
-  cout << "3. outfile: " << outfile_name << endl;
   fOut->Close();
-  cout << "4. outfile: " << outfile_name << endl;
+  cout << "outfile: " << outfile_name << endl;
 
   delete fOut;
 
@@ -193,6 +203,7 @@ void TMBAlphaOnly_DSTAwayData::Init(TTree *tree)
    od_cluster_multiplicity = 0;
    od_cluster_pass_multcut = 0;
    od_cluster_dtprompt = 0;
+
    // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
@@ -220,12 +231,14 @@ void TMBAlphaOnly_DSTAwayData::Init(TTree *tree)
    od2_cluster_pass_multcut = 0;
    od2_cluster_dtprompt = 0;
 
-   od2_cluster_charge_20 = 0;
-   od2_cluster_start_20 = 0;
-   od2_cluster_height_20 = 0;
-   od2_cluster_multiplicity_20 = 0;
-   od2_cluster_pass_multcut_20 = 0;
-   od2_cluster_dtprompt_20 = 0;
+
+   //_AC variables: AfterCut, which is a time cut and a veto of 10 us before the window.
+   od2_cluster_charge_AC = 0;
+   od2_cluster_start_AC = 0;
+   od2_cluster_height_AC = 0;
+   od2_cluster_multiplicity_AC = 0;
+   od2_cluster_pass_multcut_AC = 0;
+   od2_cluster_dtprompt_AC = 0;
    // Set branch addresses and branch pointers
    //tOut->SetMakeClass(1); //not clear from first read of https://duckduckgo.com/l/?kh=-1&uddg=https%3A%2F%2Froot.cern.ch%2Froot%2Froottalk%2Froottalk03%2F1854.html
 
@@ -235,8 +248,9 @@ void TMBAlphaOnly_DSTAwayData::Init(TTree *tree)
    b_od2_timestamp = tOut->Branch("od_timestamp", &od2_timestamp, "od_timestamp/D");
    b_od2_nclusters = tOut->Branch("od_nclusters", &od2_nclusters, "od_nclusters/I");
    b_od2_nclusters_AfterTimeCut = tOut->Branch("od_nclusters_AfterTimeCut", &od2_nclusters_AfterTimeCut, "od_nclusters_AfterTimeCut/I");
-   b_od2_nclusters_AfterTimeCut_20 = tOut->Branch("od_nclusters_AfterTimeCut_20", &od2_nclusters_AfterTimeCut_20, "od_nclusters_AfterTimeCut_20/I");
+   b_od2_nclusters_AfterTimeCut_AC = tOut->Branch("od_nclusters_AfterTimeCut_AC", &od2_nclusters_AfterTimeCut_AC, "od_nclusters_AfterTimeCut_AC/I");
    b_od2_wt_charge = tOut->Branch("od_wt_charge", &od2_wt_charge, "od_wt_charge/D");
+   b_od2_timeCutAfterPrompt = tOut->Branch("od_timeCutAfterPrompt", &od2_timeCutAfterPrompt, "od_timeCutAfterPrompt/D");
 
    b_od2_cluster_charge = tOut->Branch("od_cluster_charge", &od2_cluster_charge);
    b_od2_cluster_start = tOut->Branch("od_cluster_start", &od2_cluster_start);
@@ -245,12 +259,12 @@ void TMBAlphaOnly_DSTAwayData::Init(TTree *tree)
    b_od2_cluster_pass_multcut =  tOut->Branch("od_cluster_pass_multcut", &od2_cluster_pass_multcut);
    b_od2_cluster_dtprompt = tOut->Branch("od_cluster_dtprompt", &od2_cluster_dtprompt);
 
-   b_od2_cluster_charge_20 = tOut->Branch("od_cluster_charge_20", &od2_cluster_charge_20);
-   b_od2_cluster_start_20 = tOut->Branch("od_cluster_start_20", &od2_cluster_start_20);
-   b_od2_cluster_height_20 = tOut->Branch("od_cluster_height_20", &od2_cluster_height_20);
-   b_od2_cluster_multiplicity_20 = tOut->Branch("od_cluster_multiplicity_20", &od2_cluster_multiplicity_20);
-   b_od2_cluster_pass_multcut_20 = tOut->Branch("od_cluster_pass_multcut_20", &od2_cluster_pass_multcut_20);
-   b_od2_cluster_dtprompt_20 = tOut->Branch("od_cluster_dtprompt_20", &od2_cluster_dtprompt_20);
+   b_od2_cluster_charge_AC = tOut->Branch("od_cluster_charge_AC", &od2_cluster_charge_AC);
+   b_od2_cluster_start_AC = tOut->Branch("od_cluster_start_AC", &od2_cluster_start_AC);
+   b_od2_cluster_height_AC = tOut->Branch("od_cluster_height_AC", &od2_cluster_height_AC);
+   b_od2_cluster_multiplicity_AC = tOut->Branch("od_cluster_multiplicity_AC", &od2_cluster_multiplicity_AC);
+   b_od2_cluster_pass_multcut_AC = tOut->Branch("od_cluster_pass_multcut_AC", &od2_cluster_pass_multcut_AC);
+   b_od2_cluster_dtprompt_AC = tOut->Branch("od_cluster_dtprompt_AC", &od2_cluster_dtprompt_AC);
    /*
    b_od2_cluster_charge = tOut->Branch("od_cluster_charge", &od2_cluster_charge, "vector<double>");
    b_od2_cluster_start = tOut->Branch("od_cluster_start", &od2_cluster_start, "vector<double>");
@@ -259,12 +273,12 @@ void TMBAlphaOnly_DSTAwayData::Init(TTree *tree)
    b_od2_cluster_pass_multcut =  tOut->Branch("od_cluster_pass_multcut", &od2_cluster_pass_multcut,"vector<int>");
    b_od2_cluster_dtprompt = tOut->Branch("od_cluster_dtprompt", &od2_cluster_dtprompt,"vector<double>");
 
-   b_od2_cluster_charge_20 = tOut->Branch("od_cluster_charge_20", &od2_cluster_charge_20,"vector<double>");
-   b_od2_cluster_start_20 = tOut->Branch("od_cluster_start_20", &od2_cluster_start_20, "vector<double>");
-   b_od2_cluster_height_20 = tOut->Branch("od_cluster_height_20", &od2_cluster_height_20, "vector<double>");
-   b_od2_cluster_multiplicity_20 = tOut->Branch("od_cluster_multiplicity_20", &od2_cluster_multiplicity_20, "vector<double>");
-   b_od2_cluster_pass_multcut_20 = tOut->Branch("od_cluster_pass_multcut_20", &od2_cluster_pass_multcut_20, "vector<int>");
-   b_od2_cluster_dtprompt_20 = tOut->Branch("od_cluster_dtprompt_20", &od2_cluster_dtprompt_20, "vector<double>");
+   b_od2_cluster_charge_AC = tOut->Branch("od_cluster_charge_AC", &od2_cluster_charge_AC,"vector<double>");
+   b_od2_cluster_start_AC = tOut->Branch("od_cluster_start_AC", &od2_cluster_start_AC, "vector<double>");
+   b_od2_cluster_height_AC = tOut->Branch("od_cluster_height_AC", &od2_cluster_height_AC, "vector<double>");
+   b_od2_cluster_multiplicity_AC = tOut->Branch("od_cluster_multiplicity_AC", &od2_cluster_multiplicity_AC, "vector<double>");
+   b_od2_cluster_pass_multcut_AC = tOut->Branch("od_cluster_pass_multcut_AC", &od2_cluster_pass_multcut_AC, "vector<int>");
+   b_od2_cluster_dtprompt_AC = tOut->Branch("od_cluster_dtprompt_AC", &od2_cluster_dtprompt_AC, "vector<double>");
    */
 
    /*

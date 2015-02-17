@@ -1,6 +1,8 @@
 Veto_TMBAlphaOnly_TreeFromChain(){
-  DSTAwayData();
+  bool PPO_06 = true; //PPO_06 = false: 1.5 g/l, PPO_06 = true: 0.6 g/l
+  DSTAwayData(PPO_06);
   //DSTRandomData();
+  //slave mode is still missing
 
 
 }
@@ -24,11 +26,11 @@ void DSTRandomData(){
 }
 
 
-void DSTAwayData(){
+void DSTAwayData(bool PPO_06){
   string path="/scratch/darkside/reinhol1/Veto/DSTAwayData/";
   TChain *ch=new TChain("DSTtree");
-  bool PPO_06 = false; //PPO_06 = false: 1.5 g/l, PPO_06 = true: 0.6 g/l
 
+  string outfilename="DSTAwayData_PPO_06.root";
   if(PPO_06){
     ch->Add((path+"DST_Run011039.root").c_str());
     ch->Add((path+"DST_Run011040.root").c_str());
@@ -69,11 +71,6 @@ void DSTAwayData(){
     ch->Add((path+"DST_Run011093.root").c_str());
     ch->Add((path+"DST_Run011096.root").c_str());
 
-    TFile *f=new TFile((path+"DSTAwayData_PPO_06.root").c_str(), "RECREATE");
-    TTree *t=ch->CloneTree();
-    t->Write();
-    f->Close();
-
   } else {
     ch->Add((path+"DST_Run011155.root").c_str());
     ch->Add((path+"DST_Run011155.root").c_str());
@@ -98,10 +95,14 @@ void DSTAwayData(){
     ch->Add((path+"DST_Run011184.root").c_str());
     ch->Add((path+"DST_Run011186.root").c_str());
     ch->Add((path+"DST_Run011188.root").c_str());
-    TFile *f=new TFile((path+"DSTAwayData_PPO_15.root").c_str(), "RECREATE");
+    outfilename="DSTAwayData_PPO_15.root";
+  }
+    TFile *f=new TFile((path+outfilename).c_str(), "RECREATE");
     TTree *t=ch->CloneTree();
     t->Write();
-    f->Close(); 
-  }
+    f->Close();
+
+    cout << "output file produced: " << path+outfilename << endl;
+
 
 }

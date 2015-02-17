@@ -2,4 +2,15 @@
 
 1. copied files:
 transferred from /home/hqian/ds50analysis/darkart/haoanalysis/DSTAwayData/ and DSTSlaveData/ on ds50login (using Erin's account) to /scratch/darkside/reinhol1/Veto/ on ds50srv01
-2. 
+2. Veto_TMBAlphaOnly_TreeFromChain.C to produce one common Tree in the output file from the chain -> easier handling: 
+DSTAwayData_PPO_06.root and DSTAwayData_PPO_15.root in /scratch/darkside/reinhol1/Veto/DSTAwayData/
+
+also for DSTRandomData (and maybe later for slave mode data)
+3.TMBAlphaOnly_DSTAwayData.C/.h -> just refill variables, no recalculation of them
+Here the physics selection is done: based on a time cut (20, 30, 60, 100 us) ignoring all ringing after the prompt. Then take the first right after this cut as neutron capture. Then there are afterpulses after the neutron.
+_AC variables: AfterCut, which is a time cut and a veto of 10 us before the window.
+      od2_nclusters_AfterTimeCut=0;
+      od2_nclusters_AfterTimeCut_AC=0;
+these might be doubled
+
+4. Veto_TMBAlphaOnly_Plots.C - fill histograms into outfile and then make background subtraction and fits there in a second step.
