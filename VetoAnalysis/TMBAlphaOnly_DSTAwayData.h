@@ -148,7 +148,6 @@ void TMBAlphaOnly_DSTAwayData::SaveOutput(){
   tOut->Write();
   fOut->Close();
   cout << "outfile: " << outfile_name << endl;
-
   delete fOut;
 
 
