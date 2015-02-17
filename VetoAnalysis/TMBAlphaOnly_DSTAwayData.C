@@ -54,8 +54,7 @@ void TMBAlphaOnly_DSTAwayData::Loop()
       od2_wt_charge=od_wt_charge;
       od2_timeCutAfterPrompt=_timeCutAfterPrompt; //argument to Loop();
 
-      od2_nclusters_AfterTimeCut=0;
-      od2_nclusters_AfterTimeCut_AC=0;
+      od2_nclusters_AC=0;
 
       od2_cluster_charge = new vector<double>;
       od2_cluster_start = new vector<double>;
@@ -119,26 +118,17 @@ void TMBAlphaOnly_DSTAwayData::Loop()
 	  od2_cluster_dtprompt->push_back(od_cluster_dtprompt->at(i));
 	  
 	  if(od_cluster_dtprompt->at(i)>=_timeCutAfterPrompt){
-	    _vetoCut=false;
-	    for(int j=i-1;j>=0;--j){
-	      if(_vetoCut) continue;
-	      _vetoCut=(od_cluster_dtprompt->at(j)>=_timeCutAfterPrompt-10 && od_cluster_dtprompt->at(j)<_timeCutAfterPrompt && od_cluster_charge->at(j)>_lowerPE && od_cluster_charge->at(j)<_upperPE); //this vetoCut cuts away after-ringing leaking into the window after _timeCutAfterPrompt, even though the origin of the after-ringing is before that window.
-	      //small impact, but it is there
-	    }
-	    
-	    if(!_vetoCut){
-	      od2_cluster_charge_AC->push_back(od_cluster_charge->at(i));
-	      od2_cluster_start_AC->push_back(od_cluster_start->at(i));
-	      od2_cluster_height_AC->push_back(od_cluster_height->at(i));
-	      od2_cluster_multiplicity_AC->push_back(od_cluster_multiplicity->at(i));
-	      od2_cluster_pass_multcut_AC->push_back(od_cluster_pass_multcut->at(i));
-	      od2_cluster_dtprompt_AC->push_back(od_cluster_dtprompt->at(i));
-	    }
+	    od2_cluster_charge_AC->push_back(od_cluster_charge->at(i));
+	    od2_cluster_start_AC->push_back(od_cluster_start->at(i));
+	    od2_cluster_height_AC->push_back(od_cluster_height->at(i));
+	    od2_cluster_multiplicity_AC->push_back(od_cluster_multiplicity->at(i));
+	    od2_cluster_pass_multcut_AC->push_back(od_cluster_pass_multcut->at(i));
+	    od2_cluster_dtprompt_AC->push_back(od_cluster_dtprompt->at(i));
 	  }
 	}
       } //end if
-      od2_nclusters_AfterTimeCut=od2_cluster_charge->size();
-      od2_nclusters_AfterTimeCut_AC=od2_cluster_charge_AC->size();
+      //od2_nclusters_AfterTimeCut=od2_cluster_charge->size(); //for consistency - it works
+      od2_nclusters_AC=od2_cluster_charge_AC->size();
       //cout << Form("%d %d", od2_nclusters_AfterTimeCut,od2_nclusters_AfterTimeCut_AC) << endl;
       tOut->Fill();
    }

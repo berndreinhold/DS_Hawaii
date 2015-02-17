@@ -28,8 +28,6 @@ public :
    TTree *tOut; //output tree
 
    Int_t _timeCutAfterPrompt;
-   Float_t _lowerPE;
-   Float_t _upperPE;
 
    // Declaration of leaf types
    Int_t           od_eventID;
@@ -66,8 +64,7 @@ public :
    Double_t        od2_gps_coarse;
    Double_t        od2_timestamp;
    Int_t           od2_nclusters;
-   Int_t           od2_nclusters_AfterTimeCut; //this is new
-   Int_t           od2_nclusters_AfterTimeCut_AC; //this is new
+   Int_t           od2_nclusters_AC; //this is new
    Double_t        od2_wt_charge;
    Int_t           od2_timeCutAfterPrompt; //ignore everything between (0, timeCutAfterPrompt)
 
@@ -91,8 +88,7 @@ public :
    TBranch        *b_od2_gps_coarse;   //!
    TBranch        *b_od2_timestamp;   //!
    TBranch        *b_od2_nclusters;   //!
-   TBranch        *b_od2_nclusters_AfterTimeCut;   //!
-   TBranch        *b_od2_nclusters_AfterTimeCut_AC;   //!
+   TBranch        *b_od2_nclusters_AC;   //!
    TBranch        *b_od2_wt_charge;   //!
    TBranch        *b_od2_timeCutAfterPrompt;   //!
    TBranch        *b_od2_cluster_charge;   //!
@@ -110,7 +106,7 @@ public :
    TBranch        *b_od2_cluster_dtprompt_AC;   //!
 
 
-   TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, Float_t lowerPE, Float_t upperPE, TTree *tree=0);
+   TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, TTree *tree=0);
    virtual ~TMBAlphaOnly_DSTAwayData();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
@@ -125,7 +121,7 @@ public :
 #endif
 
 #ifdef TMBAlphaOnly_DSTAwayData_cxx
-TMBAlphaOnly_DSTAwayData::TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, Float_t lowerPE, Float_t upperPE, TTree *tree) : fChain(0) 
+TMBAlphaOnly_DSTAwayData::TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
@@ -139,10 +135,8 @@ TMBAlphaOnly_DSTAwayData::TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, Flo
    }
    
    _timeCutAfterPrompt=timeCutAfterPrompt;
-   _lowerPE=lowerPE;
-   _upperPE=upperPE;
    cout << "timeCutAfterPrompt: " << _timeCutAfterPrompt << endl;
-   cout << "[lowerPE, upperPE]: " << "[" << _lowerPE << ", " << _upperPE << "]" << endl;
+
    outfile_name=Form("/scratch/darkside/reinhol1/Veto/DSTAwayData/DSTAwayData_PPO_15_AfterPulsesRejected_%d.root",_timeCutAfterPrompt);
    fOut=new TFile(outfile_name.c_str(), "RECREATE");
    tOut = new TTree("DSTtreeOut", "tree with rejecting after pulses");
@@ -247,8 +241,7 @@ void TMBAlphaOnly_DSTAwayData::Init(TTree *tree)
    b_od2_gps_coarse = tOut->Branch("od_gps_coarse", &od2_gps_coarse, "od_gps_coarse/D");
    b_od2_timestamp = tOut->Branch("od_timestamp", &od2_timestamp, "od_timestamp/D");
    b_od2_nclusters = tOut->Branch("od_nclusters", &od2_nclusters, "od_nclusters/I");
-   b_od2_nclusters_AfterTimeCut = tOut->Branch("od_nclusters_AfterTimeCut", &od2_nclusters_AfterTimeCut, "od_nclusters_AfterTimeCut/I");
-   b_od2_nclusters_AfterTimeCut_AC = tOut->Branch("od_nclusters_AfterTimeCut_AC", &od2_nclusters_AfterTimeCut_AC, "od_nclusters_AfterTimeCut_AC/I");
+   b_od2_nclusters_AC = tOut->Branch("od_nclusters_AC", &od2_nclusters_AC, "od_nclusters_AC/I");
    b_od2_wt_charge = tOut->Branch("od_wt_charge", &od2_wt_charge, "od_wt_charge/D");
    b_od2_timeCutAfterPrompt = tOut->Branch("od_timeCutAfterPrompt", &od2_timeCutAfterPrompt, "od_timeCutAfterPrompt/D");
 
