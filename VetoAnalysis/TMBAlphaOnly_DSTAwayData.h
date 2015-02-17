@@ -126,9 +126,9 @@ TMBAlphaOnly_DSTAwayData::TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, TTr
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/scratch/darkside/reinhol1/Veto/DSTAwayData/DSTAwayData_PPO_15.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/scratch/darkside/reinhol1/Veto/DSTAwayData/DSTAwayData_PPO_06.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/scratch/darkside/reinhol1/Veto/DSTAwayData/DSTAwayData_PPO_15.root");
+         f = new TFile("/scratch/darkside/reinhol1/Veto/DSTAwayData/DSTAwayData_PPO_06.root");
       }
       f->GetObject("DSTtree",tree);
 
@@ -137,7 +137,7 @@ TMBAlphaOnly_DSTAwayData::TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, TTr
    _timeCutAfterPrompt=timeCutAfterPrompt;
    cout << "timeCutAfterPrompt: " << _timeCutAfterPrompt << endl;
 
-   outfile_name=Form("/scratch/darkside/reinhol1/Veto/DSTAwayData/DSTAwayData_PPO_15_AfterPulsesRejected_%d.root",_timeCutAfterPrompt);
+   outfile_name=Form("/scratch/darkside/reinhol1/Veto/DSTAwayData/DSTAwayData_PPO_06_AfterPulsesRejected_%d.root",_timeCutAfterPrompt);
    fOut=new TFile(outfile_name.c_str(), "RECREATE");
    tOut = new TTree("DSTtreeOut", "tree with rejecting after pulses");
    Init(tree);

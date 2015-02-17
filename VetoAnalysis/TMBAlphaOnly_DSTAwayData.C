@@ -8,7 +8,7 @@ void TMBAlphaOnly_DSTAwayData::Loop()
 {
 //   In a ROOT session, you can do:
 //      Root > .L TMBAlphaOnly_DSTAwayData.C
-//      Root > TMBAlphaOnly_DSTAwayData t(30, 200, 310); //time, lower end of alpha+gamma peak, upper end of alpha+gamma peak;
+//      Root > TMBAlphaOnly_DSTAwayData t(30); //time cut;
 //      Root > t.GetEntry(12); // Fill t data members with entry number 12
 //      Root > t.Show();       // Show values of entry 12
 //      Root > t.Show(16);     // Read and show values of entry 16
