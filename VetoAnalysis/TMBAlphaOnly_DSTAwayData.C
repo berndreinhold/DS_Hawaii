@@ -8,10 +8,12 @@ void TMBAlphaOnly_DSTAwayData::Loop()
 {
 //   In a ROOT session, you can do:
 //      Root > .L TMBAlphaOnly_DSTAwayData.C
-//      Root > TMBAlphaOnly_DSTAwayData t(30); //time cut;
-//      Root > t.GetEntry(12); // Fill t data members with entry number 12
-//      Root > t.Show();       // Show values of entry 12
-//      Root > t.Show(16);     // Read and show values of entry 16
+//      Root > TMBAlphaOnly_DSTAwayData t(30, 200, 310); //time cut, delayed energy cut (low, high): (200, 310): alpha+gamma for 1.5 g/l PPO
+//      Root > TMBAlphaOnly_DSTAwayData t(30, 2, 50); //alpha only: (10,50) or (2,50) for 1.5 g/l PPO
+//      Root > TMBAlphaOnly_DSTAwayData t(30, 1000, 1350); //H-capture: (1100,1300) or (1000,1350) for 1.5 g/l PPO
+//      Root > t.SetVetoParameters(200, 1e6, 15);       //  15 us
+//      Root > t.Input("In_blabla.root","/default/path/");
+//      Root > t.Output("Out_blabla.root","/default/path/");
 //      Root > t.Loop();       // Loop on all entries
 //
 
@@ -107,7 +109,7 @@ void TMBAlphaOnly_DSTAwayData::Loop()
 	//cout << "od_eventID: " << od_eventID << ", od_cluster_dtprompt.size(): " << od_cluster_dtprompt->size() << endl;
 	bool _vetoCut=false;
 	//basic check for the vetoCut below
-	if(_timeCutAfterPrompt-10<0)exit(-1);
+	if(_timeCutAfterPrompt-_vetoTimeWindow<0) exit(-1);
 
 	for(int i=1;i<od_cluster_dtprompt->size();++i){
 	  od2_cluster_charge->push_back(od_cluster_charge->at(i));
@@ -116,8 +118,24 @@ void TMBAlphaOnly_DSTAwayData::Loop()
 	  od2_cluster_multiplicity->push_back(od_cluster_multiplicity->at(i));
 	  od2_cluster_pass_multcut->push_back(od_cluster_pass_multcut->at(i));
 	  od2_cluster_dtprompt->push_back(od_cluster_dtprompt->at(i));
+
 	  
-	  if(od_cluster_dtprompt->at(i)>=_timeCutAfterPrompt){
+	  if(od_cluster_dtprompt->at(i)>=_timeCutAfterPrompt && od_cluster_charge->at(i)>_lowerPE && od_cluster_charge->at(i)<_upperPE){
+	    _vetoCut=false;
+	    for(int j=i-1;j>=0;--j){
+	      if(_vetoCut) continue;
+	      _vetoCut=(od_cluster_dtprompt->at(j)>=_timeCutAfterPrompt-_vetoTimeWindow && od_cluster_dtprompt->at(j)<_timeCutAfterPrompt && od_cluster_charge->at(j)>_lowerPE_veto && od_cluster_charge->at(j)<_upperPE_veto); //this vetoCut cuts away after-ringing leaking into the window after _timeCutAfterPrompt, even though the origin of the after-ringing is up to 10 us before that window.  _vetoTimeWindow=10 us by default.
+	    }
+	    
+	    if(!_vetoCut){
+	      od2_cluster_charge_AC->push_back(od_cluster_charge->at(i));
+	      od2_cluster_start_AC->push_back(od_cluster_start->at(i));
+	      od2_cluster_height_AC->push_back(od_cluster_height->at(i));
+	      od2_cluster_multiplicity_AC->push_back(od_cluster_multiplicity->at(i));
+	      od2_cluster_pass_multcut_AC->push_back(od_cluster_pass_multcut->at(i));
+	      od2_cluster_dtprompt_AC->push_back(od_cluster_dtprompt->at(i));
+	    }
+
 	    od2_cluster_charge_AC->push_back(od_cluster_charge->at(i));
 	    od2_cluster_start_AC->push_back(od_cluster_start->at(i));
 	    od2_cluster_height_AC->push_back(od_cluster_height->at(i));

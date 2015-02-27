@@ -11,6 +11,13 @@ Here the physics selection is done: based on a time cut (20, 30, 60, 100 us) ign
 _AC variables: AfterCut, which is a time cut and a veto of 10 us before the window.
       od2_nclusters_AfterTimeCut=0;
       od2_nclusters_AfterTimeCut_AC=0;
-these might be doubled
+these might be doubled -> yes, removed one.
+
+- generalized to select also on the delayed energy before filling to get rid of an accidental component
+- study the veto again.
+
+- added RunTMB.C
 
 4. Veto_TMBAlphaOnly_Plots.C - fill histograms into outfile and then make background subtraction and fits there in a second step.
+
+5. Plot

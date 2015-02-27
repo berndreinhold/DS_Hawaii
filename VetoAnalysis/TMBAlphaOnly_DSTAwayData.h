@@ -19,15 +19,27 @@
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
 class TMBAlphaOnly_DSTAwayData {
-public :
+private :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
 
-   string outfile_name;
+   string _infile_name;
+   string _input_path;
+   string _outfile_name;
+   string _output_path;
+
    TFile *fOut;
    TTree *tOut; //output tree
 
    Int_t _timeCutAfterPrompt;
+   Float_t _lowerPE;
+   Float_t _upperPE;
+
+   //energy cuts for the veto 
+   Int_t _vetoTimeWindow;
+   Float_t _lowerPE_veto;
+   Float_t _upperPE_veto;
+
 
    // Declaration of leaf types
    Int_t           od_eventID;
@@ -105,8 +117,13 @@ public :
    TBranch        *b_od2_cluster_pass_multcut_AC;   //!
    TBranch        *b_od2_cluster_dtprompt_AC;   //!
 
+ public:
+   //TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, TTree *tree=0);
+   TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, Float_t lowerPE, Float_t upperPE);
+   void Input(string infile, string inpath, TTree *tree=0);
+   void Output(string outfile, string outpath="-1");
+   void SetVetoParameters(Float_t lowerPE_veto, Float_t upperPE_veto, Int_t vetoTimeWindow);
 
-   TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, TTree *tree=0);
    virtual ~TMBAlphaOnly_DSTAwayData();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
@@ -121,36 +138,63 @@ public :
 #endif
 
 #ifdef TMBAlphaOnly_DSTAwayData_cxx
-TMBAlphaOnly_DSTAwayData::TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, TTree *tree) : fChain(0) 
-{
-// if parameter tree is not specified (or zero), connect the file
-// used to generate this class and read the Tree.
+TMBAlphaOnly_DSTAwayData::TMBAlphaOnly_DSTAwayData(Int_t timeCutAfterPrompt, Float_t lowerPE, Float_t upperPE) : fChain(0),_timeCutAfterPrompt(timeCutAfterPrompt),_lowerPE(lowerPE),_upperPE(upperPE){
+   cout << "timeCutAfterPrompt: " << _timeCutAfterPrompt << endl;
+   cout << "lowerPE: " << _lowerPE << endl;
+   cout << "upperPE: " << _upperPE << endl;
+
+}
+
+void TMBAlphaOnly_DSTAwayData::SetVetoParameters(Float_t lowerPE_veto, Float_t upperPE_veto, Int_t vetoTimeWindow){
+  _vetoTimeWindow=vetoTimeWindow;
+  _lowerPE_veto=lowerPE_veto;
+  _upperPE_veto=upperPE_veto;
+  cout << "vetoTimeWindow: " << _vetoTimeWindow << endl;
+  cout << "lowerPE_veto: " << _lowerPE_veto << endl;
+  cout << "upperPE_veto: " << _upperPE_veto << endl;
+
+}
+
+void TMBAlphaOnly_DSTAwayData::Input(string infile, string inpath, TTree *tree){
+  //  _input_path="/scratch/darkside/reinhol1/Veto/DSTAwayData/";
+  //_infile_name="DSTAwayData_PPO_15.root";
+  _infile_name=infile;
+  _input_path=inpath;
+
+  // if parameter tree is not specified (or zero), connect the file
+  // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/scratch/darkside/reinhol1/Veto/DSTAwayData/DSTAwayData_PPO_06.root");
-      if (!f || !f->IsOpen()) {
-         f = new TFile("/scratch/darkside/reinhol1/Veto/DSTAwayData/DSTAwayData_PPO_06.root");
+     TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject((_input_path+_infile_name).c_str());
+      if (!f || !f->IsOpen((_input_path+_infile_name).c_str())) {
+         f = new TFile((_input_path+_infile_name).c_str());
       }
       f->GetObject("DSTtree",tree);
 
    }
-   
-   _timeCutAfterPrompt=timeCutAfterPrompt;
-   cout << "timeCutAfterPrompt: " << _timeCutAfterPrompt << endl;
+   if (!tree) return;
+   fChain = tree;
 
-   outfile_name=Form("/scratch/darkside/reinhol1/Veto/DSTAwayData/DSTAwayData_PPO_06_AfterPulsesRejected_%d.root",_timeCutAfterPrompt);
-   fOut=new TFile(outfile_name.c_str(), "RECREATE");
-   tOut = new TTree("DSTtreeOut", "tree with rejecting after pulses");
-   Init(tree);
+   cout << "infile: " << (_input_path+_infile_name).c_str() << endl;
+}
+   
+void TMBAlphaOnly_DSTAwayData::Output(string outfile, string outpath){
+  if(outpath=="-1") _output_path=_input_path;
+  //_outfile_name=Form("DSTAwayData_PPO_06_AfterPulsesRejected_%d.root",_timeCutAfterPrompt);
+  _outfile_name=outfile;
+  fOut=new TFile((_output_path+_outfile_name).c_str(), "RECREATE");
+  tOut = new TTree("DSTtreeOut", "tree with rejecting after pulses");
+  cout << "outfile: " << (_output_path+_outfile_name).c_str() << endl;
+
+  Init(fChain); //inits input and output trees
+
 }
 
 void TMBAlphaOnly_DSTAwayData::SaveOutput(){
   fOut->cd();
   tOut->Write();
   fOut->Close();
-  cout << "outfile: " << outfile_name << endl;
+  cout << "outfile: " << (_output_path+_outfile_name).c_str() << endl;
   delete fOut;
-
-
 }
 
 
