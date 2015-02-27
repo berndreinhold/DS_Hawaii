@@ -6,15 +6,8 @@
 
 void TMBAlphaOnly_DSTAwayData::Loop()
 {
-//   In a ROOT session, you can do:
-//      Root > .L TMBAlphaOnly_DSTAwayData.C
-//      Root > TMBAlphaOnly_DSTAwayData t(30, 200, 310); //time cut, delayed energy cut (low, high): (200, 310): alpha+gamma for 1.5 g/l PPO
-//      Root > TMBAlphaOnly_DSTAwayData t(30, 2, 50); //alpha only: (10,50) or (2,50) for 1.5 g/l PPO
-//      Root > TMBAlphaOnly_DSTAwayData t(30, 1000, 1350); //H-capture: (1100,1300) or (1000,1350) for 1.5 g/l PPO
-//      Root > t.SetVetoParameters(200, 1e6, 15);       //  15 us
-//      Root > t.Input("In_blabla.root","/default/path/");
-//      Root > t.Output("Out_blabla.root","/default/path/");
-//      Root > t.Loop();       // Loop on all entries
+  // configure RunTMB.C properly and then in a ROOT session, you can do:
+//      Root > .x RunTMB.C
 //
 
 //     This is the loop skeleton where:
