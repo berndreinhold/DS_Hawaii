@@ -2,6 +2,8 @@
   ROOT macro to produce DSTs for alpha hunting
   *****************For Self Trigger Mode************
 
+  This SelfMacroDST.C is from Hao - modified from some other macro. He circulated it in Feb. 2015.
+  Bernd, below referred to as "I", adjusted it for the first time on March 3rd, 2015.
 */
 
 #include <iostream>
@@ -25,8 +27,8 @@
 #include "TNtuple.h"
 #include "TAxis.h"
 #include <vector>
-#include "../darkart/Products/EventData.hh"
-#include "analysis_lib.hh"
+#include "/ds50/app/user/reinhol1/work/darkart/darkart/Products/EventData.hh"
+#include "/ds50/app/user/reinhol1/work/darkart/analysis/APR2014PAPER/analysis_apr2014paper_lib.hh"
 
 using namespace std;
 using namespace darkart;
@@ -38,9 +40,7 @@ bool multiplicity_cut(Float_t height, Float_t multiplicity, Float_t charge);
 
 struct VetoEvent{
   VetoEvent(): od_eventID(-1), od_nclusters(-1), od_gps_fine(-1),
-	       od_gps_coarse(-1), od_timestamp(-1), od_wt_charge(-1)
-	       //,od_counts(0)
-  {}
+	       od_gps_coarse(-1), od_timestamp(-1), od_wt_charge(-1){}
   //  Int_t od_counts;
   Int_t od_eventID;
   Int_t od_nclusters;
@@ -57,28 +57,35 @@ struct VetoEvent{
 };
 
 
-void SelfMacroDST() {
+//int SelfMacroDST() {
+int main() {
         //Chain for the TPC
 	TChain* tpc_chain = new TChain("treeBuilder/Events");
-	string  tpc_path  = "/analysis/darkart_v1_01_04/tpc/Run";
+	//string  tpc_path  = "/analysis/darkart_v1_01_04/tpc/Run";
+	string tpc_path="/scratch/darkside/reconstructed/tpc/v1_01_04/Run";
+
 	TChain* od_chain = new TChain("odtree");
-	string  od_path  = "/analysis/veto/ODRun";
+	//string  od_path  = "/analysis/veto/ODRun";
+	string prefix = "am30"; //these prefixes are from Shawn, where he varied the clustering threshold.
+
+	string od_path="/scratch/darkside/reinhol1/Veto/DSTAwayData/";
 
 	std::vector<int> run_id_list;
 
-	run_id_list.push_back(10975);
+	//run_id_list.push_back(10975);
+	run_id_list.push_back(11155);
 
 	TString outFileName;
-	outFileName.Form("./DST_Run%06d",run_id_list[0]);
+	outFileName.Form("/scratch/darkside/reinhol1/Veto/DSTAwayData/DST_%s_Run%06d.root",prefix.c_str(), run_id_list[0]);
 
 	//Create path and add file to chain
 	TString os_tpc, os_od;
 	//std::ostringstream os_tpc, os_od;
-	for(vector<int>::const_iterator it = run_id_list.begin(); it != run_id_list.end(); it++){
-	  os_tpc.Form("%06d/Run%06d.root",*it,*it);
+	for(std::vector<int>::const_iterator it = run_id_list.begin(); it != run_id_list.end(); it++){
+	  os_tpc.Form("%06d/Run%06d.root", *it, *it);
 	  os_tpc.Prepend(tpc_path);	  
 	  
-	  os_od.Form("%06d/ODRun%06d.root",*it,*it);
+	  os_od.Form("%sODRun%06d.root", prefix.c_str(), *it);
 	  os_od.Prepend(od_path);
 	
 	  cout << "Adding file in OD chain: " << os_od << '\n';
@@ -89,6 +96,8 @@ void SelfMacroDST() {
 	}
 
        	LoopOverChain(tpc_chain, od_chain,outFileName);
+
+	return 1;
 }
 
 
@@ -298,9 +307,9 @@ void LoopOverChain(TChain* tpc_chain, TChain* od_chain, TString outFileName){
 	      continue;
 	    }
 	    double od_timestamp_temp = od_pps_counter*1.e+6 + od_gps_fine_time_counter*20.e-3 - 54.*20.e-3; // [us]    
-	    DT = od_timestamp - tpc_timestamp_temp;			    
+	    //DT = od_timestamp - tpc_timestamp_temp;			    
 	    //select only od events in coincidence with the tpc [od_prompt_window,od_delay_window]
-	    if (DT<od_prompt_window ||  DT>od_delay_window) continue;
+	    //if (DT<od_prompt_window ||  DT>od_delay_window) continue;
 	    
 	    ++od_counts;
 	    ODEvent->push_back(VetoEvent());
@@ -311,7 +320,7 @@ void LoopOverChain(TChain* tpc_chain, TChain* od_chain, TString outFileName){
 	    ODEvent->at(od_counts).od_gps_fine = od_gps_fine_time_counter+0.;
 	    ODEvent->at(od_counts).od_gps_coarse = od_pps_counter+0.;
 	    ODEvent->at(od_counts).od_wt_charge = od_wt_total_charge;
-	    ODEvent->at(od_counts).od_time_stamp = od_timestamp_temp;
+	    ODEvent->at(od_counts).od_timestamp = od_timestamp_temp; //comment
 	    
 	    for (Int_t n_clu = 0 ; n_clu < od_lsv_nclusters; n_clu++){
 	      ODEvent->at(od_counts).od_cluster_charge.push_back(od_lsv_cluster_charge[n_clu]);
