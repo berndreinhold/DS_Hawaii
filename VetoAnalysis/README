@@ -1,9 +1,18 @@
 @date: Feb. 12, 2015
 
 1. copied files:
-transferred from /home/hqian/ds50analysis/darkart/haoanalysis/DSTAwayData/ and DSTSlaveData/ on ds50login (using Erin's account) to /scratch/darkside/reinhol1/Veto/ on ds50srv01
+transferred DSTfiles produced by Hao from /home/hqian/ds50analysis/darkart/haoanalysis/DSTAwayData/ and DSTSlaveData/ on ds50login (using Erin's account) to /scratch/darkside/reinhol1/Veto/ on ds50srv01
+1b. ProduceDSTs/:
+- SelfMacroDST.C runs on ODrec files and produces DSTs. Based on Hao's macro (which I adjusted to fix some bugs and remove the coincidence with the TPC).
+- these are for Shawn's variation of thresholds study, where I got ODrec output files and I need to produce DSTs
+- addtrees.py - simple script running on Shawn's odrec output, calling 'hadd'
+
+#this step requires DSTs:
 2. Veto_TMBAlphaOnly_TreeFromChain.C to produce one common Tree in the output file from the chain -> easier handling: 
 DSTAwayData_PPO_06.root and DSTAwayData_PPO_15.root in /scratch/darkside/reinhol1/Veto/DSTAwayData/
+
+March 3, 2015: generalized Veto_TMBAlphaOnly_TreeFromChain.C to process Shawn variation of thresholds.
+
 
 also for DSTRandomData (and maybe later for slave mode data)
 3.TMBAlphaOnly_DSTAwayData.C/.h -> just refill variables, no recalculation of them
@@ -16,7 +25,7 @@ these might be doubled -> yes, removed one.
 - generalized to select also on the delayed energy before filling to get rid of an accidental component
 - study the veto again.
 
-- added RunTMB.C
+- added RunTMB.C - runs TMBAlphaOnly_DSTAwayData.C/.h in various configurations... - 
 
 4. Veto_TMBAlphaOnly_Plots.C - fill histograms into outfile and then make background subtraction and fits there in a second step.
 
