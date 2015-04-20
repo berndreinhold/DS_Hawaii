@@ -1,0 +1,79 @@
+##########################################################
+#                                                        #
+#                   G4Gun Standard Macro                 #
+#                                                        #
+##########################################################
+
+
+#PreInit:
+
+#  Define the level of verbosity of messages
+# options: debugging, development, trace, routine, warning, error
+# default: routine
+/ds/manager/log trace
+/ds/manager/verbosity 0
+/ds/manager/checkoverlap 0
+/ds/manager/eventcounter 50000
+/ds/manager/writephotons 0
+/ds/manager/writedeposits 1
+/ds/manager/writedaughters 1
+#/ds/manager/optics_tuning ../data/detector/DSOptics.dat
+/ds/manager/fast_simulation 1
+
+
+#Detector configuration: TPC+NV+WT (0) - TPC+NW (1) - TPC (2) - NV+WT (3) - Tester (4) - TPC_DS10 (5)
+/ds/detector/configuration 0
+/ds/detector/ExtLarScintillating 1
+/ds/detector/vetoyieldfactor 0.0
+
+
+#/ds/physics/optics 2
+#/ds/physics/HPRangeCuts false
+
+
+# Define output file name
+#/run/filename /scratch/darkside/reinhol1/MC/Cs137_beforeCopperRings
+/run/filename /scratch/darkside/reinhol1/MC/Cs137_optics_afterCopperRings_center+26mm
+
+
+# Define  random seed
+/run/heprandomseed 12345679
+
+#Define the hadronic physics list (none HP Shielding QGSP_BERT_HP QGSP_BIC_HP FTF_BIC_HP FTFP_BERT_HP)
+/ds/physics/hadronic_list HP
+#/ds/physics/hadronic_list QGSP_BERT_HP
+
+#Define the EM physics list (standard livermore)
+/ds/physics/em_list livermore
+
+/ds/physics/optics 3 
+#/ds/physics/killS1S2 1
+/ds/physics/killS2 1
+/ds/physics/tuned200V 1
+
+#/ds/physics/scaleS2 3
+#/ds/physics/DriftField 0.2 kV/cm
+#/ds/physics/ExtractionField 2.8 kV/cm
+
+/ds/detector/holderRadius 322 mm
+/ds/detector/holderPhi 0 degree
+/ds/detector/holderZ -1.05 cm
+
+#-----------------------------------
+/run/initialize
+#-----------------------------------
+
+#PostInit:
+
+
+/ds/generator/select RDM
+
+# The next command is required by this macro
+/ds/stack/select RDM
+
+#Cs137
+/ds/generator/rdm/ion 137 55 0
+/ds/generator/holderSource_on 1
+
+# Define the number of events
+/run/beamOn 100
