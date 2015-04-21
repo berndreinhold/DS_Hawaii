@@ -64,6 +64,9 @@ SCRATCH_DIR="/pnfs/darkside/scratch/users"
     echo "GROUP: $GROUP"
     echo "SCRATCH_DIR: $SCRATCH_DIR"
     echo "------------------------------"
+    echo "JOB_LABEL: $JOB_LABEL"
+    echo "USER: $USER"
+    echo "------------------------------"
 
 #create a file environ_vars.txt, which is then read by main_script_prod.py
 echo "#this is environ_vars.txt, which is used to transfer necessary enivronmental variables to main_script_prod.py. Python had an issue with os.getenv while testing in Dec. 2014" > environ_vars.txt
@@ -77,11 +80,14 @@ echo "output_dir=$CONDOR_DIR_DS_MCProd" >> environ_vars.txt
 
 #make a local copy on the worker node... (following a tip by Ken, after we got the impression that one job would not be allowed to access HelloWorld_main_script_prod.py after one job started to use it.
 
-ifdh cp -D /ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/main_script_prod.py $PWD
-ifdh cp -D /ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/MCProdBase.py $PWD
-ifdh cp -D /ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/Util.py $PWD
-ifdh cp -D /ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/MCTuningBase.py $PWD
-ifdh cp -D /ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/mac/*.mac $PWD 
+ifdh cp -D /ds50/data/user/reinhol1/DS_CONDOR/CalibData/${JOB_LABEL}/*.py $PWD
+ifdh cp -D /ds50/data/user/reinhol1/DS_CONDOR/CalibData/${JOB_LABEL}/*.mac $PWD 
+
+#ifdh cp -D /ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/main_script_prod.py $PWD
+#ifdh cp -D /ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/MCProdBase.py $PWD
+#ifdh cp -D /ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/Util.py $PWD
+#ifdh cp -D /ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/MCTuningBase.py $PWD
+#ifdh cp -D /ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/mac/*.mac $PWD 
 #copy all the .mac files
 
 chmod g+x *.py
@@ -99,6 +105,6 @@ find . -iname "*.*" | sort -n
 echo "------------------------------"
 echo "------------------------------"
 
-python --version
+#python --version
 echo "End `date`"
 exit 0

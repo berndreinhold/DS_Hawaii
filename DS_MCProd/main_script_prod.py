@@ -37,7 +37,11 @@ def main():
         elif var=="output_dir": output_dir=str(value).strip() #here the 
 
     jobindex=int(process)
-    
+
+    print "JOB_LABEL: %s" % os.environ["JOB_LABEL"]
+    print "PROCESS: %s" % os.environ["PROCESS"]
+    print "CONDOR_DIR_DS_MCProd: %s" % os.environ["CONDOR_DIR_DS_MCProd"]
+        
     f.close()
 
     print "jobindex: ", jobindex
@@ -48,7 +52,8 @@ def main():
     #x = MCP.MCProdBase("scs_Andrew", 500, jobindex, output_dir, code_dir, g4ds_dir)
     #obsolete: #x = MCP.MCProdBase("Co57", 6e6, jobindex, output_dir, code_dir, g4ds_dir)
     #x = MCP.MCProdBase("Co57", 3e6, jobindex, output_dir, code_dir, g4ds_dir)
-    x = MCP.MCProdBase("Ba133", 3e6, jobindex, output_dir, code_dir, g4ds_dir)
+    #x = MCP.MCProdBase("Ba133", 1.5e6, jobindex, output_dir, code_dir, g4ds_dir)
+    x = MCP.MCProdBase("Ba133", 5e5, jobindex, output_dir, code_dir, g4ds_dir)
     #x = MCP.MCProdBase("Cs137", 3e6, jobindex, output_dir, code_dir, g4ds_dir)
     #x = MCP.MCProdBase("Th232", 3e6, jobindex, output_dir, code_dir, g4ds_dir)
     x.loop()
