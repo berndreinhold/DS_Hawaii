@@ -158,7 +158,8 @@ class MCTuning:
 
         #modify the macro according to relevant variable changes
 
-        fMacroInputFile = open("%s/%s.mac" % (self._code_dir, self._macro_prefix))
+        #fMacroInputFile = open("%s/%s.mac" % (self._code_dir, self._macro_prefix))
+        fMacroInputFile = open("%s.mac" % self._macro_prefix) #call locally on the worker node.
         fMacro = open(self._sMacroFile, 'w') #output macro, containing the varied parameters 
         #search and replace relevant lines
         for line in fMacroInputFile:
