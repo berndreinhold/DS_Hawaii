@@ -53,6 +53,8 @@ def main():
         elif isotope=="Ba133": events=2e5 #for Ba133, ???
         elif isotope=="Cs137": events=2e5 #for Cs137
         elif isotope=="Th232": events=1e5 #for Th232, 45 min/1e5
+        elif isotope=="Ar39": events=2e5 #
+        elif isotope=="Kr83m": events=2e5 #
         else:
             print "isotope (%s) was not identified, process 1e5 events per default" % isotope
             events=1e5
