@@ -57,19 +57,18 @@
 
 /ds/detector/holderRadius 322 mm
 /ds/detector/holderPhi 0 degree
-/ds/detector/holderZ -1.05 cm
+#/ds/detector/holderZ 3.5 mm #40 mm above -36.5 mm
+/ds/detector/holderZ -1.05 cm #msc 731000: center+26mm
 
 #-----------------------------------
 /run/initialize
 #-----------------------------------
 
 #PostInit:
-
-
 /ds/generator/select RDM
 
 # The next command is required by this macro
-/ds/stack/select RDM
+/ds/stack/select RDMChain
 
 #Ba133
 /ds/generator/rdm/ion 133 56 0

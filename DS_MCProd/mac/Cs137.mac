@@ -69,7 +69,7 @@
 /ds/generator/select RDM
 
 # The next command is required by this macro
-/ds/stack/select RDM
+/ds/stack/select RDMChain
 
 #Cs137
 /ds/generator/rdm/ion 137 55 0
