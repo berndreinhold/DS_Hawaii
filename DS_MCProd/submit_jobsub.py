@@ -78,13 +78,15 @@ def main():
     #(nJobs, JobsPerEvent) = x.NJobs()
 
     nJobs = 1 #is ignored in DEBUG mode
-    #os.environ['JOB_LABEL']="CopperRings_SourceHolder_opticsOn_center+40mm";
-    #os.environ['ISOTOPE']="Co57";
-    os.environ['CATEGORY']="CalibData"; #radioactive sources are there, 39Ar and 83mKr are in a different category. This category is used in output directories on PNFS and /ds50/data/ see above 
-    os.environ['JOB_LABEL']="CopperRings_SourceHolder_opticsOn_center_plus26mm";
-    os.environ['ISOTOPE']="Cs137";
-    exec_dir=config_setup(os.environ['CATEGORY'],  os.environ['ISOTOPE'], os.environ['JOB_LABEL'], debug)
+    #os.environ['CATEGORY']="CalibData"; #radioactive sources are there, 39Ar and 83mKr are in a different category. This category is used in output directories on PNFS and /ds50/data/ see above 
+    #os.environ['JOB_LABEL']="CopperRings_SourceHolder_opticsOn_center_plus26mm";
+    #os.environ['ISOTOPE']="Cs137";
 
+    os.environ['CATEGORY']="Internal"; 
+    os.environ['JOB_LABEL']="FastSim";
+    os.environ['ISOTOPE']="Ar39";
+
+    exec_dir=config_setup(os.environ['CATEGORY'],  os.environ['ISOTOPE'], os.environ['JOB_LABEL'], debug)
 
 
     if(debug>0):
