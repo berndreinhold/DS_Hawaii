@@ -13,49 +13,51 @@ sys.argv.append( '-u' ) #stackoverflow.com/questions/107705/disable-output-buffe
 def main():
     print "begin of main(): Hello World. This is to understand a strange bug in the other main_script_prod.py"
 
-
     code_dir = "/ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/"
     g4ds_dir = "/ds50/app/user/reinhol1/work/montecarlo/g4ds10/"
-    output_dir = "/pnfs/darkside/scratch/users/reinhol1/" #is potentially overwritten below
+    output_dir = "" #is overwritten below, when on the worker node
     jobindex = 0
-    process = "0"
-
-    print "before read environ_vars.txt"
-    f=open("environ_vars.txt","r")
-    lines=f.readlines()
-
-    for line in lines:
-        if line.find("="): print "=", line,
-        else: print line,
-
-    for line in lines:
-        if line.startswith("#") or line.startswith("//"): continue #comment
-        [var, value]=line.split("=")
-        print var
-        print value
-        if var=="process_var": process=str(value)
-        elif var=="output_dir": output_dir=str(value).strip() #here the 
-
-    jobindex=int(process)
+    #process = "0"
 
     print "JOB_LABEL: %s" % os.environ["JOB_LABEL"]
     print "PROCESS: %s" % os.environ["PROCESS"]
-    print "CONDOR_DIR_DS_MCProd: %s" % os.environ["CONDOR_DIR_DS_MCProd"]
-        
-    f.close()
+    print "ISOTOPE: %s" % os.environ["ISOTOPE"]
+    if int(os.environ["DEBUG"])>0: #debug variable is always set
+        output_dir=str(os.environ["DEBUG_OPERATION_DIR"])
+    else:
+        output_dir=str(os.environ["_CONDOR_SCRATCH_DIR"])
 
+    #print "CONDOR_DIR_DS_MCProd: %s" % os.environ["CONDOR_DIR_DS_MCProd"]
+
+
+    jobindex=int(os.environ["PROCESS"])
+    isotope=str(os.environ["ISOTOPE"])
+    #os.environ["CATEGORY"] - is not used here, only in main_script.sh
+     
     print "jobindex: ", jobindex
     print "output_dir: ", output_dir
 
-    print "before class invocation:"
-    #time.sleep(60)
-    #x = MCP.MCProdBase("scs_Andrew", 500, jobindex, output_dir, code_dir, g4ds_dir)
-    #obsolete: #x = MCP.MCProdBase("Co57", 6e6, jobindex, output_dir, code_dir, g4ds_dir)
+
+    #x = MCP.MCProdBase("Ar39", 500, jobindex, output_dir, code_dir, g4ds_dir)
+    #
     #x = MCP.MCProdBase("Co57", 3e6, jobindex, output_dir, code_dir, g4ds_dir)
-    #x = MCP.MCProdBase("Ba133", 1.5e6, jobindex, output_dir, code_dir, g4ds_dir)
-    x = MCP.MCProdBase("Ba133", 5e5, jobindex, output_dir, code_dir, g4ds_dir)
+    #x = MCP.MCProdBase("Ba133", 5e5, jobindex, output_dir, code_dir, g4ds_dir)
     #x = MCP.MCProdBase("Cs137", 3e6, jobindex, output_dir, code_dir, g4ds_dir)
-    #x = MCP.MCProdBase("Th232", 3e6, jobindex, output_dir, code_dir, g4ds_dir)
+
+    if int(os.environ["DEBUG"])>0:
+        if isotope=="Co57": events=10000
+        else:
+            events=1000
+    else:
+        if isotope=="Co57": events=3e6 #for Co57, several hours
+        elif isotope=="Ba133": events=2e5 #for Ba133, ???
+        elif isotope=="Cs137": events=2e5 #for Cs137
+        elif isotope=="Th232": events=1e5 #for Th232, 45 min/1e5
+        else:
+            print "isotope (%s) was not identified, process 1e5 events per default" % isotope
+            events=1e5
+    x = MCP.MCProdBase(isotope, events, jobindex, output_dir, code_dir, g4ds_dir) #isotope is identical to the macro name, adjust this, if the g4ds macros' names change.
+    #isotope can be: Ba133, Co57, Cs137, Th232, Kr83m, Ar39
     x.loop()
 
     print "end of main()"
@@ -65,24 +67,4 @@ def main():
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if __name__ == "__main__":
     main()
-
-
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-def outsourced():
-    print "before variables"
-#    if os.getenv("PROCESS"):
-#        jobidx=os.getenv("PROCESS")
-    if os.environ["PROCESS"]:
-        jobidx=os.environ["PROCESS"]
-        print "jobidx:", jobidx 
-        jobindex=int(jobidx)
-        print "jobindex (1): ", jobindex 
-    else:
-        print "PROCESS variable not available. Is jobsub called without -N option? Continue nevertheless."
-
-    print "before CONDOR_DIR_DS_MCProd"
-    #if os.getenv("CONDOR_DIR_DS_MCProd"):
-    #    output_dir=os.getenv("CONDOR_DIR_DS_MCProd")
-    if os.environ["CONDOR_DIR_DS_MCProd"]:
-        output_dir=os.environ["CONDOR_DIR_DS_MCProd"]
 

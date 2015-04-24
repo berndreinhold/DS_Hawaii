@@ -16,7 +16,8 @@ class MCProdBase(MCTuningBase.MCTuning):
     def _parameters(self):
         #parameters:
         self._par1_name="RandomSeed"
-        self._par1 = self._job_index+1000
+        self._par1 = self._job_index+1001
+        #self._par1 = self._job_index+950
         self._par1_format="%d"
         self._valuelist_all=[self._par1]
 
@@ -26,7 +27,12 @@ class MCProdBase(MCTuningBase.MCTuning):
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     def loop(self):
         #called after _parameters()
-        self._sJobLabel_Prefix= "CopperRings_SourceHolder_opticsOn_center+26mm_" + self._par1_name
+        try:
+            self._sJobLabel_Prefix=os.environ["JOB_LABEL"]+"_"+self._par1_name
+        except KeyError:
+            print "environmental variable $JOB_LABEL not set"
+            self._sJobLabel_Prefix= "CopperRings_SourceHolder_opticsOn_NO_JOB_LABEL_var_" + self._par1_name
+
         format_string = "%s_"
         format_string += self._par1_format
         self._sJobLabel = format_string % (self._sJobLabel_Prefix, self._par1)
