@@ -85,12 +85,6 @@ def main():
     os.environ['ISOTOPE']="Cs137";
     exec_dir=config_setup(os.environ['CATEGORY'],  os.environ['ISOTOPE'], os.environ['JOB_LABEL'], debug)
 
-    #parameters = "-e P1_NAME"
-    #parameters = ""
-    #submission_string = "jobsub -g -M --OS=SL6 -N %d --opportunistic -d whatever %s /ds50/data/user/reinhol1/work/test_MCTuning/%s/ /ds50/app/user/reinhol1/work/DS_Hawaii/MCTuningCode/main_script.sh" % (nJobs, parameters,x._par1_name)
-    #submission_string = "jobsub_submit -G darkside -M --OS=SL5,SL6 -N 2 -d DS_MCProd /pnfs/darkside/scratch/users/reinhol1/Ar39/ --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file:///ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/main_script.sh"
-    #submission_string = "jobsub_submit -G darkside -M --OS=SL6 -N 10 -d DS_MCProd /pnfs/darkside/scratch/users/reinhol1/CalibData/ --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file:///ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/main_script.sh"
-    #submission_string = "jobsub_submit -G darkside -M --OS=SL6 -N 1 -e JOB_LABEL -d DS_MCProd /pnfs/darkside/scratch/users/reinhol1/CalibData/%s --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file:///ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/main_script.sh" % os.environ['JOB_LABEL']
 
 
     if(debug>0):
@@ -115,3 +109,9 @@ if __name__ == "__main__":
 #submission_string = "jobsub -g -M --OS=SL6 --opportunistic -f /scratch/darkside/reinhol1/test_condor/Optical_FusedSilicaUVAbs_1.6e-04.root -d whatever /scratch/darkside/reinhol1/test_condor/ IO_test.py"
     #--append_condor_requirements '(Disk >= N)
 
+    #parameters = "-e P1_NAME"
+    #parameters = ""
+    #submission_string = "jobsub -g -M --OS=SL6 -N %d --opportunistic -d whatever %s /ds50/data/user/reinhol1/work/test_MCTuning/%s/ /ds50/app/user/reinhol1/work/DS_Hawaii/MCTuningCode/main_script.sh" % (nJobs, parameters,x._par1_name)
+    #submission_string = "jobsub_submit -G darkside -M --OS=SL5,SL6 -N 2 -d DS_MCProd /pnfs/darkside/scratch/users/reinhol1/Ar39/ --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file:///ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/main_script.sh"
+    #submission_string = "jobsub_submit -G darkside -M --OS=SL6 -N 10 -d DS_MCProd /pnfs/darkside/scratch/users/reinhol1/CalibData/ --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file:///ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/main_script.sh"
+    #submission_string = "jobsub_submit -G darkside -M --OS=SL6 -N 1 -e JOB_LABEL -d DS_MCProd /pnfs/darkside/scratch/users/reinhol1/CalibData/%s --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file:///ds50/app/user/reinhol1/work/DS_Hawaii/DS_MCProd/main_script.sh" % os.environ['JOB_LABEL']
