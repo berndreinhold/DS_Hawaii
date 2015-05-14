@@ -34,7 +34,8 @@ using namespace std;
 using namespace darkart;
 
 // Forward declaration
-void LoopOverChain(TChain* tpc_chain,TChain* od_chain ,TString outFileName = "analysis_v1.root");
+//void LoopOverChain(TChain* tpc_chain,TChain* od_chain ,TString outFileName = "analysis_v1.root");
+void LoopOverChain(TChain* od_chain ,TString outFileName = "analysis_v1.root");
 bool multiplicity_cut(Float_t height, Float_t multiplicity, Float_t charge);
 
 
@@ -42,11 +43,12 @@ struct VetoEvent{
   VetoEvent(): od_eventID(-1), od_nclusters(-1), od_gps_fine(-1),
 	       od_gps_coarse(-1), od_timestamp(-1), od_wt_charge(-1){}
   //  Int_t od_counts;
+  Int_t od_runID;
   Int_t od_eventID;
-  Int_t od_nclusters;
   Double_t od_gps_fine;
   Double_t od_gps_coarse;
   Double_t od_timestamp; //[us]
+  Int_t od_nclusters;
   Double_t od_wt_charge;
   std::vector<Double_t> od_cluster_charge; //[PE]
   std::vector<Double_t> od_cluster_start; //[us]
@@ -54,95 +56,81 @@ struct VetoEvent{
   std::vector<Double_t> od_cluster_multiplicity;
   std::vector<Int_t> od_cluster_pass_multcut;
   std::vector<Double_t> od_cluster_dtprompt; //[us]
+  void clear(){
+    od_eventID=-1;
+    od_nclusters=-1;
+    od_gps_fine=-1;
+    od_gps_coarse=-1;
+    od_timestamp=-1;
+    od_wt_charge=-1;
+  }
 };
 
 
 //int SelfMacroDST() {
 int main() {
-        //Chain for the TPC
-	TChain* tpc_chain = new TChain("treeBuilder/Events");
-	//string  tpc_path  = "/analysis/darkart_v1_01_04/tpc/Run";
-	string tpc_path="/scratch/darkside/reconstructed/tpc/v1_01_04/Run";
 
 	TChain* od_chain = new TChain("odtree");
 	//string  od_path  = "/analysis/veto/ODRun";
-	string prefix = "am30"; //these prefixes are from Shawn, where he varied the clustering threshold.
+	string prefix = "td00"; //these prefixes are from Shawn, where he varied the clustering threshold.
 
 	string od_path="/scratch/darkside/reinhol1/Veto/DSTAwayData/";
-
+	cout << "prefix: " << prefix << endl;
+	cout << "od_path: " << od_path << endl;
 	std::vector<int> run_id_list;
 
 	//run_id_list.push_back(10975);
 	run_id_list.push_back(11155);
 
 	TString outFileName;
-	outFileName.Form("/scratch/darkside/reinhol1/Veto/DSTAwayData/DST_%s_Run%06d.root",prefix.c_str(), run_id_list[0]);
+	outFileName.Form("%s/DST_%s_Run%06d.root",od_path.c_str(), prefix.c_str(), run_id_list[0]);
 
 	//Create path and add file to chain
 	TString os_tpc, os_od;
 	//std::ostringstream os_tpc, os_od;
 	for(std::vector<int>::const_iterator it = run_id_list.begin(); it != run_id_list.end(); it++){
-	  os_tpc.Form("%06d/Run%06d.root", *it, *it);
-	  os_tpc.Prepend(tpc_path);	  
+	  //os_tpc.Form("%06d/Run%06d.root", *it, *it);
+	  //os_tpc.Prepend(tpc_path);	  
 	  
 	  os_od.Form("%sODRun%06d.root", prefix.c_str(), *it);
 	  os_od.Prepend(od_path);
 	
 	  cout << "Adding file in OD chain: " << os_od << '\n';
-	  cout << "Adding file in TPC chain: " << os_tpc << endl;
-
-	  tpc_chain  ->Add (os_tpc);		 
+	  //cout << "Adding file in TPC chain: " << os_tpc << endl;
+	  //tpc_chain  ->Add (os_tpc);		 
 	  od_chain   ->Add (os_od); 
 	}
 
-       	LoopOverChain(tpc_chain, od_chain,outFileName);
+       	LoopOverChain(od_chain,outFileName);
 
+	cout << "outFileName: " << outFileName << endl;
 	return 1;
 }
 
 
-void LoopOverChain(TChain* tpc_chain, TChain* od_chain, TString outFileName){
+void LoopOverChain(TChain* od_chain, TString outFileName){
   
-	//Const for TPC events
-        const Double_t t_drift_min        = 10.; //[us]
-	const Double_t t_drift_max        = 373.3; //[us]
-	const Double_t t_drift_delta      = 10; //[us]
-	const Double_t t_s3_sep_min       = 372.; //372.; //[us]
-	const Double_t t_s3_sep_max       = 400.; //390.; //[us]
-	const Double_t electron_lifetime  = 4733; //3338; //[us]
-	const Int_t N_CHANNELS            = 38;
-
-	//Variable limits for cuts
-	const Double_t tpc_s1_start_time_min = -6.10, tpc_s1_start_time_max = -6.0;
-	const Double_t tpc_s1_late_min = 3500, tpc_s1_late_max = 35000;
-	const Double_t tpc_s1_min = 60, tpc_s1_max = 1000;
-	const Double_t tpc_total_f90Nmin = 0.6, tpc_total_f90Nmax = 0.85;
-	const Double_t tpc_total_f90Gmin = 0.1, tpc_total_f90Gmax = 0.4;
 	const Double_t od_coinc_wind = 3930.; //[ns] obtained from validation fits
 	//Add two more variables for the self trigger modes match
-	const Double_t od_delay_window = 1000;  //[us]
-	const Double_t od_prompt_window = -1; //[us]
+	//const Double_t od_delay_window = 1000;  //[us]
+	//const Double_t od_prompt_window = -1; //[us]
 
-        Int_t tpc_events = tpc_chain->GetEntries();
-        if (tpc_events == 0){
-	    std::cout<<"No events loaded in TChain. Aborting..."<<std::endl;
-	    return;
-	}
-	
-	cout << "Total number of events: "<<tpc_events << endl;
-	
-	//TPC TChain
-        EventData* event = NULL;
-	tpc_chain->SetBranchAddress("EventData", &event);  
 
 	//OD TChain
 	Int_t    od_run                           = -1;
 	Int_t    od_event                         = -1;
 	Int_t    od_lsv_nclusters                 = -1;
+
+	TArrayF  *od_lsv_cluster_charge = 0; //[PE]
+	TArrayF  *od_lsv_cluster_start = 0; //[ns]
+	TArrayF  *od_lsv_cluster_height = 0; 
+	TArrayF  *od_lsv_cluster_multiplicity = 0;
+	/*
 	Float_t  od_lsv_cluster_charge[200]       = {}; //[PE]
 	Float_t  od_lsv_cluster_start[200]        = {}; //[ns]
 	Float_t  od_lsv_cluster_height[200]       = {}; 
 	Float_t  od_lsv_cluster_multiplicity[200] = {};
+	*/
 	UInt_t   od_gps_fine_time_counter         = 0;  //clock cycles
 	UShort_t od_pps_counter                   = 0;  //[s]
 	Float_t  od_wt_total_charge               = -1.;//[PE]
@@ -185,121 +173,62 @@ void LoopOverChain(TChain* tpc_chain, TChain* od_chain, TString outFileName){
   
 	std::cout << "Saving output to "<<outFileName.Data()<<std::endl;
 	TFile* f = new TFile(outFileName.Data(), "RECREATE");
-	TH1F* s1_startime_hist            = new TH1F("s1_startime_hist", "Drift Time", 5000, -10., 10.);
-	TH1F* total_s1_hist               = new TH1F("total_s1_hist", "S1 Spectrum", 10000, 0, 10000);
-	TH1F* total_f90_hist              = new TH1F("total_f90_hist", "F90 Distribution", 110, 0, 1.3);
-	TH2F* total_s1_f90_hist           = new TH2F("total_s1_f90_hist", "F90 vs S1; S1 [p.e.]; F90", 10000, 0, 10000, 130, 0, 1.3);
-	
+	/*
+	  TH1F* s1_startime_hist            = new TH1F("s1_startime_hist", "Drift Time", 5000, -10., 10.);
+	  TH1F* total_s1_hist               = new TH1F("total_s1_hist", "S1 Spectrum", 10000, 0, 10000);
+	  TH1F* total_f90_hist              = new TH1F("total_f90_hist", "F90 Distribution", 110, 0, 1.3);
+	  TH2F* total_s1_f90_hist           = new TH2F("total_s1_f90_hist", "F90 vs S1; S1 [p.e.]; F90", 10000, 0, 10000, 130, 0, 1.3);
+	*/
+
 	//Create DSTtree
 	TTree * DSTtree = new TTree ("DSTtree", "tree of selected events");
 	
-	Int_t    runID               = -1;
-	Int_t    tpc_eventID         = -1;
-	Int_t    tpc_event_type      = -1; // 0 gamma, 1 neutron, -1 else
-	Double_t tpc_gps_fine        = -1.; //clock cycles
-	Double_t tpc_gps_coarse      = -1.; //[s]
-	Double_t tpc_s1_start_time   = -1.; //[us]
-	Double_t tpc_total_s1        = -1.; //[PE]
-	Double_t tpc_total_f90       = -1.; 
-	Double_t tpc_t_drift         = -1.; //[us]
-	Double_t tpc_s1_late         = -1.; //[PE]
-	Int_t    tpc_npulses         = -1;
-	Double_t tpc_timestamp       = -1;  //[us]
-	Int_t    number_of_match_od_events = -1;
-	
-	DSTtree->Branch("runID",             &runID,              "runID/I");
-	DSTtree->Branch("tpc_eventID",       &tpc_eventID,        "tpc_eventID/I");
-	DSTtree->Branch("tpc_event_type",    &tpc_event_type,     "tpc_event_type/I");
-	DSTtree->Branch("tpc_gps_fine",      &tpc_gps_fine,       "tpc_gps_fine/D");
-	DSTtree->Branch("tpc_gps_coarse",    &tpc_gps_coarse,     "tpc_gps_coarse/D");
-	DSTtree->Branch("tpc_s1_start_time", &tpc_s1_start_time,  "tpc_s1_start_time/D");
-	DSTtree->Branch("tpc_total_s1",      &tpc_total_s1,       "tpc_total_s1/D");
-	DSTtree->Branch("tpc_total_f90",     &tpc_total_f90,      "tpc_total_f90/D");
-	DSTtree->Branch("tpc_t_drift",       &tpc_t_drift,        "tpc_t_drift/D");
-	DSTtree->Branch("tpc_s1_late",       &tpc_s1_late,        "tpc_s1_late/D");
-	DSTtree->Branch("tpc_npulses",       &tpc_npulses,        "tpc_npulses/I");
-	DSTtree->Branch("tpc_timestamp",     &tpc_timestamp,      "tpc_timestamp/D");
-	DSTtree->Branch("number_of_match_od_events",  &number_of_match_od_events, "number_of_match_od_events/I");
+	//VetoEvent *VEv = new VetoEvent();
+	//DSTtree->Branch("VetoEvent",&VEv);   //,32000,1);
 
-	std::vector<VetoEvent> *ODEvent = new std::vector<VetoEvent>;
-	DSTtree->Branch("ODEvent",&ODEvent);   //,32000,1);
+	Int_t od_runID=-1;
+	Int_t od_eventID=-1;
+	Double_t od_gps_fine=-1;
+	Double_t od_gps_coarse=-1;
+	Double_t od_timestamp=-1; //[us]
+	Int_t od_nclusters=-1;
+	Double_t od_wt_charge=-1;
+	std::vector<Double_t> *od_cluster_charge=new std::vector<Double_t>; //[PE]
+	std::vector<Double_t> *od_cluster_start=new std::vector<Double_t>; //[us]
+	std::vector<Double_t> *od_cluster_height=new std::vector<Double_t>; 
+	std::vector<Double_t> *od_cluster_multiplicity=new std::vector<Double_t>;
+	std::vector<Int_t> *od_cluster_pass_multcut=new std::vector<Int_t>;
+	std::vector<Double_t> *od_cluster_dtprompt=new std::vector<Double_t>; //[us]
+
+	DSTtree->Branch("od_runID",             &od_runID,              "od_runID/I");
+        DSTtree->Branch("od_eventID",       &od_eventID,        "od_eventID/I");
+        DSTtree->Branch("od_gps_fine",      &od_gps_fine,       "od_gps_fine/D");
+        DSTtree->Branch("od_gps_coarse",    &od_gps_coarse,     "od_gps_coarse/D");
+        DSTtree->Branch("od_timestamp",    &od_timestamp,     "od_timestamp/D");
+        DSTtree->Branch("od_nclusters",    &od_nclusters,     "od_nclusters/I");
+        DSTtree->Branch("od_wt_charge",    &od_wt_charge,     "od_wt_charge/D");
+	DSTtree->Branch("od_cluster_charge", &od_cluster_charge);
+	DSTtree->Branch("od_cluster_start", &od_cluster_start);
+	DSTtree->Branch("od_cluster_height", &od_cluster_height);
+	DSTtree->Branch("od_cluster_multiplicity", &od_cluster_multiplicity);
+	DSTtree->Branch("od_cluster_pass_multcut", &od_cluster_pass_multcut);
+	DSTtree->Branch("od_cluster_dtprompt", &od_cluster_dtprompt);
+
 
 	//////////////////////////////////////////////////////////////////////////
 	/////////////////     BEGIN LOOP OVER EVENTS       ///////////////////////
 	//////////////////////////////////////////////////////////////////////////
-	tpc_events -= 50; // Skip last few events because end of some (very few) runs are problematic.
-	
-	for (Int_t n_tpc = 50; n_tpc < tpc_events ; n_tpc++){
-	  Double_t DT =-100000;	
-
-	  //Load the event
-	  tpc_chain->GetEntry(n_tpc);
-	  runID = event->event_info.run_id;
-	  tpc_eventID = event->event_info.event_id;
-	  tpc_event_type = -1;
-	  
-	  if(n_tpc%10000==0) cout << "Processing event: " << n_tpc << "/" << tpc_events << ", RunID: " << runID << '\n';     
-	  
-	  //**************Standard TPC cuts*******************
-	  // Check for expected number of channels
-	  
-	  if ((int)event->n_channels != N_CHANNELS){
-	    cout << "Event=" << event->event_info.event_id<<" has LOWER # of Channels; num ch: "<<event->n_channels<<endl;
-	    continue;
-	  }
-	  
-	  //Make sure the baseline was found on the sum channel
-	  if (event->sumchannel.baseline.found_baseline == false) continue;
-	  
-	  //PULSE IDENTIFICATION   
-	  // npulses=0, then n_phys_pulses=0, if npulses=1 then the other is one... if there is an S3, then the n_phys_pulses=2 and s1_pulse_id=0 and S2_pulse_id=1...
-	  Int_t n_phys_pulses = -1, s1_pulse_id = -1, s2_pulse_id = -1;
-	  ds50analysis::identify_pulses(event, n_phys_pulses, s1_pulse_id, s2_pulse_id, t_drift_max, t_drift_delta);
-	  
-	  //NUMBER OF PULSES
-	  //Events with 0 or 1 pulses are not interesting!
-	  if (n_phys_pulses==0) continue;
-	  if (n_phys_pulses==1) continue;
-	  
-	  //CALCULATE PARAMETERS -> note: S1_pulse_id is always =0 and S2_pulse_id=1
-	  tpc_total_s1 = event->pulses[s1_pulse_id].param.fixed_int1;
-	  tpc_s1_start_time = event->pulses[s1_pulse_id].pulse.start_time;
-	  Double_t tpc_s2_start_time = event->pulses[s2_pulse_id].pulse.start_time;
-	  tpc_t_drift=-1;
-	  
-	  if (n_phys_pulses==2) tpc_t_drift = tpc_s2_start_time - tpc_s1_start_time;
-	  
-	  tpc_s1_late         = (1-event->pulses[s1_pulse_id].param.f90)*tpc_total_s1;
-	  tpc_total_f90       = event->pulses[s1_pulse_id].param.f90*event->pulses[s1_pulse_id].param.npe/tpc_total_s1;
-	  tpc_gps_fine        = event->event_info.gps_fine;
-	  tpc_gps_coarse      = event->event_info.gps_coarse;
-	  tpc_npulses         = event->n_pulses;
-	  tpc_timestamp       = tpc_gps_coarse*1.e+6 + tpc_gps_fine*20.e-3; // [us]
-	  
-	  //*********cut analysis******************************
-	  //start time cut (selecting s1 in tpc trigger position)
-	  if (tpc_s1_start_time<tpc_s1_start_time_min || tpc_s1_start_time>tpc_s1_start_time_max) continue;
-	  
-	  //CUT to select 4.4 gammas
-	  Bool_t cut_gamma   = tpc_s1_late>tpc_s1_late_min && tpc_s1_late<tpc_s1_late_max && tpc_total_f90>tpc_total_f90Gmin && tpc_total_f90<tpc_total_f90Gmax;
-	  
-	  //CUT to select neutrons NOTE: we could implement a cut on f90 at 2sigma of the distribution (95%)
-	  Bool_t cut_neutron = tpc_total_s1>tpc_s1_min && tpc_total_s1<tpc_s1_max && tpc_total_f90>tpc_total_f90Nmin && tpc_total_f90<tpc_total_f90Nmax;
-	  
-	  if ( !cut_gamma && !cut_neutron ) continue;
-	  
-	  if(cut_gamma)tpc_event_type = 0;
-	  if(cut_neutron)tpc_event_type = 1;
-	  
 	  // in slave mode 1:1 corrispondence tpc event od event (maybe just a little offset)
-	  const Int_t n_od_begin = (n_tpc - 10 < 0 ) ? 0 : (n_tpc - 10); 
-	  const Int_t n_od_end = (n_tpc + 10 > tpc_events ) ? tpc_events : (n_tpc + 10);
-	       
-	  //********Start Lopp Over Veto Events
-	  if(ODEvent->size())
-	    ODEvent->clear();
-	  int od_counts = -1;
-	  for (Int_t n_od = n_od_begin; n_od < n_od_end; n_od++){
+	  const Int_t od_events = od_chain->GetEntries() - 50;
+	  if(od_events<50){
+	    cout << "very few events in this chain: " << od_events << " (after subtracting 50 events already)"<< endl;
+	    return; 
+	  }
+
+
+	  cout << "events being processed: " << od_events << endl;
+
+	  for (Int_t n_od = 50; n_od < od_events; n_od++){
 	    od_chain->GetEntry(n_od);
 	    //cout << "loop on od events: " <<  n_od_begin << '\t' <<  n_od_end << '\n'; 			             
 	    if (od_bad_time_alignment>0){
@@ -311,35 +240,40 @@ void LoopOverChain(TChain* tpc_chain, TChain* od_chain, TString outFileName){
 	    //select only od events in coincidence with the tpc [od_prompt_window,od_delay_window]
 	    //if (DT<od_prompt_window ||  DT>od_delay_window) continue;
 	    
-	    ++od_counts;
-	    ODEvent->push_back(VetoEvent());
+	    if(n_od%10000 == 0) cout << Form("%d events (out of: %d)", n_od, od_events) << endl;
+
+	    od_cluster_charge->clear();
+	    od_cluster_start->clear();
+	    od_cluster_height->clear();
+	    od_cluster_multiplicity->clear();
+	    od_cluster_pass_multcut->clear();
+	    od_cluster_dtprompt->clear();
 	    
 	    //  ODEvent->at(od_counts).od_counts = od_counts;
-	    ODEvent->at(od_counts).od_eventID = od_event;
-	    ODEvent->at(od_counts).od_nclusters = od_lsv_nclusters;
-	    ODEvent->at(od_counts).od_gps_fine = od_gps_fine_time_counter+0.;
-	    ODEvent->at(od_counts).od_gps_coarse = od_pps_counter+0.;
-	    ODEvent->at(od_counts).od_wt_charge = od_wt_total_charge;
-	    ODEvent->at(od_counts).od_timestamp = od_timestamp_temp; //comment
+	    od_runID = od_run;
+	    od_eventID = od_event;
+	    od_nclusters = od_lsv_nclusters;
+	    od_gps_fine = od_gps_fine_time_counter+0.;
+	    od_gps_coarse = od_pps_counter+0.;
+	    od_wt_charge = od_wt_total_charge;
+	    od_timestamp = od_timestamp_temp; //comment
 	    
 	    for (Int_t n_clu = 0 ; n_clu < od_lsv_nclusters; n_clu++){
-	      ODEvent->at(od_counts).od_cluster_charge.push_back(od_lsv_cluster_charge[n_clu]);
-	      ODEvent->at(od_counts).od_cluster_start.push_back(od_lsv_cluster_start[n_clu]*1.e-3);
-	      ODEvent->at(od_counts).od_cluster_height.push_back(od_lsv_cluster_height[n_clu]);
-	      ODEvent->at(od_counts).od_cluster_multiplicity.push_back(od_lsv_cluster_multiplicity[n_clu]);
+	      od_cluster_charge->push_back(od_lsv_cluster_charge->At(n_clu));
+	      od_cluster_start->push_back(od_lsv_cluster_start->At(n_clu)*1.e-3);
+	      od_cluster_height->push_back(od_lsv_cluster_height->At(n_clu));
+	      od_cluster_multiplicity->push_back(od_lsv_cluster_multiplicity->At(n_clu));
 	      
-	      if (multiplicity_cut(od_lsv_cluster_height[n_clu], od_lsv_cluster_multiplicity[n_clu], od_lsv_cluster_charge[n_clu] ))
-		ODEvent->at(od_counts).od_cluster_pass_multcut.push_back(1);
-	      else ODEvent->at(od_counts).od_cluster_pass_multcut.push_back(0);
+	      if (multiplicity_cut(od_lsv_cluster_height->At(n_clu), od_lsv_cluster_multiplicity->At(n_clu), od_lsv_cluster_charge->At(n_clu) ))
+		od_cluster_pass_multcut->push_back(1);
+	      else od_cluster_pass_multcut->push_back(0);
 			       
-	      ODEvent->at(od_counts).od_cluster_dtprompt.push_back((od_lsv_cluster_start[n_clu] - od_coinc_wind)*1.e-3);
+	      od_cluster_dtprompt->push_back((od_lsv_cluster_start->At(n_clu) - od_coinc_wind)*1.e-3);
 	    } // end loop on clusters 			    	    
-	  } // end on selected od events
 
-	  number_of_match_od_events = od_counts+1;
-	  DSTtree                     ->Fill();
-	  total_s1_f90_hist           ->Fill(tpc_total_s1, tpc_total_f90);
-	  total_s1_hist               ->Fill(tpc_total_s1);
+	  DSTtree->Fill();
+	  //total_s1_f90_hist           ->Fill(tpc_total_s1, tpc_total_f90);
+	  //total_s1_hist               ->Fill(tpc_total_s1);
 	  
 	}//End loop over events
 	
@@ -349,8 +283,6 @@ void LoopOverChain(TChain* tpc_chain, TChain* od_chain, TString outFileName){
 
 	f->cd();
 	DSTtree->Write();
-	total_s1_f90_hist->Write();
-	total_s1_hist->Write();  
 	f->Write();
 	f->Close();
 	outfile.close();
