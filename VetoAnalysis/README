@@ -3,9 +3,10 @@
 1. copied files:
 transferred DSTfiles produced by Hao from /home/hqian/ds50analysis/darkart/haoanalysis/DSTAwayData/ and DSTSlaveData/ on ds50login (using Erin's account) to /scratch/darkside/reinhol1/Veto/ on ds50srv01
 1b. ProduceDSTs/:
-- SelfMacroDST.C runs on ODrec files and produces DSTs. Based on Hao's macro (which I adjusted to fix some bugs and remove the coincidence with the TPC).
+- SelfMacroDST.C runs on ODrec files and produces DSTs. Based on Hao's macro (which I adjusted to fix some bugs and remove the coincidence with the TPC). March 19: removed the TPC alltogether.
 - these are for Shawn's variation of thresholds study, where I got ODrec output files and I need to produce DSTs
 - addtrees.py - simple script running on Shawn's odrec output, calling 'hadd'
+
 
 #this step requires DSTs:
 2. Veto_TMBAlphaOnly_TreeFromChain.C to produce one common Tree in the output file from the chain -> easier handling: 
