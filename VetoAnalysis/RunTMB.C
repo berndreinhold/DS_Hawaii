@@ -1,12 +1,12 @@
 RunTMB(){
   // EnergyCut_withVeto();
   // AllEnergies_withVeto();
-  SystematicsStudy("am00");
-  SystematicsStudy("am10", 11155);
-  SystematicsStudy("am20", 11155);
-  SystematicsStudy("am30", 11155);
-  SystematicsStudy("am40", 11155);
-  SystematicsStudy("am50", 11155);
+  //SystematicsStudy("am00"); //looks odd, May 14 not processed further
+  SystematicsStudy("td10", 11155);
+  SystematicsStudy("td20", 11155);
+  SystematicsStudy("td30", 11155);
+  SystematicsStudy("td40", 11155);
+  SystematicsStudy("td50", 11155);
 }
 
 //useful for deltaT studies
@@ -56,7 +56,6 @@ void AllEnergies_withVeto(){
 
 }
 
-
 void SystematicsStudy(string label="am30", int run=11155){
   gROOT->Reset();
   gROOT->ProcessLine(".L TMBAlphaOnly_DSTAwayData.C");
@@ -74,3 +73,12 @@ void SystematicsStudy(string label="am30", int run=11155){
   t.Loop();       // Loop on all entries
 
 }
+
+/*
+timeCutAfterPrompt: 15
+lowerPE: 0
+upperPE: 1e+06
+vetoTimeWindow: 15
+lowerPE_veto: 200
+upperPE_veto: 1e+06
+*/
