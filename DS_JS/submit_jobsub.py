@@ -9,18 +9,29 @@ import string
 #import MCTuningBase as MCT
 
 #adapt these to your needs:
-debug_exec_workernode_dir="/scratch/darkside/reinhol1/Temp/DS_JS_Test/" #this directory is the equivalent of the local directory on the workernode where all the python scripts and macros are copied to and executed #need to change directory, since /ds50/data/user/reinhol1/DS_CONDOR/ gives a permission denied error, despite doing chmod 755 on main_script.sh
+debug_exec_workernode_dir="/scratch/darkside/reinhol1/Temp/DS_JS_Test/" #this directory is only relevant in debug mode. It is the equivalent of the local directory on the workernode where all the python scripts and macros are copied to and executed #need to change directory, since /ds50/data/user/reinhol1/DS_CONDOR/ gives a permission denied error, despite doing chmod 755 on main_script.sh
 exec_base_dir="/ds50/data/user/reinhol1/DS_CONDOR_Test/" #this directory is on ds50srv01 (or equivalent machine), where all the python scripts and G4DS macros are copied to and adjusted before them being copied to the worker node (within main_script.sh)
 DS_JS="/scratch/darkside/reinhol1/Test_GIT/DS_Hawaii/DS_JS/" #checkout directory of this code
+#final_output_base_dir="/pnfs/darkside/scratch/users/%s/" % (os.environ["USER"])
+final_output_base_dir="/scratch/darkside/reinhol1/Test_GIT/output/"
+MY_G4DS="/ds50/app/user/reinhol1/work/montecarlo/g4ds10/"
+
+
+
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #example: category: CalibData, joblabel: CopperRings_SourceHolder_opticsOn_center+26mm
 #category is for output
 def config_setup(category, isotope, joblabel, debug=0):
 
+    os.environ["EXEC_BASE_DIR"]=exec_base_dir
+    os.environ["MY_G4DS"]=MY_G4DS
+    os.environ["FINAL_OUTPUT_BASE_DIR"]=final_output_base_dir
+    os.environ["DS_JS"]=DS_JS
+    
     #mkdir output directory, this has to match the ${FINAL_OUTPUT_BASE_DIR} in main_script.sh
     try:
-        directory = "/pnfs/darkside/scratch/users/%s/%s/%s/" % (os.environ["USER"],category,joblabel)
+        directory ="%s/%s/%s/" % (final_output_base_dir, category, joblabel)
         if not os.path.exists(directory):
             os.makedirs(directory)
             os.system("chmod g+w %s" % (directory))
@@ -110,7 +121,7 @@ def main():
         os.system("./%s_%s_main_script.sh" % (os.environ['ISOTOPE'], os.environ['JOB_LABEL']))
 
     else:
-        submission_string = "jobsub_submit -G darkside -M --OS=SL6 -N %d -e JOB_LABEL -e ISOTOPE -e CATEGORY -e DEBUG -L test_logfileoutput.txt --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file://%s/%s_%s_main_script.sh" % (nJobs, exec_dir, os.environ['ISOTOPE'], os.environ['JOB_LABEL'])
+        submission_string = "jobsub_submit -G darkside -M --OS=SL6 -N %d -e JOB_LABEL -e ISOTOPE -e CATEGORY -e DEBUG -e FINAL_OUTPUT_BASE_DIR -e DS_JS -e MY_G4DS -e EXEC_BASE_DIR -L test_logfileoutput.txt --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file://%s/%s_%s_main_script.sh" % (nJobs, exec_dir, os.environ['ISOTOPE'], os.environ['JOB_LABEL'])
         #main_script.sh is renamed just because of the more descriptive 'query jobsub_q -G darkside --user=reinhol1' (see comment above)
 	#submission_string = "jobsub_submit -G darkside -M --OS=SL6 -N %d -e JOB_LABEL -e ISOTOPE -e CATEGORY -e DEBUG --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file://%s/main_script.sh" % (nJobs, "/ds50/app/user/reinhol1/work/DS_Hawaii/DS_JS/")
 
