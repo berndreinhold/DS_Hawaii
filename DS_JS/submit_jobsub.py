@@ -1,4 +1,3 @@
-
 #!/usr/bin/python
 
 import sys
@@ -10,9 +9,9 @@ import string
 #import MCTuningBase as MCT
 
 #adapt these to your needs:
-debug_exec_workernode_dir="/scratch/darkside/reinhol1/Temp/" #this directory is the equivalent of the local directory on the workernode where all the python scripts and macros are copied to and executed #need to change directory, since /ds50/data/user/reinhol1/DS_CONDOR/ gives a permission denied error, despite doing chmod 755 on main_script.sh
-exec_base_dir="/ds50/data/user/reinhol1/DS_CONDOR/" #this directory is on ds50srv01 (or equivalent machine), where all the python scripts and G4DS macros are copied to and adjusted before them being copied to the worker node (within main_script.sh)
-DS_JS="/ds50/app/user/reinhol1/work/DS_Hawaii/DS_JS" #checkout directory
+debug_exec_workernode_dir="/scratch/darkside/reinhol1/Temp/DS_JS_Test/" #this directory is the equivalent of the local directory on the workernode where all the python scripts and macros are copied to and executed #need to change directory, since /ds50/data/user/reinhol1/DS_CONDOR/ gives a permission denied error, despite doing chmod 755 on main_script.sh
+exec_base_dir="/ds50/data/user/reinhol1/DS_CONDOR_Test/" #this directory is on ds50srv01 (or equivalent machine), where all the python scripts and G4DS macros are copied to and adjusted before them being copied to the worker node (within main_script.sh)
+DS_JS="/scratch/darkside/reinhol1/Test_GIT/DS_Hawaii/DS_JS/" #checkout directory of this code
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #example: category: CalibData, joblabel: CopperRings_SourceHolder_opticsOn_center+26mm
@@ -33,19 +32,19 @@ def config_setup(category, isotope, joblabel, debug=0):
         print directory
         
         #make directory for job files
-        directory = "%s/%s/" % (base_dir,category)
+        directory = "%s/%s/" % (exec_base_dir,category)
         if not os.path.exists(directory):
             os.makedirs(directory)
             os.system("chmod g+w %s" % (directory))
         print directory
 
-        directory = "%s/%s/%s/" % (base_dir,category, joblabel)
+        directory = "%s/%s/%s/" % (exec_base_dir,category, joblabel)
         if not os.path.exists(directory):
             os.makedirs(directory)
             os.system("chmod g+w %s" % (directory))
         print directory
 
-        directory = "%s/%s/%s/%s/" % (base_dir, category, joblabel, isotope)
+        directory = "%s/%s/%s/%s/" % (exec_base_dir, category, joblabel, isotope)
         if not os.path.exists(directory):
             os.makedirs(directory)
             os.system("chmod g+w %s" % (directory))
@@ -74,7 +73,7 @@ def config_setup(category, isotope, joblabel, debug=0):
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 def main():
-    debug=0
+    debug=1
     os.environ['DEBUG']="%d" % debug #to switch the debug mode off, set to a value below 1
 
     #configure correctly: just get the number of jobs and the parameter
@@ -104,10 +103,11 @@ def main():
     if(debug>0):
         #for debugging:
         #os.system("/ds50/data/user/reinhol1/DS_CONDOR/%s/%s/%s/%s_%s_main_script.sh" % (os.environ['CATEGORY'], os.environ['JOB_LABEL'], os.environ['ISOTOPE'], os.environ['ISOTOPE'], os.environ['JOB_LABEL'])) #the macro run in this /ds50/data/ subdirectory gives permission denied errors, therefore use scratch for debugging mode
-        
+        os.system("cp %s/*.* %s/" % (exec_dir, debug_exec_workernode_dir)) #the .mac, the .py and the .sh script
         os.environ['DEBUG_OPERATION_DIR']=debug_exec_workernode_dir
         os.environ['PROCESS']="%d" % 0 #in non-debug mode this variable is available on the worker node through the -N option.
-        os.system("%s/%s_%s_main_script.sh" % (debug_exec_workernode_dir, os.environ['ISOTOPE'], os.environ['JOB_LABEL']))
+        os.chdir("%s/" % debug_exec_workernode_dir)
+        os.system("./%s_%s_main_script.sh" % (os.environ['ISOTOPE'], os.environ['JOB_LABEL']))
 
     else:
         submission_string = "jobsub_submit -G darkside -M --OS=SL6 -N %d -e JOB_LABEL -e ISOTOPE -e CATEGORY -e DEBUG -L test_logfileoutput.txt --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file://%s/%s_%s_main_script.sh" % (nJobs, exec_dir, os.environ['ISOTOPE'], os.environ['JOB_LABEL'])
