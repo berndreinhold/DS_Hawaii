@@ -2,9 +2,9 @@
 
 #adapt these to your local needs
 export MY_G4DS=/ds50/app/user/reinhol1/work/montecarlo/g4ds10/
-export EXEC_BASE_DIR=/ds50/data/user/reinhol1/DS_CONDOR/ #base_dir where all the python scripts and macros are, $CATEGORY and $JOB_LABEL are then added to the final directory structure (see below)
-export FINAL_OUTPUT_BASE_DIR=/pnfs/darkside/scratch/users/reinhol1/
-export DS_JS=/ds50/app/user/reinhol1/work/DS_Hawaii/DS_JS/
+export EXEC_BASE_DIR=/ds50/data/user/reinhol1/DS_CONDOR_Test/ #base_dir where all the python scripts and macros are, $CATEGORY and $JOB_LABEL are then added to the final directory structure (see below)
+export FINAL_OUTPUT_BASE_DIR=/scratch/darkside/reinhol1/Test_GIT/output/
+export DS_JS=/scratch/darkside/reinhol1/Test_GIT/DS_Hawaii/DS_JS/
 
 #on the worker node, ${USER} is not your username, but a generic username, therefore one cannot use $USER as part of a directory path
 echo "user variable (when run on worker node): ${USER}" 
@@ -85,7 +85,7 @@ python --version
     #echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
     echo "MY_G4DS: $MY_G4DS"
     echo "EXEC_BASE_DIR: $EXEC_BASE_DIR"
-    echo "FINAL_OUTPUT_DIR: $FINAL_OUTPUT_DIR"
+    echo "FINAL_OUTPUT_BASE_DIR: $FINAL_OUTPUT_BASE_DIR"
     echo "------------------------------"
 
 
