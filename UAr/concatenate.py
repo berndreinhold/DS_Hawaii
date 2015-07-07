@@ -11,8 +11,8 @@ from sets import Set #https://docs.python.org/2/library/sets.html
 sys.argv.append( '-b' ) #batch mode, or call as: python main_script_prod.py -b
 sys.argv.append( '-u' ) #stackoverflow.com/questions/107705/disable-output-buffering
 
-#out_dir = "/scratch/darkside/reinhol1/UAr/"
-out_dir = "/scratch/darkside/reinhol1/Calib_XY/"
+out_dir = "/scratch/darkside/reinhol1/UAr/"
+#out_dir = "/scratch/darkside/reinhol1/Calib_XY/"
 in_dir = "/scratch/darkside/slad/20150308/" #for SLAD files 
 #in_dir = "~masayuki/workspace/darkart/UAr_analysis/" #for veto coincidence DSTs
 
@@ -32,21 +32,21 @@ def main():
     #run_list = [10344, 10346, 10347, 10348, 10349, 10350] #10345 is junk
 
     #Ba133, 100 V/cm
-    run_list = [10333, 10334, 10335, 10336]
+    #run_list = [10333, 10334, 10335, 10336]
 
     #run_list = [11530, 11532,11534, 11536] #atmospheric argon
 
     #underground argon
-    #run_list = [11869, 11868, 11867, 11865, 11864, 11863, 11862, 11860, 11859, 11858, 11856]
-    #run_list.extend([11900, 11898, 11897, 11896, 11894, 11893, 11891, 11890, 11889, 11876, 11875, 11874, 11873, 11872]) #during the extension
+    run_list = [11869, 11868, 11867, 11865, 11864, 11863, 11862, 11860, 11859, 11858, 11856]
+    run_list.extend([11900, 11898, 11897, 11896, 11894, 11893, 11891, 11890, 11889, 11876, 11875, 11874, 11873, 11872]) #during the extension
 
     run_list.sort()
     #SLAD:
-    #out_name_prefix="UAr_200Vcm_run%d-%d_MasaDocDB1193" % (run_list[0], run_list[-1])
+    out_name_prefix="UAr_200Vcm_run%d-%d_MasaDocDB1193" % (run_list[0], run_list[-1])
     #out_name_prefix="AAr_200Vcm_run%d-%d_MasaDocDB1193" % (run_list[0], run_list[-1])
     #Masa's veto DSTs, DocDB 1187 (even though this DocDB 1187 is on null field runs, I use them for 200 V/cm here)
     #out_name_prefix="Calib_Co57_100Vcm_run%d-%d" % (run_list[0], run_list[-1])
-    out_name_prefix="Calib_Ba133_100Vcm_run%d-%d" % (run_list[0], run_list[-1])
+    #out_name_prefix="Calib_Ba133_100Vcm_run%d-%d" % (run_list[0], run_list[-1])
     #out_name_prefix="UAr_200Vcm_vetoDSTs_run%d-%d_MasaDocDB1193" % (run_list[0], run_list[-1])
     #out_name_prefix="AAr_200Vcm_vetoDSTs_run%d-%d_MasaDocDB1193" % (run_list[0], run_list[-1])
 
