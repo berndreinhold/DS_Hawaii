@@ -84,14 +84,14 @@ def config_setup(category, isotope, joblabel, debug=0):
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 def main():
-    debug=1
+    debug=0
     os.environ['DEBUG']="%d" % debug #to switch the debug mode off, set to a value below 1
 
     #configure correctly: just get the number of jobs and the parameter
     #x = MCT.MCTuning("83Kr",1e4)
     #(nJobs, JobsPerEvent) = x.NJobs()
 
-    nJobs = 10 #is ignored in DEBUG mode
+    nJobs = 1 #is ignored in DEBUG mode
     #os.environ['CATEGORY']="CalibData"; #radioactive sources are there, 39Ar and 83mKr are in a different category. This category is used in output directories on PNFS and /ds50/data/ see above 
     #os.environ['JOB_LABEL']="CopperRings_NullField_center_plus26mm";
     #os.environ['JOB_LABEL']="CopperRings_200V_ExtLarScint0_center_plus26mm";
