@@ -1,14 +1,5 @@
 #!/bin/bash
 
-#adapt these to your local needs
-export MY_G4DS=/ds50/app/user/reinhol1/work/montecarlo/g4ds10/
-export EXEC_BASE_DIR=/ds50/data/user/reinhol1/DS_CONDOR_Test/ #base_dir where all the python scripts and macros are, $CATEGORY and $JOB_LABEL are then added to the final directory structure (see below)
-export FINAL_OUTPUT_BASE_DIR=/scratch/darkside/reinhol1/Test_GIT/output/
-export DS_JS=/scratch/darkside/reinhol1/Test_GIT/DS_Hawaii/DS_JS/
-
-#on the worker node, ${USER} is not your username, but a generic username, therefore one cannot use $USER as part of a directory path
-echo "user variable (when run on worker node): ${USER}" 
-
 
 echo "Begin `date`"
 echo "PWD is $PWD"
@@ -75,7 +66,7 @@ python --version
     echo "PWD: $PWD"
     echo "------------------------------"
     echo "GROUP: $GROUP"
-    echo "USER: $USER"
+    echo "USER: $USER - when run on worker node" #on the worker node, ${USER} is not your username, but a generic username, therefore one cannot use $USER as part of a directory path
     echo "------------------------------"
     echo "DEBUG: $DEBUG" #possibly enabled in submit_jobsub.py
     echo "CATEGORY: $CATEGORY"
@@ -112,7 +103,7 @@ cp ${DEBUG_OPERATION_DIR}/*.* ${FINAL_OUTPUT_BASE_DIR}${CATEGORY}/${JOB_LABEL}/
 #cp ${DEBUG_OPERATION_DIR}/*.* ${FINAL_OUTPUT_BASE_DIR}${CATEGORY}/${JOB_LABEL}/${ISOTOPE}
 else
 #ifdh cp -D ${_CONDOR_SCRATCH_DIR}/${ISOTOPE}_${JOB_LABEL}*.* ${FINAL_OUTPUT_BASE_DIR}${CATEGORY}/${JOB_LABEL}/
-ifdh cp -D ${_CONDOR_SCRATCH_DIR}/*.* ${FINAL_OUTPUT_BASE_DIR}${CATEGORY}/${JOB_LABEL}/
+ifdh cp -D ${_CONDOR_SCRATCH_DIR}/*.* ${FINAL_OUTPUT_BASE_DIR}/${CATEGORY}/${JOB_LABEL}/
 #rm ${ISOTOPE}_${JOB_LABEL}*.*
 #now transfer all the rest
 #ifdh cp -D ${_CONDOR_SCRATCH_DIR}/*.* /pnfs/darkside/scratch/users/reinhol1/${CATEGORY}/${JOB_LABEL}/${ISOTOPE}/
