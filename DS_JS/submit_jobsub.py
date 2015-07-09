@@ -11,9 +11,9 @@ import string
 #adapt these to your needs:
 debug_exec_workernode_dir="/scratch/darkside/reinhol1/Temp/DS_JS_Test/" #this directory is only relevant in debug mode. It is the equivalent of the local directory on the workernode where all the python scripts and macros are copied to and executed #need to change directory, since /ds50/data/user/reinhol1/DS_CONDOR/ gives a permission denied error, despite doing chmod 755 on main_script.sh
 exec_base_dir="/ds50/data/user/reinhol1/DS_CONDOR_Test/" #this directory is on ds50srv01 (or equivalent machine), where all the python scripts and G4DS macros are copied to and adjusted before them being copied to the worker node (within main_script.sh)
-DS_JS="/scratch/darkside/reinhol1/Test_GIT/DS_Hawaii/DS_JS/" #checkout directory of this code
-#final_output_base_dir="/pnfs/darkside/scratch/users/%s/" % (os.environ["USER"])
-final_output_base_dir="/scratch/darkside/reinhol1/Test_GIT/output/"
+DS_JS=os.getcwd() #checkout directory of this code
+final_output_base_dir="/pnfs/darkside/scratch/users/%s/" % (os.environ["USER"])
+#final_output_base_dir="/scratch/darkside/reinhol1/Test_GIT/output/"
 MY_G4DS="/ds50/app/user/reinhol1/work/montecarlo/g4ds10/"
 
 
@@ -84,22 +84,25 @@ def config_setup(category, isotope, joblabel, debug=0):
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 def main():
-    debug=1
+    debug=0
     os.environ['DEBUG']="%d" % debug #to switch the debug mode off, set to a value below 1
 
     #configure correctly: just get the number of jobs and the parameter
     #x = MCT.MCTuning("83Kr",1e4)
     #(nJobs, JobsPerEvent) = x.NJobs()
 
-    nJobs = 10 #is ignored in DEBUG mode
+    nJobs = 1 #is ignored in DEBUG mode
     #os.environ['CATEGORY']="CalibData"; #radioactive sources are there, 39Ar and 83mKr are in a different category. This category is used in output directories on PNFS and /ds50/data/ see above 
     #os.environ['JOB_LABEL']="CopperRings_NullField_center_plus26mm";
     #os.environ['JOB_LABEL']="CopperRings_200V_ExtLarScint0_center_plus26mm";
     #os.environ['ISOTOPE']="Co57";
 
     os.environ['CATEGORY']="CalibData"; #radioactive sources are there, 39Ar and 83mKr are in a different category. This category is used in output directories on PNFS and /ds50/data/ see above 
-    os.environ['JOB_LABEL']="drift_200Vcm_plus26mm";
-    os.environ['ISOTOPE']="Na22";
+    #os.environ['JOB_LABEL']="drift_200Vcm_plus26mm";
+    os.environ['JOB_LABEL']="testGrid";
+    #os.environ['ISOTOPE']="Na22";
+    #os.environ['ISOTOPE']="Ba133";
+    os.environ['ISOTOPE']="Co57";
 
     #os.environ['CATEGORY']="Internal"; 
     #os.environ['JOB_LABEL']="FastSim";

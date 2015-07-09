@@ -49,8 +49,8 @@ def main():
         else:
             events=1000
     else:
-        if isotope=="Co57": events=3e6 #for Co57, several hours
-        elif isotope=="Ba133": events=2e5 #for Ba133, ???
+        if isotope=="Co57": events=1e5 #3e6 #for Co57, several hours
+        elif isotope=="Ba133": events=1e4 #2e5 #for Ba133, ???
         elif isotope=="Na22": events=2e5 #for Na22
         elif isotope=="Cs137": events=2e5 #for Cs137
         elif isotope=="Th232": events=1e5 #for Th232, 45 min/1e5
