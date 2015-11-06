@@ -10,13 +10,13 @@ import string
 
 #adapt these to your needs:
 debug_exec_workernode_dir="/scratch/darkside/reinhol1/Temp/DS_JS_Test/" #this directory is only relevant in debug mode. It is the equivalent of the local directory on the workernode where all the python scripts and macros are copied to and executed #need to change directory, since /ds50/data/user/reinhol1/DS_CONDOR/ gives a permission denied error, despite doing chmod 755 on main_script.sh
+
 exec_base_dir="/ds50/data/user/reinhol1/DS_CONDOR/" #this directory is on ds50srv01 (or equivalent machine), where all the python scripts and G4DS macros are copied to and adjusted before them being copied to the worker node (within main_script.sh)
 #DS_JS="/scratch/darkside/reinhol1/Test_GIT/DS_Hawaii/DS_JS/" #checkout directory of this code
 DS_JS=os.getcwd()
 final_output_base_dir="/pnfs/darkside/scratch/users/%s/" % (os.environ["USER"])
 #final_output_base_dir="/scratch/darkside/reinhol1/Test_GIT/output/"
 MY_G4DS="/ds50/app/user/reinhol1/work/montecarlo/g4ds10/" #this path is called on the worker node
-
 
 
 
