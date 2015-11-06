@@ -1,31 +1,43 @@
 #!/bin/bash
 
+#Ken, Aug 11, 2015: I suspect that some of the nodes may not have seen the last CVMFS update. Add the following command to your main_script.sh file before doing any setups (so basically the first thing that the script does): 
+/cvmfs/grid.cern.ch/util/cvmfs-uptodate /cvmfs/darkside.opensciencegrid.org
 
-echo "Begin `date`"
+echo "Job starting on `hostname` at `date`."
 echo "PWD is $PWD"
 export OLDPWD=$PWD
-# Establish external products 
-source /ds50/app/products/setup
-
-#%%%%%%%
-#this is run on the worker node
-#%%%%%%%
-#source /ds50/app/ds50/setup_ds50 #causes trouble on the worker node, see below
-#setup geant4 v4_9_6_p02 -q e4:debug #set in $MY_G4DS/configDarkSide.sh below
-#setup root v5_34_12 -q e4:debug #set in $MY_G4DS/configDarkSide.sh below
-#setup sam_web_client #-> disabled since in the output logfile it complained: ERROR: Product 'sam_web_client' (with qualifiers ''), has no current chain (or may not exist) 
-
 #from submission_test.sh, from FIFE_Jobsub_tutorial.pptx
 voms-proxy-info --all
 
-source /cvmfs/fermilab.opensciencegrid.org/products/common/etc/setup
-#source /cvmfs/fermilab.opensciencegrid.org/products/larsoft/setup - Ken says, I don't need this, Dec. 30 2014
+# copied from /ds50/app/user/kherner/run_darkart_TEMPLATE_CVMFS.sh
+if [ -e /cvmfs/darkside.opensciencegrid.org/ds50/app/products/setup ]; then
+    echo "darkside CVMFS repository is mounted. Continuing on."
+else
+    echo "/cvmfs/darkside.opensciencegrid.org/ds50/app/products/setup does not exist."
+    if [ -e /cvmfs/fermilab.opensciencegrid.org/fermilab/products/common/etc/setup ]; then
+        echo "But the FNAL oasis setup file does."
+    else
+        echo "And neither does the FNAL setup file."
+    fi
+    echo "Exiting."
+    exit 1
+fi
 
-setup ifdhc v1_6_2 -z /cvmfs/fermilab.opensciencegrid.org/products/common/db
+source /cvmfs/darkside.opensciencegrid.org/ds50/app/products/setup
+export PRODUCTS=/cvmfs/darkside.opensciencegrid.org/ds50/app/products:/cvmfs/fermilab.opensciencegrid.org/products/common/db
+
+setup ifdhc -z /cvmfs/fermilab.opensciencegrid.org/products/common/db
+
+
 
 
 cd $MY_G4DS
 source configDarkSide.sh #has to be called in $MY_G4DS, otherwise libg4ds.so cannot be found. Paths in configDarkSide.sh are set using $PWD (maybe there would be a more elegant way of doing this.
+
+ret_code=$?
+if [ $ret_code != 0 ]; then
+  printf "Error : [%d] when executing source configDarkSide.sh" $ret_code
+fi
 
 #helpful references:
 #https://www.joedog.org/articles-cheat-sheet/
@@ -95,7 +107,7 @@ chmod a+x *.py
 #this is the main script running G4DS and g4rooter on the worker node.
 python main_script_prod.py
 
-##transfer files back from _CONDOR_SCRATCH_DIR to $MY_PNFS
+##transfer files back from _CONDOR_SCRATCH_DIR to $final output dir on PNFS
 if [ ${DEBUG:-0} -gt 0 ]; then
 cp ${DEBUG_OPERATION_DIR}/*.* ${FINAL_OUTPUT_BASE_DIR}${CATEGORY}/${JOB_LABEL}/
 #cp ${DEBUG_OPERATION_DIR}/${ISOTOPE}_${JOB_LABEL}*.* ${FINAL_OUTPUT_BASE_DIR}${CATEGORY}/${JOB_LABEL}/
