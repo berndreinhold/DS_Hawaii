@@ -10,11 +10,12 @@ import string
 
 #adapt these to your needs:
 debug_exec_workernode_dir="/scratch/darkside/reinhol1/Temp/DS_JS_Test/" #this directory is only relevant in debug mode. It is the equivalent of the local directory on the workernode where all the python scripts and macros are copied to and executed #need to change directory, since /ds50/data/user/reinhol1/DS_CONDOR/ gives a permission denied error, despite doing chmod 755 on main_script.sh
-exec_base_dir="/ds50/data/user/reinhol1/DS_CONDOR_Test/" #this directory is on ds50srv01 (or equivalent machine), where all the python scripts and G4DS macros are copied to and adjusted before them being copied to the worker node (within main_script.sh)
-DS_JS="/scratch/darkside/reinhol1/Test_GIT/DS_Hawaii/DS_JS/" #checkout directory of this code
-#final_output_base_dir="/pnfs/darkside/scratch/users/%s/" % (os.environ["USER"])
-final_output_base_dir="/scratch/darkside/reinhol1/Test_GIT/output/"
-MY_G4DS="/ds50/app/user/reinhol1/work/montecarlo/g4ds10/"
+exec_base_dir="/ds50/data/user/reinhol1/DS_CONDOR/" #this directory is on ds50srv01 (or equivalent machine), where all the python scripts and G4DS macros are copied to and adjusted before them being copied to the worker node (within main_script.sh)
+#DS_JS="/scratch/darkside/reinhol1/Test_GIT/DS_Hawaii/DS_JS/" #checkout directory of this code
+DS_JS=os.getcwd()
+final_output_base_dir="/pnfs/darkside/scratch/users/%s/" % (os.environ["USER"])
+#final_output_base_dir="/scratch/darkside/reinhol1/Test_GIT/output/"
+MY_G4DS="/ds50/app/user/reinhol1/work/montecarlo/g4ds10/" #this path is called on the worker node
 
 
 
@@ -61,7 +62,7 @@ def config_setup(category, isotope, joblabel, debug=0):
             os.system("chmod g+w %s" % (directory))
         print directory
         
-        #transfer job files, these are all run on the worker node
+        #transfer job files to this directory, then these are copied to the worker node in main_script.sh, and run on the worker node
         os.system("cp %s/main_script_prod.py %s/" % (DS_JS, directory))
         os.system("cp %s/MCProdBase.py %s/" % (DS_JS, directory))
         os.system("cp %s/MCTuningBase.py %s/" % (DS_JS, directory))
@@ -91,15 +92,31 @@ def main():
     #x = MCT.MCTuning("83Kr",1e4)
     #(nJobs, JobsPerEvent) = x.NJobs()
 
-    nJobs = 1 #is ignored in DEBUG mode
+    nJobs = 1
+    #nJobs = 10 #is ignored in DEBUG mode
     #os.environ['CATEGORY']="CalibData"; #radioactive sources are there, 39Ar and 83mKr are in a different category. This category is used in output directories on PNFS and /ds50/data/ see above 
     #os.environ['JOB_LABEL']="CopperRings_NullField_center_plus26mm";
     #os.environ['JOB_LABEL']="CopperRings_200V_ExtLarScint0_center_plus26mm";
     #os.environ['ISOTOPE']="Co57";
 
     os.environ['CATEGORY']="CalibData"; #radioactive sources are there, 39Ar and 83mKr are in a different category. This category is used in output directories on PNFS and /ds50/data/ see above 
-    os.environ['JOB_LABEL']="drift_200Vcm_plus26mm";
-    os.environ['ISOTOPE']="Na22";
+    #os.environ['JOB_LABEL']="initial_test";
+    os.environ['JOB_LABEL']="TPC_cathode_speckles";
+
+    #ISOTOPE is also used as name of the macro
+    #os.environ['ISOTOPE']="Na22";
+    #os.environ['ISOTOPE']="Ge68";
+    #os.environ['ISOTOPE']="Co57_DS20k";
+    #os.environ['ISOTOPE']="Cs137_DS20k";
+    #os.environ['ISOTOPE']="Gamma2MeV_DS20k";
+    #os.environ['ISOTOPE']="Gamma4MeV_DS20k";
+    #os.environ['ISOTOPE']="Gamma6MeV_DS20k";
+    #os.environ['ISOTOPE']="Gamma8MeV_DS20k";
+    #os.environ['ISOTOPE']="Gamma10MeV_DS20k";
+    os.environ['ISOTOPE']="E500keV_DS20k";
+    
+    #os.environ['ISOTOPE']="Na22_DS20k";
+    #os.environ['ISOTOPE']="Ba133";
 
     #os.environ['CATEGORY']="Internal"; 
     #os.environ['JOB_LABEL']="FastSim";
@@ -121,7 +138,8 @@ def main():
         os.system("./%s_%s_main_script.sh" % (os.environ['ISOTOPE'], os.environ['JOB_LABEL']))
 
     else:
-        submission_string = "jobsub_submit -G darkside -M --OS=SL6 -N %d -e JOB_LABEL -e ISOTOPE -e CATEGORY -e DEBUG -e FINAL_OUTPUT_BASE_DIR -e DS_JS -e MY_G4DS -e EXEC_BASE_DIR -L test_logfileoutput.txt --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file://%s/%s_%s_main_script.sh" % (nJobs, exec_dir, os.environ['ISOTOPE'], os.environ['JOB_LABEL'])
+        submission_string = "jobsub_submit -G darkside -M --OS=SL6 -N %d -e JOB_LABEL -e ISOTOPE -e CATEGORY -e DEBUG -e FINAL_OUTPUT_BASE_DIR -e DS_JS -e MY_G4DS -e EXEC_BASE_DIR --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file://%s/%s_%s_main_script.sh" % (nJobs, exec_dir, os.environ['ISOTOPE'], os.environ['JOB_LABEL'])
+        #remove the -L option! Or provide absolute output path (e.g. on /pnfs/...)
         #main_script.sh is renamed just because of the more descriptive 'query jobsub_q -G darkside --user=reinhol1' (see comment above)
 	#submission_string = "jobsub_submit -G darkside -M --OS=SL6 -N %d -e JOB_LABEL -e ISOTOPE -e CATEGORY -e DEBUG --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC --role=Analysis file://%s/main_script.sh" % (nJobs, "/ds50/app/user/reinhol1/work/DS_Hawaii/DS_JS/")
 
