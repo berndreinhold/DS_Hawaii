@@ -45,20 +45,33 @@ def main():
 
     #events per job
     if int(os.environ["DEBUG"])>0:
-        if isotope=="Co57": events=10000
+        if isotope.startswith("Co57"): events=10000
         else:
             events=1000
     else:
-        if isotope=="Co57": events=3e6 #for Co57, several hours
-        elif isotope=="Ba133": events=2e5 #for Ba133, ???
-        elif isotope=="Na22": events=1000 #2e5 #for Na22
-        elif isotope=="Cs137": events=2e5 #for Cs137
-        elif isotope=="Th232": events=1e5 #for Th232, 45 min/1e5
-        elif isotope=="Ar39": events=2e4 #8h for 20000 events
-        elif isotope=="Kr83m": events=2e4 #5e4 for a 41.5 keV gamma, with the RDM generator it takes 3 times as long: 2e4 events
+        opticsOn=0 #depends on the G4DS macro configuration!
+        if opticsOn:
+
+            if isotope.startswith("Co57"): events=1e5 #3e6 #for Co57, several hours
+            elif isotope.startswith("Ba133"): events=2e5 #2e5 #for Ba133, ???
+            elif isotope.startswith("Na22"): events=4e4 #2e5 #for Na22
+            elif isotope.startswith("Ge68"): events=1e5 #2e5 #for Na22 #5e4 in about 2 hours
+            elif isotope.startswith("Cs137"): events=2e5 #for Cs137
+            elif isotope.startswith("Th232"): events=1e5 #for Th232, 45 min/1e5
+            elif isotope.startswith("Ar39"): events=2e4 #8h for 20000 events
+            elif isotope.startswith("Kr83m"): events=2e4 #5e4 for a 41.5 keV gamma, with the RDM generator it takes 3 times as long: 2e4 events
+            else:
+                print "isotope (%s) was not identified, process 1e5 events per default" % isotope
+                events=1e5
         else:
-            print "isotope (%s) was not identified, process 1e5 events per default" % isotope
-            events=1e5
+            if isotope.startswith("Co57"): events=3e6 #took 1h
+            elif isotope.startswith("Cs137"): events=2.5e6
+            elif isotope.startswith("Na22"): events=2e6
+            elif isotope.startswith("Gamma"): events=2e6
+            elif isotope.startswith("E"): events=5e6 
+            else:
+                print "isotope (%s) was not identified, process 1e6 events per default" % isotope
+                events=1e6
     x = MCP.MCProdBase(isotope, events, jobindex, output_dir, code_dir, g4ds_dir) #isotope is identical to the macro name, adjust this, if the g4ds macros' names change.
     #isotope can be: Ba133, Co57, Cs137, Th232, Kr83m, Ar39
     x.loop()
