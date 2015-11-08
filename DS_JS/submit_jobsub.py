@@ -92,7 +92,7 @@ def main():
     #x = MCT.MCTuning("83Kr",1e4)
     #(nJobs, JobsPerEvent) = x.NJobs()
 
-    nJobs = 1
+    nJobs = 5
     #nJobs = 10 #is ignored in DEBUG mode
     #os.environ['CATEGORY']="CalibData"; #radioactive sources are there, 39Ar and 83mKr are in a different category. This category is used in output directories on PNFS and /ds50/data/ see above 
     #os.environ['JOB_LABEL']="CopperRings_NullField_center_plus26mm";
@@ -101,7 +101,8 @@ def main():
 
     os.environ['CATEGORY']="CalibData"; #radioactive sources are there, 39Ar and 83mKr are in a different category. This category is used in output directories on PNFS and /ds50/data/ see above 
     #os.environ['JOB_LABEL']="initial_test";
-    os.environ['JOB_LABEL']="TPC_cathode_speckles";
+    #os.environ['JOB_LABEL']="TPC_cathode_speckles";
+    os.environ['JOB_LABEL']="AmC_InitialTest";
 
     #ISOTOPE is also used as name of the macro
     #os.environ['ISOTOPE']="Na22";
@@ -113,7 +114,8 @@ def main():
     #os.environ['ISOTOPE']="Gamma6MeV_DS20k";
     #os.environ['ISOTOPE']="Gamma8MeV_DS20k";
     #os.environ['ISOTOPE']="Gamma10MeV_DS20k";
-    os.environ['ISOTOPE']="E500keV_DS20k";
+    #os.environ['ISOTOPE']="E500keV_DS20k";
+    os.environ['ISOTOPE']="AmC_CALIS";
     
     #os.environ['ISOTOPE']="Na22_DS20k";
     #os.environ['ISOTOPE']="Ba133";

@@ -13,7 +13,7 @@ class MCTuning:
 
     #ev is 'events per job' 
     #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% common to all
-    def __init__(self, out_prefix, ev, job_index=-1, out_dir="", anacode_dir="", g4ds_dir=""):
+    def __init__(self, out_prefix, ev, job_index=-1, randomseed_offset=0, out_dir="", anacode_dir="", g4ds_dir=""):
         #check all directories, that they end on '/'
         if not out_dir.endswith("/"): out_dir+="/"
         if not anacode_dir.endswith("/"): anacode_dir+="/"
@@ -21,10 +21,11 @@ class MCTuning:
 
         self._simulation_type=out_prefix #Optical or 83mKr 
 
+        self._randomseed_offset=randomseed_offset
         self._nevents = ev #nevents is written into the G4DS macro
         print "number of events (per job): %.f" % self._nevents
         self._job_index=job_index
-        self._heprandomseed=-1 #not used, e.g. set in MCProdBase.py to self._job_index
+        self._heprandomseed=randomseed_offset #not used, e.g. set in MCProdBase.py to self._job_index
         self._parameters()
 
  

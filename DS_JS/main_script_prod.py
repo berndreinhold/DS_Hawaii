@@ -49,7 +49,7 @@ def main():
         else:
             events=1000
     else:
-        opticsOn=0 #depends on the G4DS macro configuration!
+        opticsOn=1 #depends on the G4DS macro configuration!
         if opticsOn:
 
             if isotope.startswith("Co57"): events=1e5 #3e6 #for Co57, several hours
@@ -60,6 +60,7 @@ def main():
             elif isotope.startswith("Th232"): events=1e5 #for Th232, 45 min/1e5
             elif isotope.startswith("Ar39"): events=2e4 #8h for 20000 events
             elif isotope.startswith("Kr83m"): events=2e4 #5e4 for a 41.5 keV gamma, with the RDM generator it takes 3 times as long: 2e4 events
+            elif isotope.startswith("AmC"): events=2e4 
             else:
                 print "isotope (%s) was not identified, process 1e5 events per default" % isotope
                 events=1e5
@@ -72,7 +73,9 @@ def main():
             else:
                 print "isotope (%s) was not identified, process 1e6 events per default" % isotope
                 events=1e6
-    x = MCP.MCProdBase(isotope, events, jobindex, output_dir, code_dir, g4ds_dir) #isotope is identical to the macro name, adjust this, if the g4ds macros' names change.
+                
+    randomseed_offset=1002; #that's also a parameter, which can be varied per job submissions
+    x = MCP.MCProdBase(isotope, events, jobindex, randomseed_offset, output_dir, code_dir, g4ds_dir) #isotope is identical to the macro name, adjust this, if the g4ds macros' names change.
     #isotope can be: Ba133, Co57, Cs137, Th232, Kr83m, Ar39
     x.loop()
 

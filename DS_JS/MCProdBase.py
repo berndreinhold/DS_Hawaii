@@ -15,7 +15,7 @@ class MCProdBase(MCTuningBase.MCTuning):
     def _parameters(self):
         #parameters:
         self._par1_name="RandomSeed"
-        self._par1 = self._job_index+1100
+        self._par1 = self._job_index+self._randomseed_offset
         #self._par1 = self._job_index+950
         self._par1_format="%d"
         self._valuelist_all=[self._par1]
