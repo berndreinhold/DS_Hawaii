@@ -1,0 +1,183 @@
+%% 
+%% Copyright 2007, 2008, 2009 Elsevier Ltd
+%% 
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%% 
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%% 
+%% The list of all files belonging to the 'Elsarticle Bundle' is
+%% given in the file `manifest.txt'.
+%% 
+
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%% SP 2008/03/01
+
+%%\documentclass[preprint,10pt]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[authoryear,preprint,review,12pt]{elsarticle}
+%\documentclass[preprint,review,12pt]{elsarticle}
+\documentclass[preprint,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+% %\documentclass[final,1p,times,twocolumn]{elsarticle}
+% %\documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% For including figures, graphicx.sty has been loaded in
+%% elsarticle.cls. If you prefer to use the old commands
+%% please give \usepackage{epsfig}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+\usepackage{subfigure}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers.
+%% \usepackage{lineno}
+
+\journal{Physics Letters B}
+\input def.tex
+
+\begin{document}
+
+\begin{frontmatter}
+
+\input frontpage.tex
+
+%\begin{abstract}
+%% Text of abstract
+
+%\end{abstract}
+
+%%\begin{keyword}
+%% keywords here, in the form: keyword \sep keyword
+
+%% PACS codes here, in the form: \PACS code \sep code
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+
+%%\end{keyword}
+
+\end{frontmatter}
+
+\linenumbers
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+%% main text
+%\section{}
+%\label{}
+\input{introduction.tex}
+\input{hardware_design.tex}
+\input{hardware_details.tex}
+\input{degreesOfFreedom.tex}
+\input{testing.tex}
+\input{operational_procedure.tex} 
+\input{calibrationcampaign.tex}
+
+\input{analysis.tex}
+\input{conclusions.tex}
+%\input{acknowledgments.tex}
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+%% \appendix
+
+%% \section{}
+%% \label{}
+
+%% If you have bibdatabase file and want bibtex to generate the
+%% bibitems, please use
+%%
+%%  \bibliographystyle{elsarticle-num} 
+%%  \bibliography{<your bibdatabase>}
+
+%% else use the following coding to input the bibitems directly in the
+%% TeX file.
+
+\begin{thebibliography}{00}
+
+%% \bibitem{label}
+%% Text of bibliographic item
+\bibitem{Faber}S.M.~Faber and J.S.~Gallagher, \myrefs{Ann. Rev. Astron. Astroph. {\bf 17}, 135 (1979)}{10.1146/annurev.aa.17.090179.001031}.
+\bibitem{WMAP1}D.N.~Spergel et al., \myrefs{Ap. J. Supp. {\bf 148}, 175 (2003)}{10.1086/377226}.
+\bibitem{napp}Committee on Elementary Particle Physics in the 21st Century of the National Academies of Science, {\it Revealing the Hidden Nature of Space and Time: Charting the Course for Elementary Particle Physics}, Page~118, National Academies Press, Washington, DC (2006).
+\bibitem{goodman}M.W.~Goodman and E.~Witten, \myrefs{Phys. Rev. D {\bf 31}, 3059 (1985)}{10.1103/PhysRevD.31.3059}.
+\bibitem{warp}P.~Benetti et al. (WARP Collaboration), \myrefs{Astropart. Phys. {\bf 28}, 495 (2008)}{10.1016/j.astropartphys.2007.08.002}.
+\bibitem{ds:ds-10-run3}T.~Alexander et al. (\ds\ Collaboration), \myrefs{Astropart. Phys. {\bf 49}, 44 (2013)}{10.1016/j.astropartphys.2013.08.004}.
+\bibitem{ds:uar-extraction}H.O.~Back et al., \arxiv{1204.6024}.
+\bibitem{ds:uar-distillation}H.O.~Back et al., \arxiv{1204.6061}.
+\bibitem{loosli}H.H.~Loosli, \myrefs{Earth Plan. Sci. Lett. {\bf 63}, 51 (1983)}{10.1016/0012-821X(83)90021-3}.
+\bibitem{warp:39ar}P.~Benetti et al. (WARP Collaboration), \myrefs{Nucl. Inst. Meth. A {\bf 574}, 83 (2007)}{10.1016/j.nima.2007.01.106}.
+\bibitem{ds:uar-counting}J.~Xu et al., \myrefs{Astropart. Phys. {\bf 66}, 53 (2015)}{10.1016/j.astropartphys.2015.01.002}.
+
+\bibitem{ctf:results}G.~Alimonti et al. (Borexino Collaboration), \myrefs{Astropart. Phys. {\bf 8}, 141 (1998)}{10.1016/S0927-6505(97)00050-9}.
+\bibitem{ctf:scitech}G.~Alimonti et al. (Borexino Collaboration), \myrefs{Nucl. Instr. Meth. A {\bf 406}, 411 (1998)}{10.1016/S0168-9002(98)00018-7}.
+\bibitem{lngs-depth}G.~Bellini et al. (\bx\ Collaboration), \myrefs{JCAP {\bf 1308}, 049 (2013)}{10.1088/1475-7516/2013/08/049}.
+\bibitem{bx:detector}G.~Alimonti et al. (Borexino Collaboration), \myrefs{Nucl. Instr. Meth. A {\bf 600}, 568 (2009)}{10.1016/j.nima.2008.11.076}.
+\bibitem{bx:plants}G.~Alimonti et al. (Borexino Collaboration), \myrefs{Nucl. Instr. Meth. A {\bf 609}, 58 (2009)}{doi:10.1016/j.nima.2009.07.028}.
+\bibitem{boulay}M.~G.~Boulay and A.~Hime, \myrefs{Astropart. Phys. {\bf 25}, 179 (2006)}{10.1016/j.astropartphys.2005.12.009}.
+\bibitem{bx:7be-precision}G.~Bellini et al. (\bx\ Collaboration), \myrefs{Phys. Rev. Lett. {\bf 107}, 141302 (2011)}{10.1103/PhysRevLett.107.141302}.
+\bibitem{bx:phase-I}G.~Bellini et al. (\bx\ Collaboration), \myrefs{Phys. Rev. D {\bf 89}, 112007 (2014)}{10.1103/PhysRevD.89.112007}.
+\bibitem{daya-bay}F.P.~An et al. (Daya Bay Collaboration), \arxiv{1407.0275}.
+\bibitem{lumirror}\url{http://www.toray.jp/films/en/properties/lumirror/lum\_e6sr.html}, archived at \url{https://web.archive.org/web/20110405061457/http://www.toray.jp/films/en/properties/lumirror/lum_e6sr.html}.
+\bibitem{wright} A.~Wright, P.~Mosteiro, and F.~Calaprice, \myrefs{Nucl. Instr. Meth. A {\bf 644}, 18 (2011)}{10.1016/j.nima.2011.04.009}.
+\bibitem{greenwood} L.R.~Greenwood and N.R.~Chellew, \myrefs{Rev. Sci. Instr. {\bf 50}, 466 (1979)}{10.1063/1.1135853}.
+\bibitem{wang} S.C.~Wang et al., \myrefs{Nucl. Instr. Meth. A {\bf 432}, 111 (1999)}{10.1016/S0168-9002(99)00350-2}.
+\bibitem{scene1}T.~Alexander et al. (SCENE Collaboration), \myrefs{Phys. Rev. D {\bf 88}, 092006 (2013)}{10.1103/PhysRevD.88.092006}.
+\bibitem{scene2}T.~Alexander et al. (SCENE Collaboration), \arxiv{1406.4825}.  Note that in Column 2 of our Table \ref{tab:scene}, we need $\mathcal{L}_{\rm eff,\,\krthree}$ for \dsfdriftfield, that is, the nuclear recoil light yield at \dsfdriftfield\ divided by the  \krthree\ at zero field.  This is not tabulated in the \scene\ paper.  (Table II of this reference gives $\mathcal{L}_{\rm eff,\,\krthree}$ at zero field.)  For our Table \ref{tab:scene}, we use the \dsfdriftfield\ data plotted in Fig.~8 of this reference.
+\bibitem{saes}\mref{www.saesgetters.com}, archived at \url{https://web.archive.org/web/20141222175229/http://www.saesgetters.com/}.
+\bibitem{venos}D.~V\'enos, A.~\v{S}palek, O.~Lebeda, M.~Fi\v{s}er, \myrefs{Appl. Rad. Isotopes {\bf 63}, 323 (2005)}{10.1016/j.apradiso.2005.04.011}.
+\bibitem{lippincott-kr}W.H. Lippincott, S.B.~Cahn, D.~Gastler, L.W.~Kastens, E.~Kearns, D.N.~McKinsey, and J.A.~Nikkel, \myrefs{Phys. Rev. C {\bf 81}, 045803 2010)}{10.1103/PhysRevC.81.045803}.
+\bibitem{kubota}S.~Kubota, M.~Hishida, and A.~Nohara, \myrefs{Nucl. Instr. Meth. {\bf 150}, 561, (1978)}{10.1016/0029-554X(78)90128-3};
+M.J.~Carvalho and G.~Klein, \myrefs{J. Lumin. {\bf 18-19}, 487 (1979)}{10.1016/0022-2313(79)90167-4};
+J.W.~Keto, R.E.~Gleason, and F.K. Soley, \myrefs{J. Chem. Phys. {\bf 71}, 2676 (1979)}{10.1063/1.438625};
+T.~Suemoto and H.~Kanzaki, \myrefs{J. Phys. Soc. Japan {\bf 46}, 1554 (1979)}{10.1143/JPSJ.46.1554};
+S.~Kubota, M.~Hishida, M.~Suzuki, J-z.~Ruan, \myrefs{Nucl. Instr. Meth. {\bf 196}, 101 (1982)}{10.1016/0029-554X(82)90623-1};
+S.~Kubota et al., \myrefs{Phys. Rev. B {\bf 20}, 3486 (1979)}{10.1103/PhysRevB.20.3486}.
+\bibitem{hitachi}A.~Hitachi, T.~Takahashi, N.~Funayama, K.~Masuda, J.~Kikuchi, and T.~Doke, \myrefs{Phys. Rev. B {\bf 27}, 5279 (1983)}{10.1103/PhysRevB.27.5279}.
+\bibitem{doke} E.~Shibamura, K.~Masuda, and T.~Doke, Research Report to the Ministry of Education, Science, Sport, and Culture for Grant-in-Aid Scientific Research(C), No.~62540284 (1988).
+\bibitem{xenon93}P.~Benetti et al., \myrefs{Nucl. Instr. Meth. A {\bf 327}, 203 (1993)}{10.1016/0168-9002(93)91442-P}.
+\bibitem{ds:daq}P.~Agnes et al. (\ds\ Collaboration), \arxiv{1412.2969}.
+\bibitem{caen}\mref{www.caen.it}, archived at\newline  \url{https://web.archive.org/web/20150104083159/http://www.caen.it/}.
+\bibitem{ni}\mref{www.ni.com}, archived at\newline  \url{https://web.archive.org/web/20150218101935/http://www.ni.com/}.
+\bibitem{highland}\mref{www.highlandtechnology.com}, archived at \url{https://web.archive.org/web/20150215110202/http://www.highlandtechnology.com/}.
+\bibitem{art} C.~Green et al., \myrefs{J. Phys. Conf. Ser. {\bf 396}, 022020 (2012)}{10.1088/1742-6596/396/2/022020}.
+\bibitem{empl}A.~Empl, R.~Jasim, E.V.~Hungerford, and P.~Mosteiro, \myrefs{JCAP {\bf 1408}, 64 (2014)}{10.1088/1475-7516/2014/08/064}.
+\bibitem{deap-pollmann} T.~Pollmann, M.~Boulay, and M.~Kuzniak, \myrefs{Nucl. Instrum. Meth. A {\bf 635}, 127 (2011)}{10.1016/j.nima.2011.01.045}.
+\bibitem{pocar} A.~Pocar, {\it Low Background Techniques and Experimental Challenges for Borexino and its Nylon Vessels}, Ph.D. Dissertation, Princeton University (2003).  \mref{search.proquest.com/docview/288218433/abstract}.
+\bibitem{bx-vessels}J.~Benziger et al., \myrefs{Nucl. Instr. Meth. A {\bf 582}, 509 (2007)}{10.1016/j.nima.2007.08.176}.
+\bibitem{sno-ncd}B.~Aharmim et al. (SNO Collaboration), \myrefs{Phys. Rev. Lett. {\bf 101}, 111301 (2008)}{10.1103/PhysRevLett.101.111301}.
+\bibitem{lippincott}W.H.~Lippincott, K.~J.~Coakley, D.~Gastler, A.~Hime, E.~Kearns, D.N.~McKinsey, J.A.~Nikkel, and L.C.~Stonehill, \myrefs{Phys. Rev. C {\bf 78}, 035801 (2008)}{10.1103/PhysRevC.78.035801}.  Note that there is a misprint in the relevant equation 11.
+\bibitem{deap}M.G.~Boulay et al. (DEAP Collaboration), \arxiv{0904.2930}.
+\bibitem{lewin}J.D.~Lewin and P.~Smith, \myrefs{Astropart. Phys. {\bf 6}, 87 (1996)}{10.1016/S0927-6505(96)00047-3}.
+\bibitem{savage}C.~Savage, K.~Freese, and P.~Gondolo, \myrefs{Phys. Rev. D {\bf 74}, 043531 (2006)}{10.1103/PhysRevD.74.043531}.
+\bibitem{smith}M.C.~Smith et al., \myrefs{Mon. Not. Roy. Astron. Soc. {\bf 379}, 755 (2007)}{10.1111/j.1365-2966.2007.11964.x}.
+\bibitem{gelmini}C.~Savage, G.~Gelmini, P.~Gondolo, and K.~Freese, \myrefs{JCAP {\bf 0904}, 010 (2009)}{10.1088/1475-7516/2009/04/010}.
+\bibitem{lux}D.S.~Akerib et al. (LUX Collaboration),\myrefs{Phys. Rev. Lett. {\bf 112}, 091303 (2014)}{10.1103/PhysRevLett.112.091303}.
+\bibitem{xenon-100}E.~Aprile et al. (XENON100 Collaboration), \myrefs{Phys. Rev. Lett {\bf 109}, 181301 (2012)}{10.1103/PhysRevLett.109.181301}.
+\bibitem{pandax-i}M.~Xiao et al. (PandaX Collaboration), \arxiv{1408.5114}.
+\bibitem{cdms}Z.~Ahmed et al. (CDMS II Collaboration), \myrefs{Science {\bf 327}, 1619 (2010)}{10.1126/science.1186112}.
+
+
+\end{thebibliography}
+\end{document}
+\endinput
+%%
+%% End of file `elsarticle-template-num.tex'.
