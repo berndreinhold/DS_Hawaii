@@ -1,0 +1,5 @@
+*.log
+*.aux
+CalibHardwarePaper/DS_CALIS_hardware.out
+*.toc
+CalibHardwarePaper/DS_CALIS_hardware.synctex.gz
