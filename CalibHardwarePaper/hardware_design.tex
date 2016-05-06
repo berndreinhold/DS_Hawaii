@@ -18,11 +18,22 @@ Mechanical drawing of CALIS showing the housing and the deployment device. Dimen
 }
 \end{figure}
 
-In order to send the deployment device into the LSV, both cables are unwound simultaneously. The stepper motor moves both cable spools concurrently and an absolute encoder monitors the current position of the deployment device. The stepper motor is controlled via a simple graphical LabVIEW interface, run on a dedicated laptop, in which the current z-position is shown and a target z-position can be provided by the operator. Z-positions are given in motor step counts, an arbitrary unit which has been calibrated outside CRH in meters and relative to the TPC using calibration data.
+In order to send the deployment device into the LSV, both cables are unwound simultaneously. The stepper motor moves both cable spools concurrently and an absolute encoder monitors the current position of the deployment device. The stepper motor is controlled via a simple graphical LabVIEW interface, run on a dedicated laptop, in which the current z-position is shown and a target z-position can be provided by the operator. Z-positions are given in motor step counts, an arbitrary unit which has been calibrated outside CRH in meters (Fig.~\ref{fig:z_test}) and relative to the TPC using the t-drift distribution of calibration data (Fig.~\ ref{fig:SourcePosition}, p.~\pageref{fig:SourcePosition}).
+
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=3.2in]{Figures/Z_positioning_test}
+ \caption{Plot of the z position of the pig vs the step position of the motor.}
+ \label{fig:z_test}
+\end{figure}
 
 Articulation of the arm is done manually via the articulation wheel (Fig.~\ref{fig:CALISMechanism}). This affects only the cable spool close to the articulation wheel, the left one in Fig.~\ref{fig:CALISMechanism}, thereby shortening the left cable wrt.~to the right cable and engaging the gear through a chain (Fig.~\ref{fig:sourceArmRotation}). As a result the arm is articulated and the pivot center is lifted. The degrees corresponding to a horizontal articulation has been calibrated prior to installation in CRH (Sec.~\ref{sec:Testing:LNGS}).
 
 %The deployment and articulation mechanism involving two steel cables
+
+%From testing.tex
+(...) This is necessary because, as the cable winds around the spool, the winding radius changes, increasing as the pig is lifted and decreasing as it is lowered.  This means that there is not a linear correspondence between the number of steps and the length of cable deployed.  Additionally, this non-linear dependency causes the amount of rotation required by the hand wheel for full articulation of the source arm to change as a function of the length of cable deployed.     
+
 
 Articulation and a movement in z-direction are mutually exclusive since the articulation of the arm leads to more wound up cable on the spool close to the articulation wheel wrt.~the other. If then in deployment mode both spools would be rotated simultaneously with the same angular speed, the cable close to the articulation wheel would wind up faster than the other, which would lead to a build up of difference in cable length and the deployment device would only be hanging on one cable. In order to avoid an imbalanced z-movement the arm has to be dearticulated before a change in z-position can be initiated. This is enforced by an electric switch preventing z-movement, which is disengaged only when the arm is fully dearticulated. 
 
