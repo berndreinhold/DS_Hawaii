@@ -1,0 +1,3 @@
+pig -> deployment device
+clean room -> radon-free clean room CRH (as used in the veto paper)
+radon-suppressed -> radon-free (as used in the veto paper)
