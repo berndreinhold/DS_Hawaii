@@ -1,75 +1,71 @@
 \section{Design Requirements \& Hardware Implementation} \label{sec:hardware}\label{sec:design_requirements}
 
-\subsection{Hardware}
-The apparatus consists of the housing, which has been installed in CRH (Fig.~\ref{fig:CALIS_photos}, left) and the deployment device which can be lowered into the LSV (Fig.~\ref{fig:CALIS_photos}, right). The deployment device is attached to the housing through two stainless steel cables that are wound up on cable spools (Fig.~\ref{fig:CALISMechanism}).
+\subsection{Purpose}
+Electronics gain calibration of the \wcd, \lsv\ and \tpc\ is done with dedicated Laser systems, that are in place in each of the three subdetectors. The Laser calibration in the \wcd\ is sufficient to veto muons (and their secondaries) with high efficiency \cite{veto_paper}. The \tpc\ detector response has been calibrated using the internal ${39}$Ar as well as $83m$Kr, that has been added into the \lar\ recirculation system during dedicated calibration campaigns \cite{DS:firstpaper}.
 
-\subsubsection{Deployment \& Articulation}\label{sec:DeploymentArticulation}
+The goal with the CALibration source Insertion System (CALIS) is to study and calibrate the detector response of the \tpc\ and the \lsv\ as well as the detection efficiency of internal neutrons interacting in the \tpc\ and \lsv\ using radioactive gamma and neutron sources. This complements and extends the physics reach of internal source and Laser calibration. 
+
 The center of the \lsv\ is about 6 m below the gate valve inside CRH
 %=6145=70+120+400+3455+20+251+1372+457 from http://darkside-docdb.fnal.gov:8080/cgi-bin/RetrieveFile?docid=858&filename=NoFlyZone-DS50_vers02.pdf&version=14
- and the $6''$ wide organ pipes are vertical, yet about 80 cm off center in the XY plane as shown in Fig.~\ref{fig:CALIS_photos}. For \tpc\ calibration the radioactive source has to be positioned in immediate contact with the cryostat, in order to minimize rate losses through absorption in particular for low energy sources such as $^{57}$Co (122 keV). This is made possible by enabling the deployment device to articulate an arm, at whose end the radioactive source is thereby brought close the cryostat. 
+ and the $6''$ wide organ pipes are vertical, yet about 80 cm off center in the XY plane as shown in Fig.~\ref{fig:CALIS_photos}. For \tpc\ calibration the radioactive source has to be positioned in immediate contact with the cryostat, in order to minimize rate losses through absorption in particular for low energy sources such as $^{57}$Co (122 keV). 
 
+\subsection{Deployment \& Articulation Mechanism}\label{sec:DeploymentArticulation}
+%focus on the mechanism --- protection provided by the housing is discussed below:
+This requirement precludes a single cable solution deployed from within a glove box as has been used in several scintillator experiments \cite{KamLAND-MiniCal, DayaBay_zaxis}. Instead the apparatus consists of the housing, which has been installed in CRH (Fig.~\ref{fig:CALIS_photos}, left) and the deployment device is attached to the housing through two stainless steel cables that are wound up on cable spools and allow the lowering of the device into the \lsv, next to the cryostat (Fig.~\ref{fig:CALIS_photos}, right).
+\mymarginpar{in fig.\ref{fig:sourceArmRotation} the drawing should show the arm articulate towards the left, since when the left spool is engaged, the arm articulates towards the left.}
 \begin{figure}[htbp]
  \centering
- %\subfigure{ \includegraphics[width=0.7\textwidth]{Figures/gearDrawing}}
- \includegraphics[width=0.72\textwidth]{Figures/CALISDimensions.png}
- \includegraphics[width=0.27\textwidth]{Figures/CALIS_overview_IMG_3763.jpg}
- \caption{%\textit{top}:Looking down on the top of CALIS III and inside the upper assembly: the components and drive mechanism are shown. The hand wheel is on the left connected to one of the spools only. The next parts going from left to right are the two cable spools and then the sealed motor housing.
-Mechanical drawing of CALIS showing the housing and the deployment device. Dimensions are in inches. (The total height of 88.75 inches corresponds to 225.425 cm.) The two modes of operation are illustrated: In order to move the deployment device downinto the LSV or back up the stepper motor moves both cable spools simultaneously. \textcolor{blue}{In order to articulate, the articulation wheel is rotated manually, which affects only the left spool, thereby shortening the left cable wrt.~to the right cable thereby articulating the arm and lifting the pivot center.} The amount of lifting and the amount of rotations until a horizontal articulation is reached has been calibrated prior to installation in CRH (Sec.~\ref{sec:Testing:LNGS})\label{fig:CALISDimensions}\label{fig:CALISMechanism}\label{fig:gearDrawing}
-}
-\end{figure}
-
-In order to send the deployment device into the LSV, both cables are unwound simultaneously. The stepper motor moves both cable spools concurrently and an absolute encoder monitors the current position of the deployment device. The stepper motor is controlled via a simple graphical LabVIEW interface, run on a dedicated laptop, in which the current z-position is shown and a target z-position can be provided by the operator. Z-positions are given in motor step counts, an arbitrary unit which has been calibrated outside CRH in meters (Fig.~\ref{fig:z_test}) and relative to the TPC using the t-drift distribution of calibration data (Fig.~\ ref{fig:SourcePosition}, p.~\pageref{fig:SourcePosition}).
-
-\begin{figure}[htbp]
- \centering
- \includegraphics[width=3.2in]{Figures/Z_positioning_test}
- \caption{Plot of the z position of the pig vs the step position of the motor.}
- \label{fig:z_test}
-\end{figure}
-
-Articulation of the arm is done manually via the articulation wheel (Fig.~\ref{fig:CALISMechanism}). This affects only the cable spool close to the articulation wheel, the left one in Fig.~\ref{fig:CALISMechanism}, thereby shortening the left cable wrt.~to the right cable and engaging the gear through a chain (Fig.~\ref{fig:sourceArmRotation}). As a result the arm is articulated and the pivot center is lifted. The degrees corresponding to a horizontal articulation has been calibrated prior to installation in CRH (Sec.~\ref{sec:Testing:LNGS}).
-
-%The deployment and articulation mechanism involving two steel cables
-
-%From testing.tex
-(...) This is necessary because, as the cable winds around the spool, the winding radius changes, increasing as the pig is lifted and decreasing as it is lowered.  This means that there is not a linear correspondence between the number of steps and the length of cable deployed.  Additionally, this non-linear dependency causes the amount of rotation required by the hand wheel for full articulation of the source arm to change as a function of the length of cable deployed.     
-
-
-Articulation and a movement in z-direction are mutually exclusive since the articulation of the arm leads to more wound up cable on the spool close to the articulation wheel wrt.~the other. If then in deployment mode both spools would be rotated simultaneously with the same angular speed, the cable close to the articulation wheel would wind up faster than the other, which would lead to a build up of difference in cable length and the deployment device would only be hanging on one cable. In order to avoid an imbalanced z-movement the arm has to be dearticulated before a change in z-position can be initiated. This is enforced by an electric switch preventing z-movement, which is disengaged only when the arm is fully dearticulated. 
-
-\begin{figure}[htbp]
- \centering
-\begin{minipage}[b]{0.48\textwidth}
-\centering
-  \includegraphics[width=\textwidth]{Figures/SourcePod2_mirrored.jpg}
-\end{minipage}
-\begin{minipage}[b]{0.48\textwidth}
-\centering
-  \includegraphics[width=\textwidth]{Figures/sourceArmArticulation.png}
-  \includegraphics[width=0.8\textwidth]{Figures/IMG_2457.JPG}
-\end{minipage}
-  \caption{Technical drawing showing the articulation mechanism using a chain that engages the gear to transfer the rotation of the articulation wheel (Fig.~\ref{fig:CALISMechanism}) into a rotation of the source arm. The chain has a guard rail, not shown in the drawing, that ensures that the chain can never come off the gear.}
+\includegraphics[width=0.9\textwidth]{Figures/gearDrawing}
+  \includegraphics[width=0.48\textwidth]{Figures/ArticulationProtractor_IMG_2667.JPG}
+  \includegraphics[width=0.48\textwidth]{Figures/sourceArmArticulation.png}
+  \caption{\textit{top}: Inside view of the drive mechanism's components seen from the top of CALIS. The stepper motor inside the motor housing drives both cable spools concurrently, thereby lowering the calibration device into the \lsv. An absolute encoder provides the current position of the deployment device. The hand wheel on the left is connected to the left spool only (\textit{bottom left}). When engaged, it drives the gear to transfer the rotation of the articulation wheel into a rotation of the source arm (\textit{bottom right}). The chain has a guard rail, not shown in the drawing, that ensures that the chain can never come off the gear.}
   \label{fig:sourceArmRotation}
 \end{figure} 
 
-\subsubsection{Housing \& Scintillator}
+The stepper motor moves both cable spools concurrently and sends the deployment device into the \lsv. An absolute encoder monitors its current position, even in the absence of power. The stepper motor is controlled via a simple graphical LabVIEW interface, run on a dedicated laptop, in which the current z-position is shown and a target z-position can be provided by the operator. Z-positions are given in motor step counts, an arbitrary unit which has been calibrated outside CRH in meters (Fig.~\ref{fig:z_test}) and relative to the TPC using the t-drift distribution of calibration data (Fig.~\ref{fig:SourcePosition}, p.~\pageref{fig:SourcePosition}).
 
-Besides providing mechanical support for the deployment device, the housing is the important interface between CRH and the LSV, through which sources are exchanged, while protecting the liquid scintillator and avoiding human contact with the liquid scintillator. The liquid scintillator, which is a mixture of PC and TMB\footnote{As discussed in Sec.~\ref{sec:CalibCampaigns} the concentration of TMB has varied during the campaigns.} with the wavelength shifter PPO\cite{DS50:firstPaper}, may not get exposed to oxygen or water as is present in normal clean room air and also contamination with $^{222}$Rn and its daughters has to be avoided. Vacuum and nitrogen pressurization systems have been developed \ref{sec:N2_pressure_system}.
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=0.65\textwidth]{Figures/Z_positioning_test}
+ \caption{Plot of the z position of the deployment device versus the step position of the motor. The non-linear correspondence between the number of steps and the length of cable deployed arises as follows: As the cable winds around the spool, the winding radius changes, increasing as the pig is lifted and decreasing as it is lowered. A motor step count corresponds to a fixed angular distance \textit{d$\theta$}, yet the amount of cable deployed during this motor step count is \textit{winding radius $\cdot$ d$\theta$}. As the winding radius changes as a function of z position, the fraction of deployed cable per motor step count changes.}
+ \label{fig:z_test}
+\end{figure}
 
-On the other hand TMB vapors and residues could form ...
+Articulation of the arm is done manually via the articulation wheel. This affects only the cable spool close to the articulation wheel, the left one in Fig.~\ref{fig:sourceArmRotation}, thereby shortening the left cable wrt.~to the right cable and engaging the gear through a chain (Fig.~\ref{fig:sourceArmRotation}). As a result the arm is articulated and the pivot center is lifted. The non-linearity arising from the change in winding radius on the cable spools affects also the amount of rotation required by the hand wheel for horizontal articulation of the source arm.
+The degrees corresponding to a horizontal articulation has been calibrated as a function of cable length deployed prior to installation in CRH.
 
-\textit{ToDo: more precise on risks of contact of TMB with air/ water. What are the dangers compared to a PC only scintillator?}
+Articulation and a movement in z-direction are mutually exclusive since the articulation of the arm leads to more wound up cable on the spool close to the articulation wheel wrt.~the other. If then in deployment mode both spools would be rotated simultaneously with the same angular speed, the cable close to the articulation wheel would wind up faster than the other, which would lead to a build up of difference in cable length and the deployment device would only be hanging on one cable. In order to avoid an imbalanced z-movement the arm has to be dearticulated fully before a change in z-position can be initiated. This is enforced by an electric switch preventing z-movement, which is disengaged only when the arm is fully dearticulated. 
 
-The housing thereby has the same role as glove boxes in calibration devices of other experiments (see e.g.~\cite{KamLAND:Calib,Borexino:Calib}).
+%Discussion:
+% why no permanent tube?
+% To complement studies of nuclear recoils with neutron sources ($^{241}$Am$^{9}$Be and $^{241}$Am$^{13}$C), it is planned to deploy a 
+
+\subsection{Housing \& Scintillator}
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=0.68\textwidth]{Figures/CALISDimensions.png}
+ \includegraphics[width=0.30\textwidth]{Figures/CALIS_overview_IMG_3763.jpg}
+ \caption{Mechanical drawing of CALIS showing the housing and the deployment device. Dimensions are in inches. (The total height of 88.75 inches corresponds to 225.425 cm.) The two modes of operation are illustrated: In order to move the deployment device down into the LSV or back up the stepper motor moves both cable spools simultaneously. \textcolor{blue}{In order to articulate, the articulation wheel is rotated manually, which affects only the left spool, thereby shortening the left cable wrt.~to the right cable thereby articulating the arm and lifting the pivot center.} The amount of lifting and the amount of rotations until a horizontal articulation is reached has been calibrated prior to installation in CRH (Sec.~\ref{sec:Testing:LNGS})\label{fig:CALISDimensions}\label{fig:CALISMechanism}\label{fig:gearDrawing}
+}
+\end{figure}
+
+Besides providing mechanical support for the deployment device via the cable spools, the housing is the important interface between CRH and the LSV, through which sources are exchanged, while protecting the liquid scintillator and avoiding human contact with even traces of liquid scintillator vapor at all times. It plays the same role as a glove box for other calibration systems with a narrower foot print inside CRH. The liquid scintillator is a mixture of PC and TMB\footnote{The concentration of TMB has varied during campaigns (see Sec.~\ref{sec:CalibCampaigns}).} with the wavelength shifter PPO\cite{vetoPaper}. It may not get exposed to oxygen or water as is present in normal clean room air and also contamination with $^{222}$Rn and its long-lived radioactive daughters has to be avoided. 
+
+
+
+Vacuum and nitrogen pressurization systems have been developed \ref{sec:N2_pressure_system}.
+
+
 
 \subsection{Design Requirements}
 The design of CALIS is shaped by the following requirements, thereby following the design principle of ``form follows function'': 
 \begin{itemize}
-\item to allow source exchanges and safely deploy them at various positions inside the LSV, 
-\item protecting the scintillator from oxygen and water at any time, in particular during deployments and being able to articulate a source arm in order to bring the source next to the cryostat. Also protection and safety mechanisms that avoid exposure of personal to scintillators are in place.
-\item To complement studies of nuclear recoils with neutron sources ($^{241}$Am$^{9}$Be and $^{241}$Am$^{13}$C), it is planned to deploy a neutron gun inside a dedicated deployment device currently under development (Section \ref{sec:Outlook}).
+
+
+Also protection and safety mechanisms that avoid exposure of personal to scintillators are in place.
+neutron gun inside a dedicated deployment device currently under development (Section \ref{sec:Outlook}).
 \item All materials that come in contact with the scintillator veto are made of stainless steel and teflon except for the sealing o-rings which are made out of viton.  All three materials (stainless steel, teflon, and viton) are certified materials for contact with TMB and PC.
-\item Before assembly in CRH, each component of CALIS, the ones introduced into the scintillator as well as those in the clean room CRH, have been subjected to the official cleaning procedure \cite{DS50:cleaning}.
+\item Before assembly in CRH, each component of CALIS, the ones introduced into the scintillator as well as those in the clean room CRH, have been subjected to the official cleaning procedure \cite{DS50:cleaning}. \mymarginpar{Is there any public document on the cleaning procedures? Is this necessary to quote?}
 \end{itemize}
 
 This results in further hardware design choices and requirements that are discussed below.
