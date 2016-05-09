@@ -1,35 +1,12 @@
 \section{Testing, Cleaning and Commissioning} \label{sec:Testing}\label{sec:Commissioning}
-Staged approach in testing: FNALL basic functionality test
-LNGS:
+CALIS has been assembled at FNAL from components produced at FNAL and Hawaii. After an initial set of basic functionality tests at FNAL, CALIS was shipped pre-assembled to LNGS, where it would undergo a comprehensive testing and calibration program. Still outside the clean room CRH, CALIS was installed on a high bay and tested at its full length. Besides testing all details of CALIS (see Sec.~\ref{sec:HardwareDetails}) ranging from testing the functionality of motor controls, high limit and articulation switch to recovery scenarios after e.g.~power failures during deployment.
 
-Shipment of CALIS sub-assembled to LNGS
+An important aspect was the calibration of the sources Z-position as a function of cable length before and after articulation of the source, which is a nonlinear function of motor step counts, as mentioned in Sec.~\ref{sec:Nonlinearity:MotorStepCounts}. Furthermore the accuracy and precision of XY- and Z-position of the source was estimated.
 
-approval for installation 
-cleaning according to official cleaning procedures and installation on the gate valve of CRH
+The results of this testing campaign were reviewed by an internal review board and approval for installation inside the CRH was granted. CALIS was cleaned according to official cleaning procedures and installation on the gate valve of CRH \cite{DS50:cleaning}. \mymarginpar{Is there any public document on the cleaning procedures? Is this necessary to quote?}
+After installation on the gate valve a focus of testing was the light and helium leak tightness of the system, and the testing of the nitrogen and vacuum systems, as these could only be tested in full then. A more detailed description of tests performed at FNAL and LNGS can be found in \cite{thesis:Hackett, thesis:Edkins}.\mymarginpar{----\\Tests will be described in more detail in Erin and Brianne's thesis $\rightarrow$ cite them here.}
 
-after installation: commissioning functional tests, etc.
+\subsection*{XY and Z position}
+Tests in air and in the LSV's scintillator revealed that the source position accuracy is dominated by uncertainties during articulation. The positioning in z before articulation is highly accurate and precise: The deployment speed is very low, barely visible ot the naked eye (mm/s), which minimizes the lateral motion during deployment and contact with housing or organ pipe is avoided during deployment. Yet during articulation a swing in XY is arising from tiny laterally imbalanced forces originating in the pull on the articulating cable. 
 
-testing site that allowed full deployment of CALIS
-
-Testing of CALIS has been performed at FNAL in the second half of August and first half of September 2014. CALIS was installed in a building with the high bay, on a high platform, so that the full length deployment tests could be performed. The tests are repeated at LNGS prior to cleaning the system, and some validation tests are foreseen at the time of installation in CRH.  Several different tests have been conducted:
-\begin{itemize}
-\item Test for light and helium leak tightness of the whole system
-
-\item Validation of motor controls and LabView based graphical user interface 
-\item Validation of functionality of the safety features (upper limit and arm retraction switch)
-\item Accuracy and precision in source position: tests with and without source arm articulation
-\item calibration of the motor step counts in meters with and without articulation and t-drift + 
-\item scenarios: before and after power failure
-\item test nitrogen and vacuum systems: Measure the amount of time to evacuate the device and purge with nitrogen (how long does it take in reality?)
-\item 1 cm uncertainty
-\item At LNGS the XY and Z position of the source was fully characterized and calibrated in meters.\mymarginpar{This sentence might require some more qualification... Too much advertising.}
-\end{itemize}
-
-A more detailed description of tests performed at FNAL and LNGS can be found in \cite{thesis:Hackett, thesis:Edkins}.
-
-Tests in air and in the LSV's scintillator revealed that the source position accuracy is dominated by uncertainties during articulation. The positioning in z before articulation is highly accurate and precise: The deployment speed is very low, barely visible ot the naked eye (mm/s), which minimizes the lateral motion during deployment and contact with housing or organ pipe is avoided during deployment. Yet during articulation an uncertainty in the XY position is arising from tiny laterally imbalanced forces resulting from the pull on the articulating cable. To ensure deployment precision we worked out a procedure to make reliably gentle contact: 
-after positioning the deployment device in z, articulate to horizontal while the source arm is pointing away from the cryostat, finally bring the source into contact with the cryostat through a rotation in XY while monitoring the PMT scaler rates, which increase while the source is approaching, yet stalls as soon as contact with the cryostat is made, even if the rotation in XY continues.
-
-
-
-Before assembly in CRH, each component of CALIS, the ones introduced into the scintillator as well as those in the clean room CRH, have been subjected to the official cleaning procedure \cite{DS50:cleaning}. \mymarginpar{Is there any public document on the cleaning procedures? Is this necessary to quote?}
+To ensure deployment precision we worked out a procedure to make reliably gentle contact with the cryostat, thereby eliminating the precision uncertainty in XY: After positioning the deployment device in z, the source arm is articulated to horizontal while it is pointing away from the cryostat. Only then the source is brought into contact with the cryostat through a rotation in XY while monitoring the PMT scaler rates, which increase while the source is approaching, yet plateaus as soon as contact with the cryostat is made, even if the rotation in XY continues. This provides a reliable XY and Z-position for the calibration source and has been used throughout calibration campaigns.
