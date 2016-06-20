@@ -1,22 +1,22 @@
 \section{Calibration Campaigns}\label{sec:CalibCampaigns}
 \subsection{Radioactive Sources}
-For the calibration of the LSV detector response and the TPC's response to electron recoils (ER) $^{57}$Co, $^{133}$Ba and $^{137}$Cs were selected. In a later calibration campaign $^{22}$Na has been deployed. They allow a cross-calibration with $^{83m}$Kr, that has been injected in the Ar recirculation system during dedicated campaigns and the internal $^{39}$Ar, as they cover the energy range of $^{39}$Ar (see also Table~\ref{tbl:GammaSources} and Fig.~\ref{fig:GammaSources_Ar39spectrum}). %As the interaction length increases with energy in LAr, the different gamma sources allow also to probe different regions of the TPC active volume.  
+For calibration of \lsv\ detector response and \tpc's response to electron recoils (ER) $^{57}$Co, $^{133}$Ba and $^{137}$Cs were selected. $^{22}$Na was deployed in a later calibration campaign. They allow a cross-calibration with $^{83m}$Kr injected in Argon recirculation system during dedicated campaigns and internal $^{39}$Ar, as they cover the $^{39}$Ar energy range (see also Table~\ref{tbl:GammaSources} and Fig.~\ref{fig:GammaSources_Ar39spectrum}). %As the interaction length increases with energy in LAr, the different gamma sources allow also to probe different regions of the TPC active volume.  
 
-After a preselection of gamma source energies, detailed studies with the DarkSide Monte Carlo simulation package G4DS \cite{DS50:G4DS:paper} were performed to select appropriate source activities and check the feasibility and physics reach of various deployment positions. Considering also constraints from the LSV and TPC DAQs, sources with suitable activities were identified for deployment (Table~\ref{tbl:GammaSources}).
+After a gamma source energies preselection, detailed studies with DarkSide Monte Carlo simulation package G4DS \cite{DS50:G4DS:paper} were performed to select appropriate source activities and check various deployment positions' feasibility and physics reach. Sources with suitable activities were identified for deployment considering also constraints from \lsv\ and \tpc\ DAQs (Table~\ref{tbl:GammaSources}).
 
-Energy variables are calibrated in photo-electrons (PE) using dedicated laser calibration runs, in which the single PE charge spectra for each PMT are fitted and a PE-charge gain is determined. 
-These laser runs are also an integral part of a calibration campaign requiring a laser run every few hours and at least on each change in DAQ or CALIS configuration, such as drift field changes or source position changes.
+Energy variables are calibrated in photo-electrons (PE) using dedicated laser calibration runs, in which each PMT's single PE charge spectra are fitted and a PE-charge gain is determined. 
+These laser runs are also an integral part of a calibration campaign requiring a laser run every few hours and at least on each change in DAQ, \tpc\ or CALIS configuration, such as drift field changes or source position changes.
 
 \begin{figure}[htbp]
  \centering
  \includegraphics[width=0.8\textwidth]{Figures/GammaSources_Ar39spectrum.png}
- \caption{Scintillation spectrum (S1) at null field showing a $^{83m}$Kr peak on the $^{39}$Ar $\beta$ spectrum. The energies of the three gamma sources are indicated and cover the full range of the $^{39}$Ar spectrum.
+ \caption{Scintillation spectrum (S1) at null field showing a $^{83m}$Kr peak on internal $^{39}$Ar $\beta$ spectrum. Positions of full absorption peaks of three gamma sources are indicated and cover $^{39}$Ar spectrum's full range.
 \label{fig:GammaSources_Ar39spectrum}}
 \end{figure}
 
 \begin{table}[htbp]
 \centering
-\caption{Gamma sources deployed in DS-50, $^{39}$Ar and $83m$Kr \cite{Lippincott:2010jb}. Interaction length is in LAr. Activity of $^{39}$Ar has been approx. 50 Hz during AAr filling and negligible in the UAr phase. The Kr source activity varied from campaign to campaign, but was in the range of a few Bq to some tens of Bq.} %\cite{Lippincott:83mKr}
+\caption{Gamma sources deployed in DS-50, $^{39}$Ar and $83m$Kr \cite{Lippincott:2010jb}. Interaction length is in liquid Argon. $^{39}$Ar activity has been approx. 50 Hz during AAr filling and negligible in the UAr phase. The Kr source activity varied from campaign to campaign, but was in range of a few Bq to some tens of Bq.} %\cite{Lippincott:83mKr}
 \centering
 \begin{tabular}{|l|l|l|l|l|l|}
 \hline
@@ -31,19 +31,19 @@ $^{83m}$Kr & 2 $\beta$ &  32.1 keV + 9.1 keV & xxx y & sub-mm & \\ \hline
 \label{tbl:GammaSources}
 \end{table}
 
-\subsection{Timeline of the Calibration Campaigns and Stability}
-Between October 2014 and April 2016 the following calibration campaigns have been performed:
+\subsection{Calibration Campaigns Timeline and Stability}
+Following calibration campaigns were performed between October 2014 and April 2016:
 \begin{itemize}
-\item The first extensive campaign involving all gamma sources and both the high and low activity AmBe neutron source took place in October and November 2014 at LNGS. The TPC was filled with Atmospheric Argon with an inherent trigger rate of approx. 50 Hz from $^{39}$Ar. The liquid scintillator of the \lsv contained a PC only scintillator with $<0.1 \%$ TMB and 1.4 g/l PPO as wavelength shifter.
+\item First extensive campaign involving all gamma sources and both high and low activity AmBe neutron source took place in October and November 2014 at LNGS. \tpc\ was filled with Atmospheric Argon  with an inherent trigger rate of approx. 50 Hz from $^{39}$Ar. \lsv\ liquid scintillator consisted of PC only with $<0.1 \%$ TMB and 1.4 g/l PPO as wavelength shifter.
 %Fig.~\ref{???} shows the different configurations in which data has been taken as a function of source energy, source position and drift field.
 
-\item In January and February 2015 a second campaign focusing on the LSV calibration using the low activity AmBe source was performed. Prior to that the LSV has been reconstituted with 5\% TMB. Two deployments were performed at two different PPO concentrations (0.7 g/l and 1.4 g/l), allowing to study the impact of the PPO concentration on alpha and gamma quenching. (1.4 g/l is our nominal PPO concentration, see also Fig.~\ref{fig:LSV:Calib}, right)
+\item In January and February 2015 a second campaign focusing on \lsv\ calibration using low activity AmBe source was performed. Before this \lsv\ was reconstituted with 5\% TMB. Two deployments were performed at two different PPO concentrations (0.7 g/l and 1.4 g/l), allowing to study PPO concentration impact on alpha and gamma quenching. (1.4 g/l is our nominal PPO concentration, see also Fig.~\ref{fig:LSV:Calib}, right)
 
-\item In August 2015 a $^{22}$Na source has been deployed next to the cryostat for TPC calibration. This was the first gamma source calibration campaign after the UAr deployment within \dsf.
-\item In December 2015 an $^{241}$Am$^{13}$C neutron source has been deployed, allowing an in-depth study of the detection efficiency of the prompt neutron recoil signal in the absence of the correlated 4.4 MeV gamma, obfuscating the neutron recoil signal in case of an AmBe source.
+\item In August 2015 a $^{22}$Na source was deployed next to cryostat for TPC calibration. This was first gamma source calibration campaign after UAr deployment within \dsf.
+\item In December 2015 an $^{241}$Am$^{13}$C neutron source has been deployed, allowing an in-depth study of detection efficiency of prompt neutron recoil signal in absence of correlated 4.4 MeV gamma, obfuscating neutron recoil signal in case of an AmBe source.
 \end{itemize}
 
-In dedicated analyses it hasbeen shown that the calibration campaigns have not affected negatively the light yield or introduced radioactivity into the LSV \cite{Agnes:2015qyz}.
+In dedicated analyses it has been shown that calibration campaigns have not affected negatively light yield or introduced radioactivity into the LSV \cite{Agnes:2015qyz}.
 
 %\begin{figure}[htbp]
 %\centering
@@ -54,43 +54,43 @@ In dedicated analyses it hasbeen shown that the calibration campaigns have not a
 
 
 \subsection{TPC Calibration}
-A few calibration results are shown to illustrate the quality of the acquired calibration data and their description in G4DS.
+A few calibration results are shown illustrating acquired calibration data quality and their description in G4DS.
 
 \subsubsection{$^{57}$Co S1 energy}
-Fig.~\ref{fig:CalibData:Co57} shows a data-MC comparison of the scintillation signal S1 spectrum of a $^{57}$Co calibration source deployed next to the cryostat and close to the TPC active volume center. Overlayed is the S1 distribution from an equivalent selection of G4DS MC simulation.\mymarginpar{The plot is from Paolo's G4DS talk \@ DS2016, UCLA. Ideally one could get an official copy from the MC paper.}
+Fig.~\ref{fig:CalibData:Co57} shows a data-MC comparison of scintillation signal S1 spectrum of a $^{57}$Co calibration source deployed next to cryostat and close to TPC active volume center. S1 distribution is overlayed by an equivalent selection of G4DS MC simulation events.\mymarginpar{The plot is from Paolo's G4DS talk \@ DS2016, UCLA. Ideally one could get an official copy from the MC paper.}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.7\textwidth]{./Figures/57Co_Paolo_G4DS_UCLA.png}
-\caption{Data-MC comparison for the $^{57}$Co source deployed next to the cryostat. In the magenta distribution a single-site interaction requirement has been imposed as for dark matter events and for the blue distribution this constraint has been removed \cite{DS50:G4DS:paper}.
+\caption{Data-MC comparison for $^{57}$Co source deployed next to cryostat. In magenta distribution a single-site interaction requirement is imposed as for dark matter events and for blue distribution this constraint is removed \cite{DS50:G4DS:paper}.
 \label{fig:CalibData:Co57}}
  \end{figure}
 
 
 \subsubsection{F90 distribution from $^{241}$Am$^9$Be neutron data}\label{sec:CalibData:NR}
 
-Fig.~\ref{fig:CalibData:F90} shows good agreement between F90 medians and S1 spectra measured from $^{241}$Am$^9$Be neutron data and those derived from \SCENE\ measurements, which have been used to determine the nuclear recoil energy scale and NR acceptance regions for the WIMP dark matter search \cite{Agnes:2015gu, Agnes:2015_uar}.
+Fig.~\ref{fig:CalibData:F90} shows good agreement between F90 medians and S1 spectra measured from $^{241}$Am$^9$Be neutron data and those derived from \SCENE\ measurements, which have been used to determine nuclear recoil energy scale and NR acceptance regions for WIMP dark matter search \cite{Agnes:2015gu, Agnes:2015_uar}.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.7\textwidth]{./Figures/DSf-UArAmBeDMSStCut.pdf}
-\caption{Plot of F90 vs. scintillation signal S1 from a high rate AmBe neutron source calibration of \dsf\ in grey, the upper NR band from the AmBe calibration and lower ER band from $\beta$-$\gamma$ backgrounds are visible. Overlayed are \FNinety\ \NR\ median vs. \SOne\ from a high-rate {\it in situ} AmBe\ calibration (blue) and scaled from \SCENE\ measurements (red points) \cite{Cao:2015ks}. There is very good agreement between the two.  The high source intensity and correlated neutrons and $\gamma$-ray emission by the AmBe source contribute events outside the nuclear recoil and electron recoil bands. (reproduced from \cite{Agnes:2015_uar})\label{fig:CalibData:F90}\label{fig:DSf-UArAmBeDMS}} 
+\caption{Plot of F90 vs. scintillation signal S1 from a high rate AmBe neutron source calibration of \dsf\ in grey, upper NR band from AmBe calibration and lower ER band from $\beta$-$\gamma$ backgrounds are visible. Overlaid are \FNinety\ \NR\ median vs. \SOne\ from a high-rate {\it in situ} AmBe\ calibration (blue) and scaled from \SCENE\ measurements (red points) \cite{Cao:2015ks}. There is very good agreement between the two.  High source intensity and correlated neutrons and $\gamma$-ray emission by AmBe source contribute events outside nuclear recoil and electron recoil bands. (reproduced from \cite{Agnes:2015_uar})\label{fig:CalibData:F90}\label{fig:DSf-UArAmBeDMS}} 
 \end{figure}
 
 
 \subsubsection{Source position}
-Tests at LNGS established the deployment system's positioning accuracy to be about $\pm$1 cm after a 7 meter journey into the DarkSide-50 \lsv.
+Tests at LNGS established the deployment system's positioning accuracy to be about $\pm$1 cm after a 7 meter journey into the \dsf\ \lsv.
 %comment to the "about $\pm ": the tilde $~ \pm$ did not show up at all in the output.
-During the first calibration campaign several runs have been taken with the source at its central position (731000 motor step counts). Fitting the t$_{drift}$ distribution at that position for a sequence of runs a systematic shift vs.~time has been observed (Fig.~\ref{fig:SourcePosition}, right). The source position has been on average 157.4 mm below the grid with an RMS of 10.1 mm. Following that observed systematic shift with time the deployment procedures have been revised to avoid such a time dependency in the future and to improve the deployment precision: Prior to moving the source to its position goal, the deployment device is sent to its lowest position, where the cables are fully unwound and any build-up in the cables is released. It is worth mentioning though that this does not induce significant uncertainties for calibration data analyses, as the t$_{drift}$ distribution can be measured in-situ on a per-run basis and hence does not affect our dark matter analysis.
+During first calibration campaign several runs have been taken with source at its central position (731000 motor step counts). Fitting t$_{drift}$ distribution at that position for a sequence of runs a systematic shift vs.~time has been observed (Fig.~\ref{fig:SourcePosition}, right). The source position has been on average 157.4 mm below the grid with an RMS of 10.1 mm. Following that observed systematic shift with time deployment procedures were revised to avoid such a time dependency in the future and to improve the deployment precision: Prior to moving source to its target position, deployment device is sent to its lowest position, where cables are fully unwound and any build-up in the cables is released. It is worth mentioning this does not induce significant uncertainties for calibration data analyses, as t$_{drift}$ distribution can be measured in-situ on a per-run basis and hence does not affect our dark matter analysis.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.48\textwidth]{./Figures/Tdrift_distribution_Co57_DocDB1288.png}
 \includegraphics[width=0.48\textwidth]{./Figures/SourcePosition_vs_time_DocDB1288.png}
-\caption{\textit{left:} A t$_{drift}$ distribution encoding the z-position of the $^{57}$Co deployed next to the TPC center.
-\textit{right:} Shift of source position relative to the TPC grid as a function of time when deployed to the same place.
+\caption{\textit{left:} A t$_{drift}$ distribution encoding the Z-position of $^{57}$Co deployed next to TPC vertical center.
+\textit{right:} Shift of source position relative to TPC grid as a function of time when deployed to same place.
 \label{fig:SourcePosition}} 
 \end{figure}
 
-For the XY position the distribution of the azimuthal angle in the XY plane has been studied and a mean of 139 degrees has been observed with an RMS of 1.2 deg. (One degree corresponds to 6 mm at the outer cryostat, where the source is positioned.) However an independent XY reconstrution algorithm gave 142.5 degrees with an RMS of 0.8 deg, so that systematic uncertainties from the reonstruction dominate over the XY precision. %\cite{DS:XY:paper}.
+For XY position azimuthal angle distribution in XY plane has been studied and a 139 degree mean was observed with a 1.2 deg RMS. (One degree corresponds to 6 mm at the outer cryostat, where source is positioned.) However an independent XY reconstruction algorithm gave 142.5 degrees with an 0.8 deg RMS, so that systematic uncertainties from reconstruction dominate over XY precision. %\cite{DS:XY:paper}.
 \mymarginpar{This is from DocDB 1288. Ideally one could cite a XY paper here, which is not published yet.}
 
 
@@ -98,16 +98,29 @@ For the XY position the distribution of the azimuthal angle in the XY plane has 
 
 \subsection{Liquid Scintillator Veto}\label{sec:LSV:gammasources}
 
-In Fig.~\ref{fig:LSV:Calib} (left) a data-MC comparison of the LSV charge spectra from the $^{137}$Cs source deployed in the LSV next to the cryostat is shown \cite{DS50:G4DS:paper}.
-In January and February 2015 the reconstitution of the LSV scintillator was completed and a second AmBe neutron source calibration of the LSV calibration was undertaken to further study the various neutron detection channels in the LSV. With a borated scintillator, a critical aspect of the neutron detection efficiency is the capability to observe the \brbortenground\
-capture branch leading to a \enbortengroundalpha\ $\alpha$ + $^7$Li(g.s.) without the accompanying 478 keV $\gamma$-ray. As shown in Fig.~\ref{fig:LSV:Calib} (right) the de-excitation channel is clearly observed at around 30 PE.
+In Fig.~\ref{fig:LSV:Calib} (left) a data-MC comparison of LSV charge spectra from a $^{137}$Cs source deployed in LSV next to cryostat is shown \cite{DS50:G4DS:paper}.
+In January and February 2015 LSV scintillator reconstitution was completed and a second LSV calibration using AmBe neutron source was undertaken to further study various LSV neutron detection channels. With a borated scintillator, a critical aspect of neutron detection efficiency is the capability to observe \brbortenground\ capture branch leading to a \enbortengroundalpha\ $\alpha$ + $^7$Li(g.s.) without accompanying 478 keV $\gamma$-ray. As shown in Fig.~\ref{fig:LSV:Calib} (right) the de-excitation channel is clearly observed at around 30 PE.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.48\textwidth]{./Figures/137Cs_Veto_Paolo_G4DS_UCLA.png}
 \includegraphics[width=0.48\textwidth]{./Figures/AmBe_LSV_VetoPaper.png}
-\caption{\textit{left:} Data-MC comparison of the LSV charge spectra from the $^{137}$Cs source deployed in the LSV next to the cryostat \cite{DS50:G4DS:paper}.
-\textit{right:} Clear detection of the neutron capture signal on $^{10}$B in the LSV leading to a \enbortengroundalpha\ $\alpha$ + $^7$Li(g.s.) at $\approx$ 30 PE (orange box). The
-peak on the right at $\approx$ 270 PE (green box) is from the 93.6 \% of captures that lead to the $^7$Li excited state reaction, with the accompanying 478 keV-ray. The entries below 10 PE are due to PMT after-pulses. Data has been taken before and after varying the concentration of the wavelength shifter PPO in the scintillator with the source rotated 70 cm away from the cryostat. In both cases the deexcitation to ground state is clearly observed.\cite{Agnes:2015qyz}
+\caption{\textit{left:} LSV charge spectra data-MC comparison from $^{137}$Cs source deployed in LSV next to the cryostat \cite{DS50:G4DS:paper}.
+\textit{right:} Clear neutron capture signal detection on $^{10}$B in LSV leading to a \enbortengroundalpha\ $\alpha$ + $^7$Li(g.s.) at $\approx$ 30 PE (orange box). Peak on the right at $\approx$ 270 PE (green box) is from 93.6 \% of captures that lead to the $^7$Li excited state reaction, with the accompanying 478 keV-ray. The entries below 10 PE are due to PMT after-pulses. Data has been taken before and after varying PPO wavelength shifter concentration in the scintillator with the source rotated 70 cm away from the cryostat. In both cases the deexcitation to ground state is clearly observed.\cite{Agnes:2015qyz}
 \label{fig:LSV:Calib}} 
 \end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Conclusions}\label{sec:Conclusions}\label{sec:Conclusion}
+CALIS is a simple and affordable, yet effective source deployment system that has been successfully used to deploy sources in LSV and next to TPC and to conduct several successful calibration campaigns. No adverse effects on the LSV or TPC have been noticed.
+
+%summarize that the LSV and TPC detector have not been negatively affected.
+%that's a sentence for the summary: The critical contribution by CALIS is the neutron veto detection efficiency calibration using dedicated neutron sources
+%neutron gun inside a dedicated deployment device currently under development (Section \ref{sec:Outlook}).
+%Refer to the next generation DS-detector.
+%\section{Epilogue}\label{sec:Epilogue}
+%here I would list all upcoming DarkSide papers and how they are in relationship with each other. Since so many papers are in preparation I would find that %helpful. Even if it is not eventually put into the paper.
