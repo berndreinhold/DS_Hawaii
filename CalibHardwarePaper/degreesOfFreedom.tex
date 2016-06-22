@@ -1,16 +1,17 @@
 \subsection{System's degrees of freedom}
 
-CALIS is capable of deploying sources at various positions inside \lsv. Besides movement along Z up to maximum cable length, it is possible to articulate at an angle of $\theta$ between 90$^{\circ}$ and 180$^{\circ}$, where $\theta$ is the zenith-angle (Fig.~\ref{fig:coordinate_system}). Degrees between 0$^{\circ}$ and 90$^{\circ}$ are excluded because articulation chain's end is reached at a 90$^{\circ}$ angle (see Fig.~\ref{fig:sourceArmRotation}).
+CALIS is capable of deploying sources at various positions inside \lsv. Besides movement along Z up to maximum cable length, it is possible to articulate at an angle of $\theta$ between 0$^{\circ}$ and 90$^{\circ}$, where $\theta$ is the zenith-angle (Fig.~\ref{fig:coordinate_system}). Angles of more than 90$^{\circ}$ are excluded because articulation chain's end is reached at a 90$^{\circ}$ angle (see Fig.~\ref{fig:sourceArmRotation}).
 
 \begin{figure}[htbp]
  \centering
-  \includegraphics[width=0.4\textwidth]{Figures/coordinate_system}
-  \caption{Spherical coordinate system used for establishing rotation direction of CALIS and source arm articulation. $\theta$ is kept at 90$^{\circ}$ when arm is articulated, and at 180$^{\circ}$ when dearticulated. $x$-axis is direction toward detector center. }
+  \includegraphics[height=0.37\textheight]{Figures/DeploymentDevice_XY_view}
+  \includegraphics[height=0.37\textheight]{Figures/DeploymentDevice_articulation}
+  \caption{Two degrees of freedom in source deployment position after a certain source arm length has been chosen: \textit{left}: rotation in XY-plane, \textit{right:} articulation to an angle $\theta$ between 90$^{\circ}$ when arm is articulated, and at 0$^{\circ}$ when dearticulated. }
   \label{fig:coordinate_system}
 \end{figure} 
 
-\subsubsection{XY plane rotation}\label{sec:XYrotation}
-A sealed connection below view port has an o-ring seal and uses a ring clamp to compress seal. This clamp can be slightly loosened allowing upper assembly (above and including view port) to be rotated with respect to lower assembly and detector. Rotation in XY plane can even be performed while device is deployed next to cryostat, since seal is helium leak and light tight even when loosened.
+\subsubsection{XY-plane rotation}\label{sec:XYrotation}
+A sealed connection below view port has an o-ring seal and uses a ring clamp to compress seal. This clamp can be slightly loosened allowing upper assembly (above and including view port) to be rotated with respect to lower assembly and detector. Rotation in XY-plane can even be performed while device is deployed next to cryostat, since seal is helium leak and light tight even when loosened.
 
 In principle a rotation in 360$^\circ$ can be done, except when arm would interfere with cryostat. This has been used in one calibration campaign to deploy a neutron source directly next to the cryostat and rotated away by 90$^\circ$ to study optical shadowing effects from cryostat (Sec.~\ref{sec:CalibCampaigns}). 
 
@@ -39,7 +40,7 @@ A ``no fly'' zone is defined right above the cryostat where there are many TPC s
 %\end{figure} 
 
 \subsubsection{Default configuration}
-By default, deployment device has been deployed with its longest arm (62 cm), at center of TPC's active volume in vertical direction, with arm rotated in XY plane until contact is made with cryostat. 
+By default, deployment device has been deployed with its longest arm (62 cm), at center of TPC's active volume in vertical direction, with arm rotated in XY-plane until contact is made with cryostat. 
 
 Other degrees of freedom could involve shorter arm lengths, while longer arm lengths would require deployment device hardware modifications. Out of four organ pipes a second one is available for source calibration. (Two organ pipes are not available due to interference with existing infrastructure: the cryogenic tower and electronic rack.) Moving CALIS to a different organ pipe requires a more substantial effort involving a partial CALIS disassembly and reinstallation on other organ pipe's gate valve.
 
