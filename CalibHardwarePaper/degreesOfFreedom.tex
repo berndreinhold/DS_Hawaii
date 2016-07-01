@@ -1,20 +1,21 @@
-\subsection{System's degrees of freedom}
+\subsection{Degrees of freedom}
 
-CALIS is capable of deploying sources at various positions inside \lsv. Besides movement along Z up to maximum cable length, it is possible to articulate at an angle of $\theta$ between 0$^{\circ}$ and 90$^{\circ}$, where $\theta$ is the zenith-angle (Fig.~\ref{fig:coordinate_system}). Angles of more than 90$^{\circ}$ are excluded because articulation chain's end is reached at a 90$^{\circ}$ angle (see Fig.~\ref{fig:sourceArmRotation}).
+CALIS is capable of deploying sources at various positions inside the \lsv. Besides movement along Z up to its maximum cable length, it is possible to articulate at an angle of $\theta$ between 0$^{\circ}$ and 90$^{\circ}$, where $\theta$ is the zenith-angle (Fig.~\ref{fig:coordinate_system}). Angles of more than 90$^{\circ}$ are excluded because the articulation chain's end is reached at a 90$^{\circ}$ angle (see Fig.~\ref{fig:sourceArmRotation}).
 
 \begin{figure}[htbp]
  \centering
-  \includegraphics[height=0.37\textheight,clip=true]{Figures/DeploymentDevice_XY_view}
-  \includegraphics[height=0.37\textheight]{Figures/CALIS_sideview_Cary.jpg}
-  \caption{Two degrees of freedom in source deployment position after a certain source arm length has been chosen: \textit{left}: rotation in XY-plane, \textit{right:} articulation to an angle $\theta$ between 90$^{\circ}$ when arm is articulated, and at 0$^{\circ}$ when dearticulated. }
-  \label{fig:coordinate_system}
+  \includegraphics[height=0.35\textheight,clip=true]{Figures/DeploymentDevice_XY_view}
+  \includegraphics[height=0.35\textheight]{Figures/CALIS_sideview_Cary.jpg}
+  \caption{There are two degrees of freedom in the source deployment position after a certain source arm length has been chosen: \textit{Left}: The device can be rotated in the XY-plane by an angle $\phi$, except for the region excluded by the presence of the cryostat. In most cases the source has been in contact with the cryostat. 
+\textit{Right:} Articulation to an angle $\theta$ between 0$^{\circ}$, when it is dearticulated, and 90$^{\circ}$, when the arm is horizontally articulated. During calibration campaigns the source has been mostly horizontal.
+  \label{fig:coordinate_system}}
 \end{figure} 
 %https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics on clip=true removes white space around the picture - neat!
 
 \subsubsection{XY-plane rotation}\label{sec:XYrotation}
-A sealed connection below view port has an o-ring seal and uses a ring clamp to compress seal. This clamp can be slightly loosened allowing upper assembly (above and including view port) to be rotated with respect to lower assembly and detector. Rotation in XY-plane can even be performed while device is deployed next to cryostat, since seal is helium leak and light tight even when loosened.
+A sealed connection below the view port has an o-ring seal and uses a ring clamp to compress the seal. This clamp can be slightly loosened allowing the upper assembly (everything above and including the view port) to be rotated with respect to the lower assembly and the \tpc. Rotation in the XY-plane can even be performed while the device is deployed next to the cryostat, since the seal is helium leak and light tight even when loosened.
 
-In principle a rotation in 360$^\circ$ can be done, except when arm would interfere with cryostat. This has been used in one calibration campaign to deploy a neutron source directly next to the cryostat and rotated away by 90$^\circ$ to study optical shadowing effects from cryostat (Sec.~\ref{sec:CalibCampaigns}). 
+In principle a rotation in 360$^\circ$ can be done, except when the arm would interfere with the cryostat. This has been used in one calibration campaign to deploy a neutron source directly next to the cryostat and rotated away ($\phi\,=\,90^\circ$) to study optical shadowing effects from cryostat (Sec.~\ref{sec:CalibCampaigns}). 
 
 
 
@@ -26,7 +27,7 @@ In principle a rotation in 360$^\circ$ can be done, except when arm would interf
  \centering
   \includegraphics[width=0.7\textwidth]{Figures/RingClamp_WithPin_IMG_2669.JPG}
 %  \includegraphics[scale=0.5]{Figures/RingClamp.jpg}
-  \caption{Beneath view port is a ring clamp with angle measuring strip underneath. To perform azimuthal rotation, ring clamp is slightly loosened, and entire upper assembly is rotated with respect to lower assembly, along with deployment device. Rotation angle is read from strip going around the pipe. Strip is in mm, which has then been calibrated in degrees.}
+  \caption{Beneath the view port is a ring clamp with an angle measuring strip underneath. To perform azimuthal rotation, the ring clamp is slightly loosened, and the entire upper assembly is rotated with respect to the lower assembly, along with the deployment device. The rotation angle is read from a strip going around the pipe. The strip is in mm, which has then been calibrated in degrees.}
   \label{fig:ring_clamp}
 \end{figure} 
 
@@ -41,8 +42,8 @@ A ``no fly'' zone is defined right above the cryostat where there are many TPC s
 %\end{figure} 
 
 \subsubsection{Default configuration}
-By default, deployment device has been deployed with its longest arm (62 cm), at center of TPC's active volume in vertical direction, with arm rotated in XY-plane until contact is made with cryostat. 
+By default, the deployment device has been deployed with its longest arm (62 cm), in vertical direction at the center of the TPC's active volume, with the source arm rotated in the XY-plane until reliable contact is made with the cryostat. 
 
-Other degrees of freedom could involve shorter arm lengths, while longer arm lengths would require deployment device hardware modifications. Out of four organ pipes a second one is available for source calibration. (Two organ pipes are not available due to interference with existing infrastructure: the cryogenic tower and electronic rack.) Moving CALIS to a different organ pipe requires a more substantial effort involving a partial CALIS disassembly and reinstallation on other organ pipe's gate valve.
+Other degrees of freedom could involve shorter arm lengths, while longer arm lengths would require hardware modifications on the deployment device. Out of four organ pipes a second one is available for source calibration. (Two organ pipes are not available due to interference with existing infrastructure: the cryogenic tower and the electronic rack.) Moving CALIS to a different organ pipe requires a partial disassembly of CALIS and reinstallation on the other organ pipe's gate valve.
 
 %Finally CALIS is designed to house also a different deployment device, such as currently being planned for the neutron gun \cite{???}.
