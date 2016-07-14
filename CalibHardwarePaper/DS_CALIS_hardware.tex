@@ -24,7 +24,8 @@
 %% Use the option review to obtain double line spacing
 %% \documentclass[authoryear,preprint,review,12pt]{elsarticle}
 %\documentclass[preprint,review,12pt]{elsarticle}
-\documentclass[preprint,12pt]{elsarticle}
+\documentclass[preprint,10pt]{elsarticle}
+
 
 %% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
 %% for a journal layout:
@@ -63,13 +64,14 @@
 %---
 %\input uar-70d-frontpage.tex
 \input frontpage.tex
+%\input AU-50.tex
 
 %---
 %\date{\today}
 %---
 \begin{abstract}
 This report describes the design, fabrication, commissioning and use of  a CALibration source Insertion System (CALIS) in the \dsf\ direct dark matter search experiment. CALIS  deploys radioactive sources into the liquid scintillator veto to characterize the detector response and detection efficiency of the \dsf\ Liquid Argon Time Projection Chamber, and the surrounding \lsvscintillatormass\ organic liquid scintillator neutron veto.
-It was commissioned in September 2014 and has been used successfully in several gamma and neutron source campaigns since then. A description of the hardware and highlights from the calibration analysis results are given below.
+It was commissioned in September 2014 and has been used successfully in several gamma and neutron source campaigns since then. A description of the hardware and an excerpt of calibration analysis results are given below.
 
 %In order to calibrate the detector response and detection efficiency of the \dsf\ Liquid Argon Time Projection Chamber used for dark matter detection and the surrounding \lsvscintillatormass\ organic liquid scintillator neutron veto, we designed, built and implemented a calibration source insertion system (CALIS), which allows to deploy radioactive sources into the liquid scintillator veto. 
 
@@ -83,7 +85,7 @@ It was commissioned in September 2014 and has been used successfully in several 
 
 %% MSC codes here, in the form: \MSC code \sep code
 %% or \MSC[2008] code \sep code (2000 is the default)
-Dark matter\sep WIMP\sep Noble liquid detectors\sep Low-background detectors\sep Liquid scintillators\sep radioactive source calibration
+Dark matter\sep WIMP\sep Noble liquid detectors\sep Low-background detectors\sep Liquid scintillators\sep Radioactive source calibration
 
 \PACS 95.35.+d\sep 29.40.Mc\sep 29.40Gx
 
@@ -92,7 +94,7 @@ Dark matter\sep WIMP\sep Noble liquid detectors\sep Low-background detectors\sep
 \end{frontmatter}
 
 \linenumbers
-\setcounter{tocdepth}{2}
+\setcounter{tocdepth}{1}
 \tableofcontents
 
 %% main text
@@ -101,11 +103,7 @@ Dark matter\sep WIMP\sep Noble liquid detectors\sep Low-background detectors\sep
 \input{introduction.tex}
 \input{hardware_design.tex}
 \input{hardware_details.tex}
-\input{degreesOfFreedom.tex}
-\input{testing.tex}
-%\input{operational_procedure.tex} 
 \input{calibrationcampaign.tex}
-
 \input{conclusions.tex}
 
 %% The Appendices part is started with the command \appendix;
