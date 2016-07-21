@@ -24,32 +24,19 @@ It is possible to manually retract the deployment device back to its home positi
 A high limit switch is a hardware interlock that prevents the deployment device from hitting cable spools and gears, should it pass beyond the home position in the CALIS housing (Fig.~\ref{fig:CALISMechanism}). 
 \end{description}
 
-\textit{Thus far during calibration campaigns it has not been necessary to use the manual retraction system nor has the high limit switch been activated.}
-
+Thus far during calibration campaigns it has not been necessary to use the manual retraction system nor has the high limit switch been activated.
 	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Degrees of Freedom}
 
-CALIS is capable of deploying sources at various positions inside the \lsv. Besides movement along $z$ up to its maximum cable length, it is possible to articulate at an angle of $\theta$ between 0$^{\circ}$ and 90$^{\circ}$, where $\theta$ is the zenith-angle (Fig.~\ref{fig:coordinate_system}). Angles of more than 90$^{\circ}$ are excluded because the articulation chain's end is reached at a 90$^{\circ}$ angle (see Fig.~\ref{fig:sourceArmRotation}).
-
-\begin{figure}[htbp]
- \centering
-  \includegraphics[height=0.35\textheight,clip=true]{Figures/DeploymentDevice_XY_view}
-  \includegraphics[height=0.35\textheight]{Figures/CALIS_sideview_Cary.jpg}
-  \caption{There are two degrees of freedom in the source deployment position after a certain source arm length has been chosen: \textit{Left}: The device can be rotated in the $xy$-plane by an angle $\phi$, except for the region excluded by the presence of the cryostat. In most cases the source has been in contact with the cryostat. 
-\textit{Right:} Articulation to an angle $\theta$ between 0$^{\circ}$, when it is dearticulated, and 90$^{\circ}$, when the arm is horizontally articulated. During most calibration campaigns the source has been horizontal.
-  \label{fig:coordinate_system}}
-\end{figure} 
-%https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics on clip=true removes white space around the picture - neat!
+CALIS is capable of deploying sources at various positions inside the \lsv. Besides movement along $z$ down to its maximum cable length, it is possible to articulate at an angle of $\theta$ between 0$^{\circ}$ and 90$^{\circ}$, where $\theta$ is the zenith-angle (Fig.~\ref{fig:DeploymentDevice}). Angles of more than 90$^{\circ}$ are excluded because the articulation chain's end is reached at a 90$^{\circ}$ angle (see photo inset in Fig.~\ref{fig:DeploymentDevice}).
 
 \subsubsection*{$XY$-plane rotation}\label{sec:XYrotation}
-A sealed connection below the view port has an o-ring seal and uses a ring clamp to compress the seal. This clamp can be slightly loosened allowing the upper assembly (everything above and including the view port) to be rotated with respect to the lower assembly and the \tpc. Rotation in the $xy$-plane can even be performed while the device is deployed next to the cryostat, since the seal is helium leak and light tight even when loosened.
+The connection below the view port has an o-ring seal and uses a ring clamp to compress the seal. This clamp can be slightly loosened allowing the upper assembly (everything above and including the view port) to be rotated with respect to the lower assembly and the \tpc. Rotation in the $xy$-plane can even be performed while the device is deployed next to the cryostat, since the seal is helium leak and light tight even when loosened.
 
-In principle a rotation of 360$^\circ$ can be done, except when the arm would interfere with the cryostat. This has been used in one calibration campaign to deploy a neutron source directly next to the cryostat and rotated away ($\phi\,=\,90^\circ$) to study optical shadowing effects from the cryostat (Sec.~\ref{sec:CalibCampaigns}). 
-
-
+In principle a rotation by an arbitrary angle can be done, except when the arm would interfere with the cryostat. In one calibration campaign an \AmBe\ neutron source was deployed directly next to the cryostat and rotated away to an angle $\phi\,=\,90^\circ$.  A relative comparison between the two data sets as well as comparisons with Monte Carlo simulations gave insights on optical shadowing effects by the cryostat (Sec.~\ref{sec:CalibCampaigns}). 
 
 %For articulation, there is currently a choice of three arm lengths---40.3\,cm,  57.15\,cm and 62\,cm.  
 %Each of these lengths are measured from the center line of the organ pipe to the end of the source holder.  The arm lengths, 57.15\,cm and 62\,cm are intentionally made too long as they will be used to determine the exact location of the cryostat; some uncertainty in the cryostat's z and lateral position exist at the level of 3 - 4\,cm. The organ pipe we intend to use is 81\,cm distant from the cryostat center (and the geometric center of the LSV sphere) as measured from the center line of the organ pipe. The cryostat is 32\,cm in radius, which leaves a distance of $\sim$49\,cm to be reached  by the arm.
@@ -64,7 +51,7 @@ In principle a rotation of 360$^\circ$ can be done, except when the arm would in
 \end{figure} 
 
 \subsubsection*{``No fly'' zone}
-A ``no fly'' zone is defined directly above the cryostat where there are many TPC supply tubes. No deployment device part may enter in this region, particularly the source arm.
+A ``no fly'' zone is defined directly above the cryostat where there are many TPC supply tubes. No deployment device part may enter in this region, particularly the source arm. This zone is avoided by convention
 
 %\begin{figure}[htbp]
 % \centering
