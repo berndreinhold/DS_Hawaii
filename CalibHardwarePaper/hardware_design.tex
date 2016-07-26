@@ -19,7 +19,7 @@ In order to return the deployment device from the \lsv\ the sequence and every s
  \centering
 %\includegraphics[height=0.7\textheight,clip=true]{Figures/DeploymentDevice}
 %\includegraphics[height=0.4\textheight]{Figures/CALIS_sideview_Cary.jpg}
-\includegraphics[width=\textwidth]{Figures/DeploymentDevice_XY_view2}
+\includegraphics[width=\textwidth]{Figures/DeploymentDevice_XY_view2} %0.65\textwidth would work
   \caption{A side view \textit{(left)} and top view \textit{(right)} of the deployment device (1) next to the \tpc's cryostat (2) is shown. The deployment device features cones at the top and bottom (3a,b), weights (4), an articulation gear (5) and the source arm (6) with the source holder at its tip. A deployment into the \lsv\ involves three steps: \textit{A. lowering} the device into the \lsv\ with the source arm dearticulated, \textcolor{blue}{\textit{B. articulation} of the source arm to horizontal, while the arm is still rotated away in the $xy$-plane and} \textit{C. rotation} of the device to have the source in contact with the cryostat. (In order to distinguish the '\textcolor{blue}{articulation}' from the 'lowering', the former is highlighted in blue in the figure.) Articulation can be set to any angle $\theta$ between 0$^{\circ}$, when it is dearticulated, and 90$^{\circ}$, when the arm is horizontally articulated. During calibration campaigns by default the arm length was 62 cm and the source arm was articulated to horizontal. The cryostat's outer radius is 32 cm, the organ pipe is off from the TPC's vertical z-axis by 80 cm.\label{fig:DeploymentDevice}}
 \end{figure} 
 
@@ -27,6 +27,9 @@ In order to return the deployment device from the \lsv\ the sequence and every s
 \subsection{Deployment \& Articulation Mechanism}\label{sec:DeploymentArticulation}
 %This way the gap between the organ pipe and cryostat is bridged. The articulation mechanism requires two cables and  
 
+%The deployment and articulation modes are illustrated both in Figs.~\ref{fig:DeploymentDevice} and \ref{fig:CALISMechanism}. 
+As shown in Fig.~\ref{fig:CALISMechanism}, the stepper motor moves both cable spools concurrently and thereby sends the deployment device into the \lsv. An absolute encoder provides its current position, even in the absence of power. The stepper motor is controlled via a simple graphical LabVIEW interface, run on a dedicated laptop, in which the current $z$-position is shown and a target $z$-position can be provided by the operator. $Z$-positions are given in motor step counts, an arbitrary unit which has been calibrated outside CRH in meters (Fig.~\ref{fig:z_test}), as well as relative to the TPC using \tdrift\ distributions from calibration data (Sec.~\ref{sec:SourcePosition}). \label{sec:Nonlinearity:MotorStepCounts}
+The non-linearity between motor steps and cable length shown in Fig.~\ref{fig:z_test} arises as follows: As the cables wind around their spools, the winding radius changes, increasing as the deployment device is lifted and decreasing as it is lowered. A motor step count corresponds to a fixed angular distance \textit{d$\theta$}, yet the amount of cable deployed during this motor step is \textit{winding radius $\cdot$ d$\theta$}. As the winding radius changes as a function of $z$-position, the fraction of deployed cable per motor step count changes.
 
 \begin{figure}[htbp]
  \centering
@@ -37,10 +40,6 @@ In order to return the deployment device from the \lsv\ the sequence and every s
 In the photograph the vacuum pump (8) and tubing (9) are shown, which are part of the evacuation and purging system (Sec.~\ref{sec:EvacPurge}). \label{fig:CALISDimensions}\label{fig:CALISMechanism}\label{fig:gearDrawing}\label{fig:flushing_purging}
 }
 \end{figure}
-
-%The deployment and articulation modes are illustrated both in Figs.~\ref{fig:DeploymentDevice} and \ref{fig:CALISMechanism}. 
-As shown in Fig.~\ref{fig:CALISMechanism}, the stepper motor moves both cable spools concurrently and thereby sends the deployment device into the \lsv. An absolute encoder provides its current position, even in the absence of power. The stepper motor is controlled via a simple graphical LabVIEW interface, run on a dedicated laptop, in which the current $z$-position is shown and a target $z$-position can be provided by the operator. $Z$-positions are given in motor step counts, an arbitrary unit which has been calibrated outside CRH in meters (Fig.~\ref{fig:z_test}), as well as relative to the TPC using \tdrift\ distributions from calibration data (Sec.~\ref{sec:SourcePosition}). \label{sec:Nonlinearity:MotorStepCounts}
-The non-linearity between motor steps and cable length shown in Fig.~\ref{fig:z_test} arises as follows: As the cables wind around their spools, the winding radius changes, increasing as the deployment device is lifted and decreasing as it is lowered. A motor step count corresponds to a fixed angular distance \textit{d$\theta$}, yet the amount of cable deployed during this motor step is \textit{winding radius $\cdot$ d$\theta$}. As the winding radius changes as a function of $z$-position, the fraction of deployed cable per motor step count changes.
 
 \begin{figure}[htbp]
  \centering
