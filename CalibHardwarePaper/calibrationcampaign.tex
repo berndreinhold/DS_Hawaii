@@ -1,12 +1,12 @@
 \section{Testing, Cleaning and Commissioning} \label{sec:Testing}\label{sec:Commissioning}
 CALIS was assembled at FNAL from components produced at FNAL and at the University of Hawaii. After initial basic functionality tests at FNAL, CALIS was shipped pre-assembled to LNGS, where it underwent a comprehensive testing and calibration program. While still outside the clean room CRH, CALIS was installed on a high bay platform in the LNGS underground Hall C and tested to its full deployment length. Besides testing basic $z$-motion, articulation and $xy$-rotation, all details of CALIS operations were tested. These included the testing of the functionality of motor controls, the high limit and articulation switch. Validation was concluded with recovery scenarios after, e.g.,~power failures during deployment.
 
-An important aspect was $z$-position calibration of the source as a function of cable length before and after source arm articulation, which is a nonlinear function of motor step counts, as mentioned in Sec.~\ref{sec:Nonlinearity:MotorStepCounts}. Furthermore, the source's $xy$- and $z$-position accuracy and precision were estimated.
+An important aspect was the $z$-position calibration of the source as a function of cable length before and after source arm articulation, which is a nonlinear function of motor step counts, as mentioned in Sec.~\ref{sec:Nonlinearity:MotorStepCounts}. Furthermore, the source's $xy$- and $z$-position accuracy and precision were estimated.
 
-This testing campaign's results were reviewed by an internal review board and approval for installation of CALIS inside CRH was granted. CALIS was cleaned according to official cleaning procedures and installed on its gate valve in September 2014.
+This testing campaign's results were reviewed by an internal review board and approval for installation of CALIS inside CRH was granted subsequently. CALIS was cleaned according to official cleaning procedures and installed on its gate valve in September 2014.
 After installation on the gate valve a testing focus was the system's light and helium leak tightness, as well as validation of nitrogen and vacuum systems, as these could only be tested fully after installation. A more detailed description of tests performed at FNAL and LNGS can be found in \cite{thesis:Hackett, thesis:Edkins}.
 
-\subsection*{$xy$- and $z$-position}
+\subsection*{$XY$- and $Z$-position}
 Tests in air and in the LSV's scintillator revealed that the dominant source of uncertainty in the source position arises during articulation. Positioning in $z$ before articulation is highly accurate and precise: deployment speed is very low, barely visible to the naked eye (0.4 cm/s), which minimizes lateral motion and avoids contact with the housing or the organ pipe during deployment. Yet during articulation a swing of the source in $xy$ arises from tiny laterally imbalanced forces originating in the cable manipulated for articulation. 
 
 To ensure deployment precision, a procedure has been worked out to make reliably gentle contact with the cryostat, thereby eliminating precision uncertainty in $xy$: After positioning the deployment device in $z$, the source arm is articulated to horizontal while it is still pointing away from the cryostat. Only then is the source brought into contact with the cryostat through an $xy$-rotation of the upper assembly, while monitoring scaler rates in the TPC's photomultiplier tubes (PMT).  These increase while the source is approaching, yet plateau as soon as contact with the cryostat is made, even if $xy$-rotation continues. This procedure provides a reliable $xy$- and $z$-position for the calibration source and was used throughout all calibration campaigns.
@@ -74,7 +74,7 @@ The following calibration campaigns were performed between October 2014 and Apri
 \item The first extensive campaign involving all gamma sources and both a high and low activity \AmBe\ neutron source took place in October and November 2014 at LNGS. The \tpc\ was filled with AAr with an inherent trigger rate of approx. 50 Hz from $^{39}$Ar. The \lsv's liquid scintillator consisted of PC, with $<0.1 \%$ TMB and 1.4 g/l PPO as wavelength shifter \cite{Agnes:2015qyz}.
 %Fig.~\ref{???} shows the different configurations in which data has been taken as a function of source energy, source position and drift field.
 
-\item A second campaign focusing on \lsv\ calibration using the low activity \AmBe\ source was performed in January and February 2015. Before this campaign, the \lsv\ was reconstituted with 5\% TMB. Two deployments were performed at two different PPO concentrations (0.7 g/l and 1.4 g/l), allowing the study of the impact of the PPO concentration on alpha and gamma quenching. (1.4 g/l is our nominal PPO concentration, see also Fig.~\ref{fig:LSV:Calib}, right.)
+\item A second campaign focusing on \lsv\ calibration using the low activity \AmBe\ source was performed in January and February 2015. Before this campaign, the \lsv\ was reconstituted with 5\% TMB, our nominal concentration \cite{Agnes:2015qyz}. Two deployments were performed at two different PPO concentrations (0.7 g/l and 1.4 g/l), allowing the study of the impact of the PPO concentration on alpha and gamma quenching. (1.4 g/l is our nominal PPO concentration, see also Fig.~\ref{fig:LSV:Calib}, right.)
 \item A $^{22}$Na source was deployed next to the cryostat for TPC calibration in August 2015. This was the first gamma source calibration campaign after the deployment of UAr within \dsf.
 \item An \AmC\ neutron source was deployed in December 2015, allowing an in-depth study of the detection efficiency of the prompt neutron thermalization signal, which is obfuscated in a majority of \AmBe\ decays by its neutron-correlated high energy gamma.
 \end{itemize}
@@ -91,7 +91,7 @@ The following calibration campaigns were performed between October 2014 and Apri
 A few calibration results of the \tpc\ and \lsv\ are shown, illustrating the quality of acquired calibration data and the high level of agreement with their description in the G4DS MC package.
 
 \subsubsection{\tpc\ $^{57}$Co Scintillation Energy}
-Fig.~\ref{fig:CalibData:Co57} shows a data-MC comparison of the scintillation signal spectrum (S1) of a $^{57}$Co calibration source deployed next to the cryostat and close to the TPC active volume center in $z$. The S1 distribution is overlayed by an equivalent selection of G4DS MC simulation events.\mymarginpar{The plot is from Paolo's G4DS talk \@ DS2016, UCLA. Ideally one could get an official copy from the MC paper.}
+Fig.~\ref{fig:CalibData:Co57} shows a data-MC comparison of the scintillation signal spectrum (S1) of a $^{57}$Co calibration source deployed next to the cryostat and at our central $z$-position. The S1 distribution is overlayed by an equivalent selection of G4DS MC simulation events.\mymarginpar{The plot is from Paolo's G4DS talk \@ DS2016, UCLA. Ideally one could get an official copy from the MC paper.}
 
 \begin{figure}[htbp]
 \centering
@@ -129,9 +129,10 @@ For the $xy$-position of the calibration source, distributions of the azimuthal 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{\lsv\ Integrity}
+In dedicated analyses it has been shown that the calibration campaigns have not negatively affected the light yield so far or introduced additional radioactivity into the \lsv\ \cite{Agnes:2015qyz}.
 
 \subsubsection{Liquid Scintillator Veto}\label{sec:LSV:gammasources}
-
 In Fig.~\ref{fig:LSV:Calib} (left) a data-MC comparison of the LSV charge spectra from a $^{137}$Cs source deployed in the LSV next to the cryostat is shown \cite{DS50:G4DS:paper}.
 In January and February 2015, the LSV scintillator reconstitution to 95\% PC with 5 \% TMB was completed and a second LSV calibration using an \AmBe\ neutron source was undertaken to further study various LSV neutron detection channels. With a borated scintillator, a critical aspect of the neutron detection efficiency is the capability to observe the \brbortenground\ capture branch leading to a \enbortengroundalpha\ $\alpha$ + $^7$Li(g.s.) without the accompanying 478 keV $\gamma$-ray. As shown in Fig.~\ref{fig:LSV:Calib} (right), the de-excitation channel is clearly observed at around 30 PE.
 
@@ -140,9 +141,7 @@ In January and February 2015, the LSV scintillator reconstitution to 95\% PC wit
 \includegraphics[width=0.44\textwidth]{./Figures/137Cs_Veto_Paolo_G4DS_UCLA}
 \includegraphics[width=0.54\textwidth]{./Figures/AmBe_LSV_VetoPaper}
 \caption{\textit{Left:} A data-MC comparison of the $^{137}$Cs source LSV charge spectrum while the source was deployed next to the cryostat \cite{DS50:G4DS:paper}.
-\textit{Right:} A clear detection signal of the neutron capture on $^{10}$B in the LSV. The peak at $\approx$ 30 PE on the left (orange box) is due to a \enbortengroundalpha\ $\alpha$ + $^7$Li(g.s.). The peak on the right at $\approx$ 270 PE (green box) is from 93.6~\% of captures that lead to the $^7$Li excited state reaction, with the accompanying 478 keV $\gamma$-ray. The entries below 10 PE are due to PMT after-pulses. Data has been taken before and after varying the PPO wavelength shifter concentration in the scintillator with the \AmBe\ source rotated away by 90$^{\circ}$ from the cryostat. Though the additional PPO reduced the light yield a bit, it also reduced the quenching of the critical alpha, as expected. Thus at both PPO concentrations the de-excitation to ground state is clearly observed \cite{Agnes:2015qyz}.
+\textit{Right:} A clear detection signal of the neutron capture on $^{10}$B in the LSV is observed. The peak at $\approx$ 30 PE on the left (orange box) is due to a \enbortengroundalpha\ $\alpha$ + $^7$Li(g.s.). The peak on the right at $\approx$ 270 PE (green box) is from 93.6~\% of captures that lead to the $^7$Li excited state reaction, with the accompanying 478 keV $\gamma$-ray. The entries below 10 PE are due to PMT after-pulses. Data has been taken before and after varying the PPO wavelength shifter concentration in the scintillator with the \AmBe\ source rotated away from the cryostat to $\phi\,=\,90^{\circ}$. Though the additional PPO reduced the light yield a bit, it also reduced the quenching of the critical alpha, as expected. Thus at both PPO concentrations the de-excitation to ground state is clearly observed \cite{Agnes:2015qyz}.
 \label{fig:LSV:Calib}} 
 \end{figure}
 
-\subsubsection{\lsv\ Integrity}
-In dedicated analyses it has been shown that the calibration campaigns have not negatively affected the light yield so far or introduced additional radioactivity into the \lsv\ \cite{Agnes:2015qyz}.
