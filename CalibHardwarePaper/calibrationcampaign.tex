@@ -91,11 +91,12 @@ The following calibration campaigns were performed between October 2014 and Apri
 A few calibration results of the \tpc\ and \lsv\ are shown, illustrating the quality of acquired calibration data and the high level of agreement with their description in the G4DS MC package.
 
 \subsubsection{\tpc\ $^{57}$Co Scintillation Energy}
-Fig.~\ref{fig:CalibData:Co57} shows a data-MC comparison of the scintillation signal spectrum (S1) of a $^{57}$Co calibration source deployed next to the cryostat and at our central $z$-position. The S1 distribution is overlayed by an equivalent selection of G4DS MC simulation events.\mymarginpar{The plot is from Paolo's G4DS talk \@ DS2016, UCLA. Ideally one could get an official copy from the MC paper.}
+Fig.~\ref{fig:CalibData:Co57} shows a data-MC comparison of the scintillation signal spectrum (S1) of a $^{57}$Co calibration source deployed next to the cryostat and at our central $z$-position. The S1 distribution is overlayed by an equivalent selection of G4DS MC simulation events.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.7\textwidth]{./Figures/57Co_Paolo_G4DS_UCLA.png}
+%\includegraphics[width=0.7\textwidth]{./Figures/57Co_Paolo_G4DS_UCLA.png}
+\includegraphics[width=0.7\textwidth]{./Figures/Co57_TPC.png}
 \caption{Data-MC comparison for a $^{57}$Co source deployed next to the cryostat. In the magenta distribution a single-site interaction requirement is imposed as for dark matter events and for the blue distribution this constraint is removed \cite{DS50:G4DS:paper}.
 \label{fig:CalibData:Co57}}
  \end{figure}
@@ -125,8 +126,6 @@ Fitting the \tdrift\ distribution at that position for a sequence of runs, a sys
 \end{figure}
 
 For the $xy$-position of the calibration source, distributions of the azimuthal angle in the $xy$-plane have been studied and a 139 degree mean was observed with a 1.2 deg RMS. (One degree corresponds to 6 mm at the outer cryostat, where the source is positioned.) However, an independent $xy$ reconstruction algorithm gave 142.5 degrees with an RMS of 0.8 deg, so that systematic uncertainties from the reconstruction algorithm dominate over the $xy$ positioning precision. %\cite{DS:XY:paper}.
-\mymarginpar{This is from DocDB 1288. Ideally one could cite a $xy$ paper here, which is not published yet.}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{\lsv\ Integrity}
@@ -138,8 +137,9 @@ In January and February 2015, the LSV scintillator reconstitution to 95\% PC wit
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.44\textwidth]{./Figures/137Cs_Veto_Paolo_G4DS_UCLA}
-\includegraphics[width=0.54\textwidth]{./Figures/AmBe_LSV_VetoPaper}
+%\includegraphics[width=0.44\textwidth]{./Figures/137Cs_Veto_Paolo_G4DS_UCLA}
+\includegraphics[width=0.44\textwidth]{./Figures/Cs137_LSV}
+\includegraphics[width=0.515\textwidth]{./Figures/AmBe_LSV_VetoPaper}
 \caption{\textit{Left:} A data-MC comparison of the $^{137}$Cs source LSV charge spectrum while the source was deployed next to the cryostat \cite{DS50:G4DS:paper}.
 \textit{Right:} A clear detection signal of the neutron capture on $^{10}$B in the LSV is observed. The peak at $\approx$ 30 PE on the left (orange box) is due to a \enbortengroundalpha\ $\alpha$ + $^7$Li(g.s.). The peak on the right at $\approx$ 270 PE (green box) is from 93.6~\% of captures that lead to the $^7$Li excited state reaction, with the accompanying 478 keV $\gamma$-ray. The entries below 10 PE are due to PMT after-pulses. Data has been taken before and after varying the PPO wavelength shifter concentration in the scintillator with the \AmBe\ source rotated away from the cryostat to $\phi\,=\,90^{\circ}$. Though the additional PPO reduced the light yield a bit, it also reduced the quenching of the critical alpha, as expected. Thus at both PPO concentrations the de-excitation to ground state is clearly observed \cite{Agnes:2015qyz}.
 \label{fig:LSV:Calib}} 
