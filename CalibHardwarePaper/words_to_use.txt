@@ -1,4 +1,0 @@
-pig -> deployment device
-clean room -> radon-free clean room CRH (as used in the veto paper)
-radon-suppressed -> radon-free (as used in the veto paper)
-use upper assembly at all? Is it above the view port or above the ring clamp?
