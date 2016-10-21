@@ -3,13 +3,13 @@
 \subsection{Purpose \& Deployment Procedure}
 %The goal with the CALibration source Insertion System (CALIS) is to study and calibrate the detector response of the \tpc\ and the \lsv\ as well as the detection efficiency of internal neutrons interacting in the \tpc\ and \lsv\ using radioactive gamma and neutron sources. 
 
-The CALibration Insertion System (CALIS) deploys radioactive gamma and neutron sources inside the LSV to study and calibrate the \tpc\ and the \lsv\ detector response and neutron detection efficiency. For \tpc\ calibration the radioactive source has to be positioned in immediate contact with the cryostat, in order to minimize rate losses through absorption. This is especially important for low energy sources such as $^{57}$Co (122 keV). 
+Via CALIS radioactive gamma and neutron sources can be deployed inside the LSV to study and calibrate the \tpc\ and the \lsv\ detector response and neutron detection efficiency. For \tpc\ calibration the radioactive source has to be positioned in immediate contact with the cryostat, in order to minimize rate losses through absorption. This is especially important for low energy sources such as $^{57}$Co (122 keV). 
 
 As shown in Fig.~\ref{fig:DeploymentDevice}, right, there is a gap between the 32 cm wide cryostat and the organ pipe, whose central axis is 80 cm away from the TPC's vertical z-axis. This gap precludes a single cable solution deployed from within a glove box as used in several other scintillator experiments \cite{Banks:2014hra, Huang:2013uxa}. %\cite{KamLAND-MiniCal, DayaBay_zaxis}.
 Instead our apparatus consists of an enclosure which has been installed in CRH and the deployment device featuring an articulation mechanism. Inside the enclosure the deployment device is mounted through two stainless steel cables wound around cable spools. The deployment device contains the mechanical support structure for the source arm, which holds the calibration source at its tip and the gear to articulate it. Focusing just on the mechanics, i.e.~after successful source insertion, a deployment consists of three steps as illustrated in Fig.~\ref{fig:DeploymentDevice}:
 \begin{enumerate}
 \renewcommand{\theenumi}{\Alph{enumi}} %http://tex.stackexchange.com/questions/2291/how-do-i-change-the-enumerate-list-format-to-use-letters-instead-of-the-defaul
-\item Lowering the deployment device into the \lsv with the source arm dearticulated,
+\item Lowering the deployment device into the \lsv\ with the source arm dearticulated,
 \item articulation of the source arm to horizontal, while the arm is still rotated away from the cryostat in the $xy$-plane and
 \item the rotation of the device in the $xy$-plane to bring the calibation source into contact with the cryostat.
 \end{enumerate}
@@ -29,7 +29,7 @@ In order to return the deployment device from the \lsv\ the sequence and every s
 
 %The deployment and articulation modes are illustrated both in Figs.~\ref{fig:DeploymentDevice} and \ref{fig:CALISMechanism}. 
 As shown in Fig.~\ref{fig:CALISMechanism}, the stepper motor moves both cable spools concurrently and thereby sends the deployment device into the \lsv. An absolute encoder provides its current position, even in the absence of power. The stepper motor is controlled via a simple graphical LabVIEW interface, run on a dedicated laptop, in which the current $z$-position is shown and a target $z$-position can be provided by the operator. $Z$-positions are given in motor step counts, an arbitrary unit which has been calibrated outside CRH in meters (Fig.~\ref{fig:z_test}), as well as relative to the TPC using \tdrift\ distributions from calibration data (Sec.~\ref{sec:SourcePosition}). \label{sec:Nonlinearity:MotorStepCounts}
-The non-linearity between motor steps and cable length shown in Fig.~\ref{fig:z_test} arises as follows: As the cables wind around their spools, the winding radius changes, increasing as the deployment device is lifted and decreasing as it is lowered. A motor step count corresponds to a fixed angular distance \textit{d$\theta$}, yet the amount of cable deployed during this motor step is \textit{winding radius $\cdot$ d$\theta$}. As the winding radius changes as a function of $z$-position, the fraction of deployed cable per motor step count changes.
+The non-linearity between motor steps and cable length shown in Fig.~\ref{fig:z_test} arises as follows: As the cables wind around their spools, the winding radius \textit{r$_w$} changes, increasing as the deployment device is lifted and decreasing as it is lowered. A motor step count corresponds to a fixed angular distance \textit{d$\theta$}, yet the amount of cable deployed during this motor step is \textit{$r_w\,\cdot\,d\theta$}. As the winding radius changes as a function of $z$-position, the fraction of deployed cable per motor step count changes.
 
 \begin{figure}[htbp]
  \centering
