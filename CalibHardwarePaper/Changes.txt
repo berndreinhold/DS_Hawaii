@@ -1,0 +1,65 @@
+Oct. 3:
+updated authorlist by hand after comparison - not sure about Arisaka,
+Xiao
+send email to Roberto Peruzza 
+Davide's, Hanguo's email
+
+Luca:
+-----
+took from you: 
+- Cherenkov
+- winding radius
+- LSVwith -> LSV with
+- reversed order for 83mKr and 39Ar
+
+question:
+- full stop or colon, ":"? Does one continue with a big letter after ":"?
+- o-ring or O-ring
+
+
+kept it: 
+- the gap-sentence
+- Fig. - kept it
+- in-situ 
+- weakly interacting ...
+- 1.4 g/l PPO is our nominal
+
+-----------
+reply to Marco: all in there
+reply to Cristian, Roberto - Xiao
+
+Grzegorz:
+---------
+following your suggestion:
+- split the sentence
+- CRH for Clean Room Hanoi
+- removed second definition on L.34
+- L.133-L.154: we used the same high purity nitrogen, that is also used as blanket for the liquid scintillator veto - its the same supply line.
+- acknowledgement: changed grant
+- FNAL --- fixed
+
+
+todo:
+- DS20k reference
+
+keep:
+- abstract in definition - give the definition for when it is used the first time
+- L.42: from within? --- confirmed with native speaker
+- the two unit systems reflect our American/European experiment. CALIS was designed and contructed in the US (using mostly imperial and some metric) and then built into the experiment, which is mostly using metric units. 
+
+Stefano:
+--------
+> 1- Somewhere between lines 23-25 can be a good place to first cite the
+> veto paper (which is first cited only at page 16) --- agreed and introduced after "... suppress radiogenic and cosmogenic backgrounds"
+> 2- Line 81, no space between "LSW with"  --- fixed, thanks
+> 3- L330, maybe use an expression like "to the measurements taken in the
+> SCENE experiment", so every reader can quickly get what SCENE is. --- sounds good, implemented
+> 4- Caption of table 1, "83Rb which have a" -> maybe "which has" (it
+> refers to 83Rb right?) --- implemented
+> 5- Caption of table 1, maybe 83mKr "nuclei" instead of "atoms" ? --- implemented
+> 6- Title of 4.4.1, maybe "TPC scintillation yield from 57Co" sounds better --- done
+> 7- Maybe a sentence about possible scalability of CALIS concept to
+> DS-20k (if possible) ?
+> 8- There is alternation of words "gamma" and "$\gamma$-ray", maybe you
+> can consider uniform the convention --- a colleague of ours was in favor of not using the same word, but try alternations which would results in a more interesting read because of less repetitions - this seems to be a minor question of taste, so I keep this.
+> 9-Can you please add a "m" (INFN Genova) to my affiliations? --- done

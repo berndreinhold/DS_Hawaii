@@ -1,0 +1,1062 @@
+%--- Text and References
+\newcommand{\mymarginpar}[1]{\marginpar{\scriptsize{\textit{#1}}}} 
+%http://tex.stackexchange.com/questions/48571/redefine-marginpar-with-renewcommand -> could not use \marginpar itself
+\newcommand{\myrefs}[2]{\href{http://dx.doi.org/#2}{#1}}
+\newcommand{\mref}[1]{\href{http://#1}{#1}}
+\newcommand{\elog}[1]{\href{https://blackhole.lngs.infn.it/DS-50kg/#1}{#1}}
+\newcommand{\mrefsec}[1]{\href{https://#1}{#1}}
+\newcommand{\mrefs}[2]{\href{http://#2}{#1}}
+\newcommand{\arxiv}[1]{\href{http://arxiv.org/abs/#1}{arxiv:#1}}
+\newcommand{\grant}[2]{#1-#2}
+\newcommand{\docdb}[1]{\href{http://darkside-docdb.fnal.gov:8080/cgi-bin/ShowDocument?docid=#1}{DarkSide DocDB \##1}}
+\newcommand{\cmt}[2]{\indent{\tt \color{red}#1: #2}\\}
+\newcommand{\chk}[1]{{\tt \color{red}CHECK~#1}}
+\newcommand{\event}[2]{{\tt Event\# #1, Run\# #2}}
+\newcommand{\minitab}[3]{\begin{tabular}{@{}#1@{}}{#2}\\{#3}\end{tabular}}
+%--- Internal Reports
+\newcommand{\scx}{``Standard Cuts''}
+\newcommand{\qcx}{``Quality Cuts''}
+\newcommand{\pcx}{``Physics Cuts''}
+\newcommand{\zcx}{``Zero Time Gap Cut''}
+\newcommand{\dma}{\mbox{\tt dma}}
+\newcommand{\dmb}{\mbox{\tt dmb}}
+\newcommand{\dwa}{\mbox{\tt dwa}}
+\newcommand{\dwb}{\mbox{\tt dwb}}
+\newcommand{\etal}{et al.}
+\newcommand{\aq}[1]{Answer to Question~\ref{#1}}
+\newcommand{\purposecri}[1]{\noindent{\bf Purpose of Criterion:} #1\\}
+\newcommand{\purposecut}[1]{\noindent{\bf Purpose of Cut:} #1\\}
+\newcommand{\definitioncri}[1]{\noindent{\bf Definition of Criterion:} #1\\}
+\newcommand{\definitioncut}[1]{\noindent{\bf Definition of Cut:} #1\\}
+\newcommand{\impactcut}[1]{\noindent{\bf Impact of Cut:} #1\\}
+\newcommand{\discussioncut}[1]{\noindent{\bf Discussion of Cut:} #1\\}
+\newcommand{\precut}[1]{\noindent{\bf Pre-Cuts in Use for Determination of Acceptance of Cut:} #1\\}
+\newcommand{\determinationliv}[1]{\noindent{\bf Determination of Residual Livetime after Cut:} #1\\}
+\newcommand{\determinationacc}[1]{\noindent{\bf Determination of Acceptance of Cut:} #1\\}
+\newcommand{\determinationfid}[1]{\noindent{\bf Determination of Fiducial Mass Set by Cut:} #1\\}
+\newcommand{\determinerrliv}[1]{\noindent{\bf Determination of Error on Residual Livetime after Cut:} #1\\}
+\newcommand{\determinerracc}[1]{\noindent{\bf Determination of Error on Acceptance of Cut:} #1\\}
+\newcommand{\determinerrfid}[1]{\noindent{\bf Determination of Error on Fiducial Mass Set by Cut:} #1\\}
+\newcommand{\fiducialcut}[1]{\noindent{\bf Fiducial Mass Set by Cut:} #1\\}
+\newcommand{\acceptancecut}[1]{\noindent{\bf Acceptance of Cut:} #1\\}
+\newcommand{\livetimecut}[1]{\noindent{\bf Residual Livetime after Cut:} #1\\}
+%--- Software Packages
+\newcommand{\FLUKA}{FLUKA}
+\newcommand{\Geant}{GEANT4}
+\newcommand{\GFDS}{G4DS}
+\newcommand{\SOURCES}{SOURCES4A}
+\newcommand{\TALYS}{TALYS}
+\newcommand{\LabVIEW}{NI LabVIEW}
+\newcommand{\CERNRoot}{Root}
+%--- Functions
+\newcommand{\logten}{\ensuremath{\log_{10}}}
+%--- Units
+\DeclareSIUnit\c{\mbox{$c$}}
+\DeclareSIUnit\week{w}
+\DeclareSIUnit\year{yr}
+\DeclareSIUnit\yr{yr}
+\DeclareSIUnit\yr{yr}
+\DeclareSIUnit\standard{std}
+\DeclareSIUnit\str{sr}
+\DeclareSIUnit\ppm{ppm}
+\DeclareSIUnit\ppb{ppb}
+\DeclareSIUnit\ppt{ppt}
+\DeclareSIUnit\pe{PE}
+\DeclareSIUnit\spe{SPE}
+\DeclareSIUnit\ev{events}
+\DeclareSIUnit\hit{hit}
+\DeclareSIUnit\hits{hits}
+\DeclareSIUnit\bin{(\mbox{5-PE}~bin)}
+\DeclareSIUnit\sgm{\mbox{$\sigma$}}
+\DeclareSIUnit\rms{RMS}
+\DeclareSIUnit\keVr{\mbox{keV$_{\rm nr}$}}
+\DeclareSIUnit\keVee{\mbox{keV$_{e{\rm e}}$}}
+\DeclareSIUnit\ph{photons}
+\DeclareSIUnit\pm{PMT}
+\DeclareSIUnit\inch{''}
+\DeclareSIUnit\bit{bit}
+\DeclareSIUnit\sample{samples}
+\DeclareSIUnit\barn{b}
+\DeclareSIUnit\bara{bar}
+\DeclareSIUnit\Curie{Ci}
+\DeclareSIUnit\psi{psi}
+\DeclareSIUnit\mK{\milli\kelvin}
+\DeclareSIUnit\liveday{\mbox{live-days}}
+\DeclareSIUnit\days{\mbox{days}}
+%--- Energies, Branching Ratios, and Abundances
+\newcommand{\BR}{\mbox{BR}}
+\newcommand{\EC}{\mbox{EC}}
+\newcommand{\HOneNeutronCaptureGammaEnergy}{\SI{2.2}{\MeV}}
+\newcommand{\BTenNaturalAbundance}{\SI{20}{\percent}}
+\newcommand{\BTenNeutronCaptureCrossSection}{\SI{3840}{\barn}}
+\newcommand{\BTenNeutronCaptureGroundDecayBR}{\SI{6.4}{\percent}}
+\newcommand{\BTenNeutronCaptureGroundDecayAlphaEnergy}{\SI{1775}{\keV}}
+\newcommand{\BTenNeutronCaptureExcitedDecayBR}{\SI{93.6}{\percent}}
+\newcommand{\BTenNeutronCaptureExcitedDecayGammaEnergy}{\SI{478}{\keV}}
+\newcommand{\BTenNeutronCaptureExcitedDecayAlphaEnergy}{\SI{1471}{\keV}}
+\newcommand{\BTenNeutronCaptureExcitedDecayAlphaQuenchedEnergy}{\SIrange[range-units=single]{30}{35}{\keVee}}
+\newcommand{\BTenNeutronCaptureExcitedDecayAlphaPE}{\SIrange[range-units=single]{25}{35}{\pe}}
+\newcommand{\COneFourQValue}{\SI{156}{\keV}}
+\newcommand{\ArThreeSevenDecay}{\EC}
+\newcommand{\ArThreeSevenBR}{\SI{100}{\percent}}
+\newcommand{\ArThreeSevenQValue}{\SI{2.7}{\keV}}
+\newcommand{\ArThreeSevenMeanLife}{\SI{50.51(3)}{\day}}
+\newcommand{\ArThreeSevenKOneBR}{\SI{81.5}{\percent}}
+\newcommand{\ArThreeSevenKTwoToFourBR}{\SI{8.7}{\percent}}
+\newcommand{\ArThreeSevenKCaptureXRaysEnergy}{\SI{2.82}{\keV}}
+\newcommand{\ArThreeNineQValue}{\SI{565}{\keV}}
+\newcommand{\ArThreeNineMeanLife}{\SI{388}{\year}}
+\newcommand{\RbEightThreeMeanLife}{\SI{124.4}{\day}}
+\newcommand{\KrEightThreeQValue}{\mbox{41.5\,keV}}
+\newcommand{\KrEightThreeMOneMeanLife}{\SI{2.64}{\hour}}
+\newcommand{\KrEightThreeMOneECEnergy}{\mbox{32.1\,keV}}
+\newcommand{\KrEightThreeMTwoMeanLife}{\SI{222}{\ns}}
+\newcommand{\KrEightThreeMTwoECEnergy}{\mbox{9.4\,keV}}
+\newcommand{\KrEightFiveGroundDecayQValue}{\SI{687}{\keV}}
+\newcommand{\KrEightFiveExcitedDecayBR}{\SI{0.43}{\percent}}
+\newcommand{\KrEightFiveExcitedDecayQValue}{\SI{173}{\keV}}
+\newcommand{\RbEightFiveMGammaEnergy}{\SI{514}{\keV}}
+\newcommand{\RbEightFiveMMeanLife}{\SI{1.464}{\micro\s}}
+\newcommand{\PbTwoOneZeroMeanLife}{\SI{32.0}{\yr}}
+\newcommand{\AmTwoFourGammaOneEnergy}{\SI{59.5}{\keV}}
+\newcommand{\AmTwoFourOneGammaTwoBR}{\SI{56}{\percent}}
+\newcommand{\AmBegrenergy}{\SI{4.4}{\MeV}}
+%\newcommand{\AmBe}{\ce{AmBe}}
+%\newcommand{\AmC}{\ce{^241Am^13C}}
+\newcommand{\AmBe}{\ensuremath{^{241}}Am\ensuremath{^9}Be}
+\newcommand{\AmC}{\ensuremath{^{241}}Am\ensuremath{^{13}}C}
+\newcommand{\DOneDOne}{\ce{^2D}-\ce{^2D}}
+\newcommand{\AArArThreeNineOverArFourZeroRatio}{\num{8E-16}}
+\newcommand{\AArArThreeNineActivity}{\SI{1}{\becquerel\per\kg}}
+%--- Solar Neutrinos
+\newcommand{\PP}{\mbox{$pp$}}
+\newcommand{\PEP}{\mbox{$pep$}}
+\newcommand{\CNO}{\mbox{CNO}}
+%--- Names (DS 1st paper)
+\newcommand{\ds}{\mbox{DarkSide}}
+\newcommand{\dst}{\mbox{DarkSide-10}}
+\newcommand{\dstexp}{502 days}								% DocDb 562
+\newcommand{\dsf}{\mbox{DarkSide-50}}
+\newcommand{\dsg}{\mbox{DarkSide-G2}}
+\newcommand{\bx}{\mbox{Borexino}}
+\newcommand{\scene}{\mbox{SCENE}}
+\newcommand{\scenenullfieldlyjun}{\SI{6.3(3)}{\pe\per\keV}}
+\newcommand{\scenenullfieldlyoct}{\SI{4.8(2)}{\pe\per\keV}}
+\newcommand{\ctf}{\mbox{CTF}}
+\newcommand{\lsv}{\mbox{LSV}}
+%\newcommand{\wcd}{\mbox{WCD}}
+\newcommand{\wcv}{\mbox{WCV}} %Water Cerenkov Veto, veto paper
+\newcommand{\wt}{\mbox{WT}}
+\newcommand{\tpc}{\mbox{TPC}}
+\newcommand{\pmt}{\mbox{PMT}}
+\newcommand{\artdaq}{\mbox{artdaq}}
+\newcommand{\tmb}{\mbox{TMB}}
+\newcommand{\pc}{\mbox{PC}}
+\newcommand{\pctmb}{\mbox{\pc-\tmb}}
+\newcommand{\ppo}{\mbox{PPO}}
+\newcommand{\popop}{\mbox{POPOP}}
+\newcommand{\ito}{\mbox{ITO}}
+\newcommand{\ptfe}{\mbox{PTFE}}
+\newcommand{\tpb}{\mbox{TPB}}
+\newcommand{\og}{\mbox{Operations Group}}
+\newcommand{\aar}{\mbox{AAr}}
+\newcommand{\lar}{\mbox{LAr}}
+\newcommand{\gar}{\mbox{GAr}}
+\newcommand{\uar}{\mbox{UAr}}
+\newcommand{\hpge}{\mbox{HP-Ge}}
+\newcommand{\hvft}{\mbox{HVFT}}
+%--- Names (2nd Paper, ds.def)
+\newcommand{\DS}{\mbox{DarkSide}}
+\newcommand{\DSt}{\mbox{DarkSide-10}}
+\newcommand{\DSf}{\mbox{DarkSide-50}}
+\newcommand{\DSk}{\mbox{DarkSide-20k}}
+\newcommand{\Argo}{\mbox{Argo}}
+\newcommand{\ThreeDPi}{\mbox{3D$\pi$}}
+\newcommand{\BX}{\mbox{Borexino}}
+\newcommand{\SCENE}{\mbox{SCENE}}
+\newcommand{\ReD}{\mbox{ReD}}
+\newcommand{\Urania}{\mbox{Urania}}
+\newcommand{\Aria}{\mbox{Aria}}
+\newcommand{\SeruciOne}{\mbox{Seruci-I}}
+\newcommand{\SeruciTwo}{\mbox{Seruci-II}}
+\newcommand{\CNAF}{\mbox{CNAF}}
+\newcommand{\RAS}{\mbox{RAS}}
+\newcommand{\CTF}{\mbox{CTF}}
+\newcommand{\CROne}{\mbox{CR1}}
+\newcommand{\CRH}{\mbox{CRH}}
+\newcommand{\LSV}{\mbox{LSV}}
+%\newcommand{\WCD}{\mbox{WCD}}
+\newcommand{\WCV}{\mbox{WCV}}
+%\newcommand{\wt}{\mbox{WT}}
+\newcommand{\TPC}{\mbox{TPC}}
+\newcommand{\LArTPC}{\mbox{LAr~TPC}}
+\newcommand{\LArTPCs}{\mbox{LAr~TPCs}}
+\newcommand{\calis}{\mbox{CALIS}}
+\newcommand{\PMT}{\mbox{PMT}}
+\newcommand{\PMTs}{\mbox{PMTs}}
+\newcommand{\SiPM}{\mbox{SiPM}}
+\newcommand{\SiPMs}{\mbox{SiPMs}}
+\newcommand{\RGB}{\mbox{RGB}}
+\newcommand{\RGBHD}{\mbox{RGB-HD}}
+\newcommand{\UV}{\mbox{UV}}
+\newcommand{\NUV}{\mbox{NUV}}
+\newcommand{\NUVHD}{\mbox{NUV-HD}}
+\newcommand{\NUVHDLF}{\mbox{NUV-HD-LF}}
+\newcommand{\HD}{\mbox{HD}}
+\newcommand{\PCBs}{\mbox{PCBs}}
+\newcommand{\tile}{\mbox{tile}}
+\newcommand{\tiles}{\mbox{tiles}}
+\newcommand{\SPAD}{\mbox{SPAD}}
+\newcommand{\SPADs}{\mbox{SPADs}}
+\newcommand{\QE}{\mbox{QE}}
+\newcommand{\PDE}{\mbox{PDE}}
+\newcommand{\DCR}{\mbox{DCR}}
+\newcommand{\TCNR}{\mbox{TCNR}}
+\newcommand{\TCNP}{\mbox{TCNP}}
+\newcommand{\CMOS}{\mbox{CMOS}}
+\newcommand{\SQB}{\mbox{SQB}}
+\newcommand{\SQBs}{\mbox{SQBs}}
+\newcommand{\TRB}{\mbox{TRB}}
+\newcommand{\TRBs}{\mbox{TRBs}}
+\newcommand{\WIMP}{\mbox{WIMP}}
+\newcommand{\WIMPs}{\mbox{WIMPs}}
+\newcommand{\MC}{\mbox{MC}}
+\newcommand{\DAQ}{\mbox{DAQ}}
+\newcommand{\ADC}{\mbox{ADC}}
+\newcommand{\ADCs}{\mbox{ADCs}}
+\newcommand{\TDC}{\mbox{TDC}}
+\newcommand{\TDCs}{\mbox{TDCs}}
+%\newcommand{\artdaq}{\mbox{artdaq}}
+\newcommand{\TMB}{\mbox{TMB}}
+\newcommand{\PC}{\mbox{PC}}
+\newcommand{\PCTMB}{\mbox{\PC-\TMB}}
+\newcommand{\PPO}{\mbox{PPO}}
+\newcommand{\POPOP}{\mbox{POPOP}}
+\newcommand{\ITO}{\mbox{ITO}}
+\newcommand{\PTFE}{\mbox{PTFE}}
+\newcommand{\TPB}{\mbox{TPB}}
+%\newcommand{\og}{\mbox{Operations Group}}
+\newcommand{\LAr}{\ce{LAr}}
+\newcommand{\GAr}{\ce{GAr}}
+\newcommand{\AAr}{\ce{AAr}}
+\newcommand{\UAr}{\ce{UAr}}
+\newcommand{\DAr}{\ce{DAr}}
+\newcommand{\HPGe}{\mbox{HPGe}}
+\newcommand{\HVFT}{\mbox{HVFT}}
+\newcommand{\UHMWPE}{\mbox{UHMWPE}}
+\newcommand{\PET}{\mbox{PET}}
+\newcommand{\TOFPET}{\mbox{TOF-PET}}
+\newcommand{\CPU}{\mbox{CPU}}
+\newcommand{\CT}{\mbox{CT}}
+\newcommand{\CPUs}{\mbox{CPUs}}
+\newcommand{\STEM}{\mbox{STEM}}
+\newcommand{\ROI}{\mbox{ROI}}
+\newcommand{\SNR}{\mbox{SNR}}
+\newcommand{\LNGS}{\mbox{LNGS}}
+\newcommand{\INFN}{\mbox{INFN}}
+\newcommand{\MIUR}{\mbox{MIUR}}
+\newcommand{\DUNE}{\mbox{DUNE}}
+\newcommand{\PoliMi}{\mbox{PoliMi}}
+\newcommand{\FBKTIFPA}{\mbox{FBK/TIFPA}}
+\newcommand{\MPD}{\mbox{MPD}}
+\newcommand{\LFoundry}{\mbox{LFoundry}}
+\newcommand{\LSO}{\mbox{LSO}}
+\newcommand{\LYSO}{\mbox{LYSO}}
+\newcommand{\PSA}{\mbox{PSA}}
+%--- Global Symbols
+\newcommand{\OmegaNonBaryonicFraction}{\num{0.85}}
+\newcommand{\OmegaNonBaryonicPercent}{\SI{85}{\percent}}
+\newcommand{\RhoDMSymbol}{\mbox{$\rho_{\rm dm}$}}
+\newcommand{\RhoDMValue}{\SI{0.3}{\GeV\per\square\c\per\cubic\cm}}
+\newcommand{\VelocityNaughtSymbol}{\mbox{$v_0$}}
+\newcommand{\VelocityNaughtValue}{\SI{220}{\km\per\s}}
+\newcommand{\VelocityEarthSymbol}{\mbox{$v_{\rm Earth}$}}
+\newcommand{\VelocityEarthValue}{\SI{232}{\km\per\s}}
+\newcommand{\VelocityEscapeSymbol}{\mbox{$v_{\rm escape}$}}
+\newcommand{\VelocityEscapeValue}{\SI{544}{\km\per\s}}
+\newcommand{\WIMPMassSymbol}{\mbox{m_\chi}}
+\newcommand{\WIMPMassHundredGev}{\SI{100}{\GeV\per\square\c}}
+\newcommand{\WIMPMassOneTev}{\SI{1}{\TeV\per\square\c}}
+\newcommand{\WIMPMassTenTev}{\SI{10}{\TeV\per\square\c}}
+\newcommand{\LArNormalTemperature}{\SI{87}{K}}
+\newcommand{\LINNormalTemperature}{\SI{77}{K}}
+\newcommand{\ElectronMass}{\SI{511}{\keV\per\square\c}}
+\newcommand{\LHCCenterOfMassEnergy}{\SI{13}{TeV}}
+\newcommand{\LHCDirectSearchesWIMPMassTurnoverThreshold}{\mbox{a few hundred~\si{GeV\per\square\c}}}
+\newcommand{\BackgroundFreeRequirement}{\SI{<0.1}{\ev}}
+\newcommand{\ZeroBackgroundNinetyPerCentCLEventsLimit}{\SI{2.3}{\ev}}
+\newcommand{\NinetyPerCentCL}{\mbox{\SI{90}{\percent}~C.L.}}
+\newcommand{\ArWaveLength}{\SI{128}{\nano\meter}}
+\newcommand{\TPBWaveLength}{\SI{420}{\nano\meter}}
+\newcommand{\NR}{\mbox{NR}}
+\newcommand{\NRs}{\mbox{NRs}}
+\newcommand{\ER}{\mbox{ER}}
+\newcommand{\ERs}{\mbox{ERs}}
+\newcommand{\bg}{\mbox{$\beta/\gamma$}}
+\newcommand{\bgs}{\mbox{$\beta/\gamma$'s}}
+\newcommand{\gr}{\mbox{$\gamma$-ray}}
+\newcommand{\grs}{\mbox{$\gamma$-rays}}
+\newcommand{\LEff}{\mbox{$\mathcal{L}_{\rm eff}$}}
+\newcommand{\SOne}{\mbox{S1}}
+\newcommand{\STwo}{\mbox{S2}}
+\newcommand{\STwoSoneRatio}{\mbox{S2/S1}}
+\newcommand{\SThree}{\mbox{S3}}
+\newcommand{\GWL}{\mbox{GWL}}
+\newcommand{\LWL}{\mbox{LWL}}
+%--- Local Symbols
+\newcommand{\ArDimerTripletMeanLife}{$\sim$\SI{1.5}{\us}}
+\newcommand{\ArDimerSingletMeanLife}{\SI{6}{\nano\second}}
+\newcommand{\PSD}{\mbox{PSD}}
+\newcommand{\FNinety}{\mbox{f$_{90}$}}
+\newcommand{\timefno}{\SI{90}{\nano\second}} %from def.tex of AAr paper
+\newcommand{\fixedintone}{\SI{7}{\micro\second}} %from def.tex of AAr paper
+\newcommand{\WindowFNinety}{\SI{90}{\ns}}
+\newcommand{\WindowSOne}{\SI{7}{\us}}
+\newcommand{\FractionSOneERWindowFNinety}{\SI{30}{\percent}}
+\newcommand{\FTwoHundred}{\mbox{f$_{200}$}}
+\newcommand{\SigmaSPE}{\mbox{$\sigma_{\rm SPE}$}}
+\newcommand{\SigmaTPB}{\mbox{$\sigma_{\rm TPB}$}}
+\newcommand{\SigmaP}{\mbox{$\sigma_{\rm p}$}}
+\newcommand{\SigmaL}{\mbox{$\sigma_{\rm l}$}}
+\newcommand{\SigmaFNinety}{\mbox{$\sigma_{\FNinety}$}}
+\newcommand{\GPSAbsoluteTimeAccuracy}{\SI{20}{\ns}}
+\newcommand{\LNGSMuonResidualFlux}{1.1/(m$^2$$\cdot$hr)}
+\newcommand{\LNGSDepthMWE}{3800\,m.w.e.}  												%BX, JCAP 08, 049 (2013)
+%--- Radon
+\newcommand{\RadonMonitorLimit}{\mbox{some tens of~\si{\micro\becquerel}}}
+\newcommand{\RadonFilterLimit}{\SI{1}{\milli\becquerel}}
+\newcommand{\RadonFilterSuppression}{\num{1E5}}
+\newcommand{\RadonCRHLimit}{\SI{5}{\milli\becquerel\per\cubic\meter}}
+\newcommand{\RadonCRHSuppression}{\num{2E4}}
+%--- SiPM
+\newcommand{\TileMaxArea}{\SI[product-units=power]{50 x 50}{\square\mm}}
+\newcommand{\TileMaxSNR}{\num{3}}
+\newcommand{\TileTestPreAmpArea}{\SI[product-units=power]{32 x 32}{\square\mm}}
+\newcommand{\TileTestPreAmpSNR}{\num{4}}
+\newcommand{\TilePowersDissipation}{\SI{60}{\micro\W\per\square\mm}}
+\newcommand{\TileSapphireSupportThickness}{\SI{0.7}{\mm}}
+\newcommand{\SiPMAreaMax}{\SI[product-units=power]{10 x 10}{\square\mm}}
+\newcommand{\SiPMCapacitancePerArea}{$>$\SI{10}{\pico\farad\per\square\mm}}
+\newcommand{\SiPMGainRange}{\numrange{E6}{E7}}
+\newcommand{\SiPMDCRRoomTemperature}{\SI{100}{\kilo\hertz\per\square\mm}}
+\newcommand{\SiPMDCRLArTemperature}{\SI{1}{\hertz\per\square\mm}}
+\newcommand{\SiPMSPEResolution}{\SI{5}{\percent}}
+\newcommand{\SiPMDynamicRange}{\SI{E4}{\pe\per\square\mm}}
+\newcommand{\SiPMPDESpecification}{\SI{40}{\percent}}
+\newcommand{\SiPMDCRSpecification}{\SI{0.1}{\hertz\per\square\mm}}
+\newcommand{\SiPMDCRMeasurementLArTemp}{\SI{0.2}{\hertz\per\square\mm}}
+\newcommand{\SiPMNUVHDLFLArTempDCR}{\SI{0.01}{\hertz\per\square\mm}}
+\newcommand{\SiPMNUVHDLFLArTempTCNP}{\SI{28}{\percent}}
+\newcommand{\SiPMTCNPSpecification}{\SI{40}{\percent}}
+\newcommand{\SiPMInactiveGapSpecification}{\SI{200}{\um}}
+\newcommand{\SiPMGainSpecification}{\num{E6}}
+\newcommand{\SiPMTransAmpGain}{\SI{E3}{\volt\per\ampere}}
+\newcommand{\SiPMPulseLengthMax}{\SI{300}{\ns}}
+\newcommand{\SiPMRGBHDRecoveryTime}{\SI{200}{\ns}}
+\newcommand{\SiPMRoomTempOverVoltage}{\SI{3}{\volt}}
+\newcommand{\SiPMLArTempOverVoltage}{\SI{4}{\volt}}
+\newcommand{\SiPMCryogenicTestTemperatureRange}{\SIrange{40}{300}{\kelvin}}
+%--- PMT-SiPM Comparison
+\newcommand{\HamamatsuModel}{Hamamatsu~S11828-3344M}
+\newcommand{\HamamatsuSiPMNumber}{\num{16}}
+\newcommand{\HamamatsuSiPMTotalArea}{\SI[product-units=power]{3.0 x 3.0}{\square\mm}}
+\newcommand{\HamamatsuArrayArea}{\SI[product-units=power]{12.0 x 12.0}{\square\mm}}
+\newcommand{\HamamatsuSiPMLightYield}{\SI{1.1}{\pe\per\keVee}}
+\newcommand{\HamamatsuPMTLightYield}{\SI{2.1}{\pe\per\keVee}}
+\newcommand{\HamamatsuPMTAperture}{\SI[product-units=power]{20.0 x 20.0}{\square\mm}}
+\newcommand{\HamamatsuSiPMLightPerAreaYield}{\SI{0.76}{\pe\per\keVee\per\square\cm}}
+\newcommand{\HamamatsuPMTLightPerAreaYield}{\SI{0.53}{\pe\per\keVee\per\square\cm}}
+\newcommand{\HamamatsuSiPMOverPMTLightYieldGain}{\SI{45}{\percent}}
+\newcommand{\LNGSCellActiveDiameter}{\SI{80}{\mm}}
+\newcommand{\LNGSCellActiveHeight}{\SI{80}{\mm}}
+\newcommand{\LNGSCellPMTOpeningArea}{SI[product-units=power]{20 x 20}{\square\mm}}
+\newcommand{\SensLModel}{\mbox{SensL-ArrayC-60035-64P}}
+\newcommand{\SensLSiPMNumber}{\num{64}}
+\newcommand{\SensLSiPMTotalArea}{\SI[product-units=power]{7.2 x 7.2}{\square\mm}}
+\newcommand{\SensLSiPMActiveArea}{\SI[product-units=power]{6.0 x 6.0}{\square\mm}}
+\newcommand{\SensLArrayArea}{\SI[product-units=power]{57.2 x 57.2}{\square\mm}}
+\newcommand{\SensLSPADArea}{\SI[product-units=power]{35 x 35}{\square\micro\m}}
+\newcommand{\SensLSPADCapacitance}{\SI{150}{\femto\farad}}
+\newcommand{\SensLFillFactor}{\SI{75}{\percent}}
+\newcommand{\SensLSPADCapacity}{\SI{150}{\femto\farad}}
+\newcommand{\SensLBoardChannels}{\num{2}}
+\newcommand{\SensLBoardSiPMPerChannel}{\num{32}}
+\newcommand{\SensLLeaDCollimatorDiameter}{\SI{10}{\mm}}
+\newcommand{\SensLLeadCollimatorLength}{\SI{30}{\mm}}
+\newcommand{\SensLSiPMLightYield}{\SI{5.6}{\pe\per\keVee}}
+\newcommand{\SensLPMTLightYield}{\SI{4.4}{\pe\per\keVee}}
+\newcommand{\SensLTotalLightYield}{\SI{10}{\pe\per\keVee}}
+\newcommand{\SensLSiPMOverPMTLightYieldGainOne}{\SI{43}{\percent}}
+\newcommand{\SensLSiPMOverPMTLightYieldGainTwo}{\SI{25}{\percent}}
+\newcommand{\SensLCorrelatedPulsesEffect}{\SI{25}{\percent}}
+\newcommand{\GAPTPC}{\mbox{GAP~TPC}}
+\newcommand{\GAPTPCActiveDiameter}{\SI{57.0}{\mm}}
+\newcommand{\GAPTPCActiveHeight}{\SI{10.0}{\cm}}
+%--- DarkSide-20k
+\newcommand{\DSkTotalMass}{\SI{30}{\tonne}}
+\newcommand{\DSkActiveMass}{\SI{23}{\tonne}}
+\newcommand{\DSkFiducialMass}{\SI{20}{\tonne}}
+\newcommand{\DSkActiveDiameter}{\SI{356}{\cm}}
+\newcommand{\DSkActiveHeight}{\SI{241}{\cm}}
+\newcommand{\DSkFiducialCut}{\SI{5}{\cm}}
+\newcommand{\DSkfiducialvolumediameter}{\SI{201}{\cm}}
+\newcommand{\DSkFiducialHeight}{\SI{316}{\cm}}
+\newcommand{\DSkSensitivityOneGeVBare}{1E-47}
+\newcommand{\DSkSensitivityOneGeVUnit}{\SI{\DSkSensitivityOneGeVBare}{\square\cm}}
+\newcommand{\DSkSensitivityTenGeVBare}{1E-46}
+\newcommand{\DSkSensitivityTenGeVUnit}{\SI{\DSkSensitivityTenGeVBare}{\square\cm}}
+\newcommand{\DSkSensitivityImprovementOneGeV}{\num{E3}}
+\newcommand{\DSkExposure}{\SI{100}{\tonne\year}}
+\newcommand{\DSkRunTimePlanned}{\SI{5}{\year}}
+\newcommand{\DSkROIEnergyRange}{\SIrange{30}{200}{\keVr}}
+\newcommand{\DSkROIPERange}{\SIrange{50}{460}{\pe}}
+\newcommand{\DSkROIElectronEquivalentEnergyRange}{\SIrange{7}{50}{\keVee}}
+\newcommand{\DSkROIPPRate}{\SI{200}{\ev\per\tonne\per\yr}}
+\newcommand{\DSkROIPPEvents}{\SI{2.0E4}{\ev}}
+\newcommand{\DSkROIBiTwoOneFourRate}{\SI{1000}{\ev\per\tonne\per\yr}}
+\newcommand{\DSkROIBiTwoOneFourEvents}{\SI{1.0E5}{\ev}}
+\newcommand{\DSkROITotalEvents}{\SI{7.0E4}{\ev}}
+\newcommand{\DSkArThreeNineActivity}{\SI{10}{\micro\becquerel\per\kg}}
+\newcommand{\DSkArThreeNineDepletion}{\num{E5}}
+\newcommand{\DSkArThreeNineEvents}{\num{2E7}}
+\newcommand{\DSkArThreeNineAbatementMissing}{19}
+\newcommand{\DSkUArKrActivity}{\SI{1}{\micro\becquerel\per\cubic\meter}}
+\newcommand{\DSkDriftLength}{\SI{240}{\cm}}
+\newcommand{\DSkDriftField}{\SI{200}{\volt\per\centi\meter}}
+\newcommand{\DSkExtractionField}{\SI{2.8}{\kilo\volt\per\centi\meter}}
+\newcommand{\DSkElectroLuminescenceField}{\SI{4.2}{\kilo\volt\per\centi\meter}}
+\newcommand{\DSkElectronMeanLife}{\SI{3}{\ms}}
+\newcommand{\DSkDriftTime}{\SI{2.5}{\ms}}
+\newcommand{\DSkXYResolution}{\SI{5}{\mm}}
+\newcommand{\DSkZResolution}{\SI{1}{\mm}}
+\newcommand{\DSkGasPocketThickness}{\SI{7}{\milli\meter}}
+\newcommand{\DSkLArOverGridThickness}{\SI{3}{\milli\meter}}
+\newcommand{\DSkLArOverGridPitch}{\SI{2}{\milli\meter}}
+\newcommand{\DSkAnodePotential}{\mbox{ground}}
+\newcommand{\DSkCathodePotential}{\SI{-52}{\kilo\volt}}
+\newcommand{\DSkGridPotential}{\chk{\SI{-5.6}{\kilo\volt}}}
+\newcommand{\DSkHHVTest}{\SI{-150}{\kilo\volt}}
+\newcommand{\DSkPTFEPanelHeight}{\SI{2400}{\mm}}
+\newcommand{\DSkPTFEPanelWidth}{\SI{1160}{\mm}}
+\newcommand{\DSkSiPMArea}{\SI[product-units=power]{5 x 5}{\square\mm}}
+\newcommand{\DSkSiPMsPerTile}{\numrange{25}{100}}
+\newcommand{\DSkSiPMsNumber}{\num{130250}}
+\newcommand{\DSkSQBTRBSize}{\SI{25}{\cm}}
+\newcommand{\DSkPhotosensingArea}{\SI{14}{\square\meter}}
+\newcommand{\DSkTilesPerSQBNumber}{\num{25}}
+\newcommand{\DSkTileArea}{\SI[product-units=power]{5 x 5}{\square\cm}}
+\newcommand{\DSkTilesSurface}{\SI{13.0}{\square\m}}
+\newcommand{\DSkTilesHalfNumber}{\num{2605}}
+\newcommand{\DSkTilesNumber}{\num{5210}}
+\newcommand{\DSkCryostatSSThUActivityRequirement}{\SI{<1}{\milli\becquerel\per\kg}}
+\newcommand{\DSkCryostatTitaniumThUActivityRequirement}{\SI{<1}{\milli\becquerel\per\kg}}
+\newcommand{\DSkCryostatTitaniumIngotMass}{\SI{\sim20}{\g}}
+\newcommand{\DSkCryostatTitaniumLargeIngotMass}{\SI{\sim20}{\kg}}
+\newcommand{\DSkCryogenicsPressureStability}{\SI{\pm0.1}{\psi}}
+\newcommand{\DSkCryogenicsGasFlowTotal}{\SI{1000}{\standard\liter\per\minute}}
+\newcommand{\DSkCryogenicsGasFlowGWL}{\SI{200}{\standard\liter\per\minute}}
+\newcommand{\DSkCryogenicsGasFlowLWL}{\SI{800}{\standard\liter\per\minute}}
+\newcommand{\DSkCryogenicsLiquidFlow}{\SI{1}{liter\per\minute}}
+\newcommand{\DSkCryogenicsCryostatPowerLeak}{\SI{150}{\watt}}
+\newcommand{\DSkCryogenicsExchangerCoolingPower}{\SI{1}{\kilo\watt}}
+\newcommand{\DSkCryogenicsExchangerLINPower}{\SI{1.2}{\kilo\watt}}
+\newcommand{\DSkCryogenicsFullCoolingPowerEquivalent}{\SI{8}{\kilo\watt}}
+\newcommand{\DSkCryogenicsFullHeatingPowerEquivalent}{\SI{4}{\kilo\watt}}
+\newcommand{\DSkCryogenicsTransferLineLength}{\chk{\SI{5}{\m}}}
+\newcommand{\DSkCryogenicsLINBufferVolume}{\SI{250}{\liter}}
+\newcommand{\DSkCryogenicsLINBackupTime}{\SI{3}{\days}}
+\newcommand{\DSkCryogenicsLINStorageMass}{\SI{30}{\tonne}}
+\newcommand{\DSkCryogenicsRecoveryCryostatPowerLeak}{\SI{150}{\watt}}
+\newcommand{\DSkCryogenicsRecoveryExchangerEfficiency}{\SI{95}{\percent}}
+\newcommand{\DSkCryogenicsRecoveryExchangerInefficiency}{\SI{5}{\percent}}
+\newcommand{\DSkCryogenicsRecoveryExchangerCoolingPower}{\SI{0.4}{\kilo\watt}}
+\newcommand{\DSkCryogenicsRecoveryExchangerLINPower}{\SI{1.2}{\kilo\watt}}
+\newcommand{\DSkSOneTilePileUpProbability}{\SI{0.4}{\percent}}
+\newcommand{\DSkSOneMax}{\num{600}}
+\newcommand{\DSkSTwoOverSOne}{\num{40}}
+\newcommand{\DSkSTwoMaxPerChannel}{\SI{4000}{\pe}}
+\newcommand{\DSkSTwoRateMaxPerChannel}{\SI{0.4}{\pe\per\ns}}
+\newcommand{\DSkOverDSfAreaRatio}{\num{55}}
+\newcommand{\DSkTriggerThresholdHits}{\num{7}}
+\newcommand{\DSkTriggerThresholdWindow}{\SI{200}{\ns}}
+\newcommand{\DSkTriggerRandomRate}{\SI{0.1}{\hertz}}
+\newcommand{\DSkTriggerArThreeNineRate}{\SI{1}{\hertz}}
+\newcommand{\DSkTriggerSurfaceRate}{\SI{27}{\hertz}}
+\newcommand{\DSkTriggerTotalRate}{\SI{28}{\hertz}}
+\newcommand{\DSkADCBits}{\num{8}}
+\newcommand{\DSkADCSamplingRate}{\SI{100}{\mega\hertz}}
+\newcommand{\DSkTDCThresholdFirst}{\SI{0.5}{\pe}}
+\newcommand{\DSkTDCThresholdSecond}{\SI{5}{\pe}}
+\newcommand{\DSkADCBytesPerHit}{\SI{12}{\byte\per\hit}}
+\newcommand{\DSkTDCBytesPerHit}{\SI{4}{\byte\per\hit}}
+\newcommand{\DSkTotalBytesPerHit}{\SI{16}{\byte\per\hit}}
+\newcommand{\DSkTotalBytesPerEvent}{\SI{2E5}{\byte}}
+\newcommand{\DSkDarkCountHitsPerRecordLength}{\SI{1E4}{\mbox{noise }\hits}}
+\newcommand{\DSkDataRate}{\SI{5.6}{\mega\byte\per\s}}
+\newcommand{\DSkElectronicsDynamicRange}{\SI{6}{\bit}}
+\newcommand{\DSkDataStorageTotalDisk}{\SI{2}{\peta\byte}}
+\newcommand{\DSkDataStorageLNGSShortDisk}{\SI{20}{\tera\byte}}
+%--- DS-20k Veto
+\newcommand{\DSkLSVDiameter}{\SI{7}{\meter}}
+\newcommand{\DSkVetoPMTDiameter}{\SI{20}{\inch}}
+\newcommand{\DSkLSVNumberPMTs}{\num{100}}
+\newcommand{\DSkVetoNumberPMTs}{\num{200}}
+\newcommand{\DSkLSVPMTCoverage}{\SI{13}{\percent}}
+\newcommand{\DSkLSVWaterShield}{\SI{3.5}{\meter}}
+\newcommand{\DSkWCVNumberPMTs}{\num{100}}
+\newcommand{\DSkWCVPMTCoverage}{\SI{2}{\percent}}
+\newcommand{\DSkWCVDiameter}{\SI{14}{\meter}}
+\newcommand{\DSkWCVHeight}{\SI{14}{\meter}}
+\newcommand{\FLUKASimulationLivetime}{\SI{34}{\year}}
+\newcommand{\FLUKASimulationMass}{\SI{3.3}{\tonne}}
+\newcommand{\FLUKASimulationExposure}{\SI{112}{\tonne\year}}
+\newcommand{\FLUKASimulationCTFEventRate}{\SI{3.45}{\mbox{~events per minute}}}
+\newcommand{\FLUKASimulationMuonlessEvents}{\SI{23}{\percent}}
+\newcommand{\FLUKASimulationLSVEventRate}{\SI{0.30}{\mbox{~events per minute}}}
+\newcommand{\FLUKASimulationTPCEventRate}{\SI{0.07}{\mbox{~events per minute}}}
+\newcommand{\FLUKASimulationEventsNoCTF}{\num{7.9}}
+\newcommand{\FLUKASimulationTPCEventRateYear}{\SI{581}{\mbox{~events per year}}}
+\newcommand{\FLUKASimulationTPCEventRateYearWithCTF}{\SI{0.3}{\mbox{~events per year}}}
+\newcommand{\FLUKASimulationTPCEventRateYearWithLSV}{\SI{0.6}{\mbox{~events per year}}}
+\newcommand{\GeantSimulationExposure}{\SI{1000}{\tonne\year}}
+%--- Urania
+\newcommand{\UraniaUArRate}{\SI{100}{\kg\per\day}}
+\newcommand{\UraniaGasFeedFraction}{\SI{6}{\percent}}
+\newcommand{\UraniaCOTwoFeedFraction}{$\sim$\SI{95}{\percent}}
+\newcommand{\UraniaArFeedFraction}{\SI{440}{\ppm}}
+\newcommand{\UraniaGasFeedPressure}{\SI{50}{\bara}}
+\newcommand{\UraniaGasFeedFlow}{\SI{6500}{\standard\cubic\meter\per\hour}}
+\newcommand{\UraniaFirstUnitOutputFlow}{\SI{1300}{\standard\cubic\meter\per\hour}}
+\newcommand{\UraniaFirstUnitFlowReduction}{\num{5}}
+\newcommand{\UraniaGasReturnPressure}{\SI{120}{\bara}}
+\newcommand{\UraniaArFinalPurity}{\SI{99.9}{\percent}}
+\newcommand{\UraniaHeProductionRate}{\SI{6.5E9}{\standard\liter\per\yr}}
+\newcommand{\UraniaHeNationalReserveFractionEquivalentRate}{\SI{15}{\percent}}
+\newcommand{\UraniaHeStartDate}{\mbox{July~2015}}
+%--- Aria
+\newcommand{\AriaChemicalPerPass}{\num{E3}}
+\newcommand{\AriaChemicalRate}{O(\SI{1}{\tonne\per\day})}
+\newcommand{\AriaDepletionPerPass}{\num{10}}
+\newcommand{\AriaDepletionPerTwoPass}{\num{100}}
+\newcommand{\AriaSeruciOneRate}{\SI{10}{\kg\per\day}}
+\newcommand{\AriaSeruciTwoRate}{\SI{150}{\kg\per\day}}
+\newcommand{\AriaSeruciHeight}{\SI{350}{\m}}
+\newcommand{\AriaNuraxiHeight}{\SI{350}{\m}}
+\newcommand{\AriaMonteSinniDiameter}{\SI{5}{\m}}
+\newcommand{\AriaArVolatiityRatio}{\num{1.0015(1)}}
+\newcommand{\AriaArVolatiityOrder}{O(\num{E-3})}
+\newcommand{\AriaModulesNumber}{\num{28}}
+\newcommand{\AriaModulesHeight}{\SI{12}{\m}}
+\newcommand{\AriaPlatformVerticalSpacing}{\SI{4}{\m}}
+\newcommand{\AriaArDistillationTemperatureRange}{\SIrange{84}{100}{K}}
+\newcommand{\AriaDetectorSensitivity}{\SI{1}{\milli\becquerel\per\kg}}
+\newcommand{\AriaDetectorActiveMass}{$\sim$\SI{1}{\kg}}
+\newcommand{\AriaCOSMOActivationRate}{\SI{1.5E-8}{\becquerel\per\kilogram\per\day}}
+\newcommand{\AriaACTIVIAActivationRate}{\SI{0.54E-8}{\becquerel\per\kilogram\per\day}}
+%--- Argo
+\newcommand{\ArgoTotalMass}{\SI{300}{\tonne}}
+\newcommand{\ArgoFiducialMass}{\SI{200}{\tonne}}
+\newcommand{\ArgoExposure}{\SI{1000}{\tonne\year}}
+\newcommand{\ArgoArThreeNineAbatementMissing}{190}
+\newcommand{\ArgoBeSevenSolarNeutrinosAccuracy}{\SI{2}{\percent}}
+\newcommand{\ArgoPEPSolarNeutrinosAccuracy}{\SI{10}{\percent}}
+\newcommand{\ArgoCNOSolarNeutrinosAccuracy}{\SI{15}{\percent}}
+%--- SCENE
+\newcommand{\SCENEEnergyMax}{\SI{57}{\keVr}}
+\newcommand{\SCENEDirectionalityThreshold}{\SI{55}{\keV}}
+\newcommand{\SCENENRQuenchingRatio}{\SI{<25}{\percent}}
+\newcommand{\SCENENRQuenchingRatioRange}{\SIrange{0}{1000}{\volt\per\cm}}
+\newcommand{\SCENEERQuenchingRatio}{\SI{50}{\percent}}
+\newcommand{\SCENEERQuenchingRatioField}{\SI{100}{\volt\per\cm}}
+%--- DarkSide-10
+\newcommand{\DStExposure}{\SI{502}{day}}													%DocDb#562
+%--- AAr
+\newcommand{\DSfAArArThreeNineActivity}{\SI{1}{\becquerel\per\kg}}
+\newcommand{\DSfAArRunTime}{\CriterionSRAArLiveTime}
+\newcommand{\DSfAArAfterQualityCutsLiveTime}{\totalliv}
+\newcommand{\DSfAArNullFieldLightYield}{\SI{8.1(2)}{\pe\per\keV}}									%Statistical error only; DocDB 1358
+\newcommand{\DSfAArDriftFieldLightYield}{\SI{7.0(3)}{\pe\per\keV}}									%New sys err, PDM email 10/1/2014
+\newcommand{\DSfAArDriftFieldLightYieldfeb}{\SI{6.99(2)}{\pe\per\keV}}
+\newcommand{\DSfAArLightYieldStability}{\SI{0.7}{\percent}}
+\newcommand{\DSfAArDiscriminatorEfficiency}{\num{0.887}}
+\newcommand{\DSfAArTriggerRate}{\SI{50}{\Hz}}												%PDM: changed from 0.60
+\newcommand{\DSfAArGTwoTriggerRate}{\SI{13}{\hertz}}
+\newcommand{\DSfAArGTwoTriggerReduction}{\num{4}}
+\newcommand{\DSfAArROIEventsNumber}{\num{1.5E7}}   										%2014 DS-50 Physics paper
+\newcommand{\DSfAArExposure}{\DSfAArDFExposure}
+\newcommand{\DSfAArDFExposure}{\SI{1422(67)}{\kg\day}}
+\newcommand{\DSfAArSRExposure}{\SI{605(33)}{\kg\day}}
+\newcommand{\DSfAArFNExposure}{\SI{236(13)}{\kg\day}}
+\newcommand{\DSfAArLimitHundredGev}{\SI{6.1E-44}{\square\cm}}
+\newcommand{\DSfAArLimitOneTeV}{\SI{2.3E-43}{\square\cm}}
+\newcommand{\DSfAArLimitTenTeV}{\SI{2.2E-42}{\square\cm}}
+\newcommand{\DSfAArNeutronsRadiogenicObserved}{\num{3}}
+\newcommand{\DSfAArNeutronsCosmogenicObserved}{\num{1}}
+\newcommand{\DSfAArNeutronsAllObserved}{\num{4}}
+\newcommand{\DSfAArNeutronsRadiogenicExpected}{$\sim$\SI{1.3}{\ev}}							%DocDb#1011 v2
+\newcommand{\DSfAArNeutronsBackground}{\SI{0.2}{\ev}}
+\newcommand{\DSfAArROIEventsNumberleft}{\num{1.5E7}}
+%--- UAr
+\newcommand{\DSfUArExposure}{\SI{2616(43)}{\kg\day}}
+\newcommand{\DSfUArPhysicsCutsEfficiency}{\SI{>70}{\percent}}
+\newcommand{\DSfUArFillDate}{\mbox{April 1, 2015}}											%DocDB#2592
+\newcommand{\DSfUArAfterQualityCutsLiveTime}{\SI{70.9}{\liveday}}
+\newcommand{\DSfUArTriggerRate}{\SI{1}{\Hz}}
+\newcommand{\DSfUArLimitHundredGev}{\SI{2.0E-44}{\square\cm}}
+\newcommand{\DSfUArLimitOneTeV}{\SI{8.6E-44}{\square\cm}}
+\newcommand{\DSfUArLimitTenTeV}{\SI{8.0E-43}{\square\cm}}					
+\newcommand{\DSfUArROIPERange}{\SIrange{20}{460}{\pe}}
+\newcommand{\DSfUArROIEnergyRange}{\SIrange{13}{201}{\keVr}}
+\newcommand{\DSfUArROIEventsNumber}{\num{1.26E5}}
+\newcommand{\DSfUArFiducialDiameter}{\SI{200}{\mm}}
+\newcommand{\DSfUArFiducialHeight}{\SI{90}{\mm}}
+\newcommand{\DSfUArFiducialFraction}{$\sim$\SI{10}{\percent}}
+\newcommand{\DSfUArFiducialMass}{\SI{4}{\kg}}
+\newcommand{\DSfAAronUArinterval}{\SIrange{1000}{2500}{\pe}}
+\newcommand{\DSfAAronUArratio}{\num{300(7)}}
+\newcommand{\DSfUArArThreeNineActivity}{\SI{0.73(11)}{\milli\becquerel\per\kg}}						%DocDB#1366  % Update from P. Agnes email 2015-09-17
+\newcommand{\DSfUArGTwoTriggerReduction}{\num{2}}
+\newcommand{\DSfUArActivityLessThan}{\SI{3}{\milli\becquerel\per\kg}}	
+\newcommand{\DSfUArBackgroundFreeExtrapolatedExposure}{\SI{5.5}{\tonne\yr}}
+\newcommand{\DSfUArArThreeNineDepletion}{\num{1.4(2)E3}}
+\newcommand{\DSfUArAArRunTimeEquivalent}{\SI{23}{\year}}
+\newcommand{\DSfUArKrEightFiveActivity}{\SI{2.05(13)}{\milli\becquerel\per\kg}}						%DocDB#1366 % Update from P. Agnes email 2015-09-17
+\newcommand{\DSfUArKrEightFiveMRateFromFit}{\SI{35.3(22)}{\ev\per\day}}							%DocDB#1366 Corrected by Davide
+\newcommand{\DSfUArKrEightFiveMRateFromCoincidences}{\SI{33.1(9)}{\ev\per\day}}					%DocDB#1314, updated for full UAr statistics
+\newcommand{\DSfUArRbEightFiveMCoincidenceWindow}{\SIrange{0.1}{2.2}{\micro\s}}
+\newcommand{\DSfUArRbEightFiveMMeasuredMeanLife}{\SI{1.64(12)}{\micro\s}}
+\newcommand{\DSfUArRbEightFiveMMeanLife}{\SI{1.46}{\micro\s}}
+\newcommand{\DSfUArNeutronsRadiogenicObserved}{\num{1}}
+\newcommand{\DSfUArNeutronsCosmogenicObserved}{\num{0}}
+\newcommand{\DSfUArMassDelivered}{\SI{156(1)}{\kg}}
+\newcommand{\DSfUArMassApprox}{\SI{150}{\kg}}
+\newcommand{\DSfUArExtractionRate}{\SI{0.3}{\kg\per\day}}
+\newcommand{\DSfUArPurificationRate}{\SI{20}{\kg\per\day}}
+\newcommand{\DSfUArConcentrationWell}{\SI{400}{\ppm}}
+\newcommand{\DSfUArConcentrationCrude}{\SI{5}{\percent}}
+\newcommand{\DSfUArConcentrationDistillate}{\SI{99.999}{\percent}}
+\newcommand{\DSfUArImpuritiesDistillate}{\SI{<10}{\ppm}}
+\newcommand{\DSfUArSTwoLossToElectroNegativeMax}{\SI{<7}{\percent}}
+\newcommand{\DSfUArSOneRadialVariabilityMax}{\SI{<3}{\percent}}
+\newcommand{\DSfComptonPeakPE}{$\sim$\SI{600}{\pe}}
+%--- DS-50 Global Run
+\newcommand{\DSfGlobalNeutronsRadiogenicObserved}{\num{1}}									% 2015-10-02 AFan: updated per email discussions
+\newcommand{\DSfGlobalNeutronsRadiogenicExpected}{\SI{2(2)}{\ev}}								%DocDb#1011 v2      2015-10-02 AFan: updated per email discussions
+\newcommand{\DSfGlobalNeutronsRadiogenicExpectedPassVetoCuts}{\num{<0.02}}	
+\newcommand{\DSfGlobalLiveTime}{\SI{118}{\liveday}}                                 							%47.1 + 70.9 days
+%--- DS-50
+\newcommand{\DSfTotalMass}{\SI{153(1)}{\kg}}												%To be checked with Hanguo
+\newcommand{\DSfFiducialMass}{\SI{36.9(6)}{\kg}}
+\newcommand{\DSfSpectraFitMass}{\SI{\sim34}{\kg}}
+\newcommand{\DSfPlannedRunTime}{\SI{3}{\year}}
+\newcommand{\DSfDMSArThreeNineBackgroundCondition}{\SI{0.01}{\ev\per\bin}}
+\newcommand{\DSfDMSFNinetyNineZeroUpperLimit}{\SI{90}{\percent}}
+\newcommand{\DSfDMSFNinetyNineNineUpperLimit}{\SI{99}{\percent}}
+\newcommand{\DSfRnTwoTwoTwoActivityLimit}{\SI{2}{\micro\becquerel\per\kg}}
+\newcommand{\DSfKrEightFiveExtractionEfficiency}{$\sim$\SI{66}{\percent}}
+\newcommand{\DSfSTwoOverSOne}{\num{40}}
+\newcommand{\DSfSTwoOverSThree}{$\sim$\num{1000}}										%Alden Fan plot
+\newcommand{\DSfPMTRadiogenicNeutronRate}{\SI{7}{\ev\per\pm\year}}
+\newcommand{\DSfDetectorRadiogenicNeutronRate}{\SI{1}{\ev\per\week}}
+\newcommand{\DSfPMTsNumber}{\num{38}}
+\newcommand{\DSfPMTsAliveNumber}{\DSfPMTsNumber}
+\newcommand{\DSfPMTsNumberText}{thirty-eight}
+\newcommand{\DSfPMT}{{Hamamatsu R11065}}
+\newcommand{\DSfPMTSize}{\SI{3}{\inch}}
+\newcommand{\DSfPMTQE}{\SI{34}{\percent}}													%PDM: average for actual PMTs in DS-50, see also DocDb#42
+\newcommand{\DSfPMTCE}{\SI{92}{\percent}}
+\newcommand{\DSfPMTWaveLength}{\SI{420}{\nano\meter}}
+\newcommand{\DSfPMTGainEqualization}{\SI{10}{\percent}}
+\newcommand{\DSfPMTBiasMax}{\SI{-1050}{\volt}}
+\newcommand{\DSfPMTBiasMin}{\SI{-1288}{\volt}}
+\newcommand{\DSfPMTGain}{\num{4.E5}}
+\newcommand{\DSfActiveDiameter}{\SI{356}{\mm}}
+\newcommand{\DSfActiveHeight}{\SI{356}{\mm}}
+\newcommand{\DSfActiveMass}{\SI{46.4(7)}{\kg}}
+\newcommand{\DSfDriftTimeMax}{\SI{376}{\us}}												% Value for UAr analysis See docdb 1255. Compare to old AAr value of 373.3. Change is due to change of power supply.  
+\newcommand{\DSfElectronMeanLife}{\SI{\ge5}{ms}}
+\newcommand{\DSfDriftField}{\SI{200}{\volt\per\centi\meter}}
+\newcommand{\DSfExtractionField}{\SI{2.8}{\kilo\volt\per\centi\meter}}
+\newcommand{\DSfMultiplicationField}{\SI{4.2}{\kilo\volt\per\centi\meter}}
+\newcommand{\DSfCathodePotential}{\SI{-12.7}{\kilo\volt}}
+\newcommand{\DSfGridPotential}{\SI{-5.6}{\kilo\volt}}
+\newcommand{\DSfAnodePotential}{\SI{0}{\kilo\volt}}
+\newcommand{\DSfTotalHeight}{\SI{353.5}{\mm}}
+\newcommand{\DSfGArHeight}{\SI{1}{\centi\meter}}
+\newcommand{\DSfLArAboveMeshHeight}{\SI{4.7}{\mm}}
+\newcommand{\DSfLArBelowMeshHeight}{\SI{348.8}{\mm}}
+\newcommand{\DSfLArElectronSpeedStability}{\SI{0.04}{\percent}}
+\newcommand{\DSfLArAboveMeshElectronSpeed}{\SI{3.510}{\mm\per\us}}
+\newcommand{\DSfLArBelowMeshElectronSpeed}{\SI{0.93(1)}{\mm\per\us}}							%Guangyong Koh
+\newcommand{\DSfTriggerDiscriminatorThreshold}{\SI{0.6}{\pe}}									%PDM: changed from 0.60
+\newcommand{\DSfTriggerPMTsNumberThreshold}{\num{3}}
+\newcommand{\DSfTriggerWindow}{\SI{100}{\ns}}
+\newcommand{\DSfTriggerEfficiency}{\SI{100}{\percent}}
+\newcommand{\DSfTriggerEfficiencythresh}{\SI{60}{\pe}}
+\newcommand{\DSfTriggerAcquisitionPreWindow}{\SI{5}{\us}}
+\newcommand{\DSfTriggerAcquisitionPostWindow}{\SI{40}{\us}}
+\newcommand{\DSfTriggerAcquisitionTotalWindow}{\SI{440}{\us}}
+\newcommand{\DSfTriggerInhibitWindow}{\SI{810}{\us}}
+\newcommand{\DSfTriggerGOneGate}{\SI{10}{\us}}
+\newcommand{\DSfTriggerGTwoGate}{\SI{13}{\us}}
+\newcommand{\DSfColdAmplifierGain}{\SI{3}{\volt/\volt}}
+\newcommand{\DSfColdAmplifierBandWidth}{\SI{150}{\mega\hertz}}
+\newcommand{\DSfColdAmplifierRiseAndFallTime}{\SI{2.4}{\nano\second}}
+\newcommand{\DSfColdAmplifierLowFrequencyTimeConstant}{\SI{5.8}{\milli\second}}
+\newcommand{\DSfColdAmplifierOutputRange}{\SI{3}{\volt}}
+\newcommand{\DSfColdAmplifierTermination}{\SI{50}{\ohm}}                               						%George Korga
+\newcommand{\DSfColdAmplifierNoise}{\SI{45}{\micro\volt}}
+\newcommand{\DSfFrontEndGain}{\num{10}}
+\newcommand{\DSfADCBitNumber}{\SI{12}{\bit}}
+\newcommand{\DSfADCSamplingRate}{\SI{250}{\MHz}}
+\newcommand{\DSfLaserWaveLength}{\SI{405}{nm}}											%Giuliana Fiorillo, Hamamatsu PLP10-040
+\newcommand{\DSfLaserPMTOccupancy}{\SI{0.1}{\pe}}
+\newcommand{\DSfLaserPulseWidth}{\SI{60}{\ps}}												%Giuliana Fiorillo, Hamamatsu PLP10-040
+\newcommand{\DSfLaserPulseRate}{\SI{500}{\hertz}}
+\newcommand{\DSfLaserAcquisitionWindow}{\SI{3}{\us}}
+\newcommand{\DSfLaserIntegrationWindow}{\SI{108}{\ns}}
+\newcommand{\DSfLaserSPEMeanStability}{\SI{2.5}{\percent}}
+\newcommand{\DSfLaserSPESystematic}{$<$\SI{2.5}{\percent}}
+\newcommand{\DSfCryogenicsExchangerCoolingPower}{\SI{300}{\watt}}
+\newcommand{\DSfCryogenicsExchangerLINPower}{\SI{125}{\kg\per\day}}
+\newcommand{\DSfCryogenicsGasFlowNormal}{\SI{30}{\standard\liter\per\minute}}
+\newcommand{\DSfCryogenicsGasFlowLINBoost}{\SI{50}{\standard\liter\per\minute}}
+\newcommand{\DSfCryogenicsCryostatPowerLeak}{\SI{25}{\watt}}
+\newcommand{\DSfCryogenicsPMTsHeatLoad}{\SI{3}{\watt}}
+\newcommand{\DSfCrogenicsHeaterPower}{\SI{40}{\watt}}
+\newcommand{\DSfCryogenicsEmergencyCoolingDuration}{\SI{10}{\day}}
+\newcommand{\DSfCryogenicsUllagePressure}{\SI{1080.0(1)}{\milli\bar}}
+\newcommand{\DSfCryogenicsRnTrapTemperature}{\SIrange[range-units=single]{185}{190}{\kelvin}}		%Yury Suvorov e-mail with graph 9/10/2014
+\newcommand{\DSfCryogenicsInCryostatTemperature}{\SI{87.95(2)}{\kelvin}}
+\newcommand{\DSfITOThickness}{\SI{15}{\nano\meter}}
+\newcommand{\DSfITOTopWindowBottomBias}{\SI{-1183}{\volt}}
+\newcommand{\DSfITOTopWindowTopBias}{\SI{-1157}{\volt}}
+\newcommand{\DSfPTFEReflectorThickness}{\SI{2.54}{\centi\meter}}
+\newcommand{\DSfTPBCenterThickness}{\SI{230(10)}{\micro\gram\per\square\centi\meter}}				%Evap elog# 96-100
+\newcommand{\DSfTPBEdgeThickness}{\SI{190(15)}{\micro\gram\per\square\centi\meter}}				%Guangyong Koh (PDM changed from +20-10)
+\newcommand{\DSfTPBPTFEReflectorCenterThickness}{\SI{165(20)}{\micro\gram\per\square\centi\meter}}   	%Jason Brodsky
+\newcommand{\DSfTPBPTFEReflectorEndThickness}{\SI{224(27)}{\micro\gram\per\square\centi\meter}} 		%Jason Brodsky
+\newcommand{\DSfGridFoilThickness}{\SI{50}{\micro\meter}}
+\newcommand{\DSfGridFoilTrasparency}{\SI{95}{\percent}}
+\newcommand{\DSfCALISTransversePositioningRange}{\SIrange{0}{60}{\cm}}
+\newcommand{\DSfSpatialZResolution}{\chk{\SI{888}{\mm}}}
+\newcommand{\DSfSpatialXYResolution}{\chk{\SI{888}{\mm}}}
+\newcommand{\DSfDataTotalRate}{\SI{9E5}{\ev\per\day}}
+\newcommand{\DSfDataLaserRate}{\SI{8E5}{\ev\per\day}}
+\newcommand{\DSfDataLaserSize}{\SI{0.1}{\mega\byte}}
+\newcommand{\DSfDataDMSRate}{\SI{1E5}{\ev\per\day}}
+\newcommand{\DSfDataDMSSize}{\SI{2.6}{\mega\byte}}
+\newcommand{\DSfDataStorageLNGSShortDisk}{\SI{7}{\tera\byte}}
+\newcommand{\DSfDataStorageLNGSLongDisk}{\SI{710}{\tera\byte}}
+\newcommand{\DSfDataStorageCNAFDisk}{\SI{670}{\tera\byte}}
+\newcommand{\DSfDataStorageCNAFTape}{\SI{300}{\tera\byte}}
+\newcommand{\DSfDataStorageFNALDisk}{\SI{50}{\tera\byte}}
+\newcommand{\DSfDataStorageFNALTape}{\SI{620}{\tera\byte}}
+\newcommand{\DSfCPUsLNGS}{\mbox{400~cores}}
+\newcommand{\DSfCPUsCNAF}{\mbox{300~job~queues}}
+\newcommand{\DSfCPUsFNAL}{\mbox{25~guaranteed~batch~slots}}
+\newcommand{\DSfCPUsFNALUpgrade}{\mbox{60~guaranteed~batch~slots}}
+\newcommand{\OSGCPUEquivalent}{\mbox{6000~CPU}}
+%--- LSV High Background TMB
+\newcommand{\LSVOldTMBConcentration}{\SI{50}{\percent}}										%Augusto Goretti email to PDM 12/23/14
+\newcommand{\LSVOldPPOConcentration}{\SI{2.5}{\gram\per\liter}}									%Augusto Goretti email to PDM 12/23/14
+\newcommand{\LSVOldPhY}{\SI{12}{photons\per\keV}}
+\newcommand{\LSVOldLY}{\SI{0.54(4)}{\pe\per\keV}}											%Maria Elena Monzani email, 10/1/2014
+\newcommand{\LSVOldNeutronsRadiogenicRejectionEfficiencyMeasured}{\SI{97}{\percent}}
+\newcommand{\LSVOldNeutronCaptureMeanLife}{\SI{2.2}{\us}}
+\newcommand{\LSVOldCFourteenFitRange}{\SIrange[range-units=single]{30}{110}{\pe}}
+\newcommand{\LSVOldCFourteenRate}{$\sim$\SI{150}{\kilo\becquerel}}								%DocDb#885, #738
+\newcommand{\LSVOldAlphaQuenchedEnergy}{\SIrange[range-units=single]{50}{60}{\keV}}
+%--- LSV Low Background TMB
+\newcommand{\LSVNewTMBConcentration}{\SI{5}{\percent}}
+\newcommand{\LSVNewPPOConcentration}{\SI{1.4}{\gram\per\liter}}							
+\newcommand{\LSVNewPhY}{\SI{12}{photons\per\keV}}
+\newcommand{\LSVNewLY}{\SI{0.53(3)}{\pe\per\keV}}										
+\newcommand{\LSVNewNeutronsRadiogenicRejectionEfficiencyMeasured}{{\SI{>99}{\percent}}}
+\newcommand{\LSVNewNeutronCaptureMeanLife}{\SI{22}{\micro\s}}
+\newcommand{\LSVNeutronThermalizationTimeScale}{\SI{< 100}{\ns}}
+\newcommand{\LSVBackgroundRatioOldOverNew}{\SI{1}{\percent}}
+\newcommand{\LSVNewCOneFourRate}{$\sim$\SI{0.3}{\kilo\becquerel}}
+\newcommand{\LSVNewBTenCaptureGroundPE}{\SI{30}{\pe}}
+\newcommand{\LSVNewBTenCaptureExcitedPE}{\SI{240}{\pe}}
+\newcommand{\LSVNewBTenCaptureFraction}{$\sim$\SI{92}{\percent}}
+\newcommand{\LSVNewHOneCaptureFraction}{$\sim$\SI{8}{\percent}}
+\newcommand{\LSVNewNeutronsRadiogenicRejectionEfficiencySoleCapture}{\SI{>99.1}{\percent}}
+\newcommand{\LSVNewRecordLengthShort}{\SI{140}{\micro\s}}
+\newcommand{\LSVNewRecordLengthLong}{\SI{200}{\micro\s}}
+\newcommand{\LSVShortRecordLengthLiveTime}{\SI{36.7}{\day}}
+\newcommand{\LSVLongRecordLengthLiveTime}{\SI{34.9}{\day}}
+\newcommand{\LSVNewRecordLengthStart}{\SI{-6.5}{\micro\s}}
+\newcommand{\LSVNewRecordLengthEndShort}{\SI{133.5}{\micro\s}}
+\newcommand{\LSVNewRecordLengthEndLong}{\SI{193.5}{\micro\s}}
+%--- LSV
+\newcommand{\LSVScintillatorMass}{\SI{30}{\tonne}}
+\newcommand{\lsvscintillatormass}{\SI{30}{\tonne}} %copied over from def.tex
+
+\newcommand{\LSVStainlessSphereDiameter}{\SI{4.0}{\m}}
+\newcommand{\LSVStainlessSteelTopFlangeDiameter}{\SI{2.0}{\m}}
+\newcommand{\LSVStainlessSteelReducedFlangeDiameter}{\SI{91}{\cm}}
+\newcommand{\LSVPMTsNumber}{\num{110}}
+\newcommand{\LSVPMTsAliveNumber}{\num{106}}
+\newcommand{\LSVPMTModel}{\mbox{Hamamatsu R5912}}
+\newcommand{\LSVPMTSize}{\SI{8}{\inch}}
+\newcommand{\LSVPMTQE}{\SI{37}{\percent}}
+\newcommand{\LSVPMTModelwave}{\SI{408}{\nano\meter}}
+\newcommand{\LSVPMTCE}{\SI{92}{\percent}}
+\newcommand{\LSVProtonsQuenchingFactor}{\num{10}}
+\newcommand{\LSVPMTsBiasRange}{\SI{+1500}{1800}{\volt}}
+\newcommand{\LSVNeutronsRadiogenicRejectionEfficiencyDesign}{\SI{99.5}{\percent}}
+\newcommand{\LSVNeutronsCosmogenicRejectionEfficiencyDesign}{\SI{95}{\percent}}
+%--- CTF
+\newcommand{\CTFHeight}{\SI{10}{\meter}}
+\newcommand{\CTFDiameter}{\SI{11}{\meter}}
+\newcommand{\CTFWaterMass}{\SI{1}{\kilo\tonne}}
+\newcommand{\CTFTopPortSize}{\SI[product-units=power]{3.2 x 3.2}{\square\m}}
+\newcommand{\CTFTopFlangeDiameter}{\SI{2.3}{\m}}
+\newcommand{\CTFCurrentManHoleSize}{\SI[product-units=power]{1.5 x 0.6}{\square\m}}
+\newcommand{\CTFModifiedManHoleSize}{\SI[product-units=power]{4.0 x 4.0}{\square\m}}
+\newcommand{\CTFPMTsNumber}{\num{80}}
+\newcommand{\CTFPMTsAliveNumber}{\num{74}}
+\newcommand{\CTFPMTsOnWallNumber}{\num{56}}
+\newcommand{\CTFPMTsOnFloorNumber}{\num{24}}
+\newcommand{\CTFPMTModel}{\mbox{ETL 9351}}
+\newcommand{\CTFPMTSize}{\SI{8}{\inch}}
+\newcommand{\CTFPMTQE}{\SI{27}{\percent}}
+\newcommand{\CTFPMTCE}{\SI{60}{\percent}}
+\newcommand{\CTFPMTWaveLength}{\SI{420}{\nano\meter}}
+\newcommand{\CTFPMTBiasMax}{\SI{+1150}{\volt}}
+\newcommand{\CTFPMTBiasMin}{\SI{+1600}{\volt}}
+%--- OD High Background TMB
+\newcommand{\ODOldNeutronRejectionMeasured}{\numrange{40}{60}}								%DocDb#982
+%--- OD Low Background TMB
+\newcommand{\ODNewNRAcceptance}{$>$\SI{81.3}{\percent}}
+%--- OD
+\newcommand{\ODPMTGain}{\num{1.E7}}
+\newcommand{\ODPMTsNumber}{\num{190}}
+\newcommand{\ODPMTsAliveNumber}{\num{180}}
+\newcommand{\ODFrontEndGain}{\num{10}}
+\newcommand{\ODADCBits}{\SI{10}{\bit}}														%Checked by SD
+\newcommand{\ODADCSamplingRate}{\SI{1.25}{\GHz}}											%Checked by SD
+\newcommand{\ODAcquisitionWindow}{\SI{70}{\us}}												%Analysis Memo v11 line 725
+\newcommand{\ODBaselineWindow}{\SI{15}{\ns}}
+\newcommand{\ODNeutronRejectionRequirement}{\num{200}}
+\newcommand{\ODLaserPulseRate}{\SI{500}{\hertz}}
+\newcommand{\ODLaserIntegrationWindow}{\SI{200}{\ns}}
+\newcommand{\ODLaserAccidentalRate}{\SI{7.4}{\percent}}
+%--- 3Dpi
+\newcommand{\PETRadioTracerActivity}{\SI{10}{\milli\Curie}}
+\newcommand{\ThreeDPiTimeResolution}{\SI{30}{\ps}}
+\newcommand{\ThreeDPiEnergyResolution}{\SI{5}{\percent}}
+%--- ReD and GAP-TPC
+\newcommand{\ReDNeutronsEnergyRange}{\SIrange{1}{4}{\MeV}}
+\newcommand{\ReDRecoilsEnergyRange}{\SIrange{10}{200}{\keV}}
+\newcommand{\ReDDirectionalityEnergyRange}{\SIrange{55}{206}{\keV}}
+\newcommand{\ReDDirectionalityCrossSectionOneGeV}{\SI{E-46}{\square\cm}}
+%--- Other Experiments
+\newcommand{\DuNEHHVTest}{\SI{-115}{\kilo\volt}}
+%--- DS-50 Run Selection Criteria
+\newcommand{\CriterionPSNumber}{CR\#1}
+\newcommand{\CriterionPSString}{Period Selection}
+\newcommand{\CriterionPSAArLiveTime}{\SI{56.4(2)}{\day}}										%Alessandro Razeto 9/26/14
+%
+\newcommand{\CriterionTTNumber}{CR\#2}
+\newcommand{\CriterionTTString}{Run Type}
+\newcommand{\CriterionTTAArLiveTime}{\SI{54.7(2)}{\day}}
+%
+\newcommand{\CriterionDGNumber}{CR\#3}
+\newcommand{\CriterionDGString}{Digitizer Gate}
+\newcommand{\CriterionDGTitle}{Usable runs}
+\newcommand{\CriterionDGAArLiveTime}{\SI{53.8(2)}{\day}}
+%
+\newcommand{\CriterionNSNumber}{CR\#4}
+\newcommand{\CriterionNSString}{No Small Runs}
+\newcommand{\CriterionNSAArLiveTime}{\SI{53.5(2)}{\day}}
+%
+\newcommand{\CriterionDFNumber}{CR\#5}
+\newcommand{\CriterionDFString}{DAQ Fever}
+\newcommand{\CriterionDFAArLiveTime}{\SI{51.2(2)}{\day}}
+%
+\newcommand{\CriterionDCNumber}{CR\#6}
+\newcommand{\CriterionDCString}{DAQ Cold}
+\newcommand{\CriterionDCStringpaper}{Automated selection}
+\newcommand{\CriterionDCAArLiveTime}{\SI{51.1(2)}{\day}}
+%
+\newcommand{\CriterionSRNumber}{CR\#7}
+\newcommand{\CriterionSRString}{Single Run}
+\newcommand{\CriterionSRAArLiveTime}{\SI{49.2(2)}{\day}}
+%--- DS-50 Cuts
+\newcommand{\CutNCNumber}{CX\#1}
+\newcommand{\CutNCString}{Number of channels}
+\newcommand{\CutNCValue}{\DSfPMTAliveNumber}
+\newcommand{\CutNCSLADVariable}{nchannel}
+\newcommand{\CutNCAArLiveTime}{\SI{48.8(2)}{\day}}
+\newcommand{\CutNCUArLiveTime}{}
+%
+\newcommand{\CutBFNumber}{CX\#2}
+\newcommand{\CutBFString}{Baseline found}
+\newcommand{\CutBFValue}{\num{0}}
+\newcommand{\CutBFSLADVariable}{SumChannelHasNoBaseline}
+\newcommand{\CutBFAArLiveTime}{\SI{48.8(2)}{\day}}
+\newcommand{\CutBFUArLiveTime}{}
+%
+\newcommand{\CutPTNumber}{CX\#3}
+\newcommand{\CutPTString}{Time since previous trigger}
+\newcommand{\CutPTSLADVariable}{(lifetime+inhibittime)}
+\newcommand{\CutPTMin}{\SI{1.35}{\milli\second}}
+\newcommand{\CutPTAArLiveTime}{\SI{48.7(2)}{\day}}
+\newcommand{\CutPTUArLiveTime}{}
+%
+\newcommand{\CutLGNumber}{CX\#4}
+\newcommand{\CutLGString}{Large gap}
+\newcommand{\CutLGSLADVariable}{lifetime}
+\newcommand{\CutLGAArMax}{\SI{1}{\second}}
+\newcommand{\CutLGUArMax}{$\infinity$}
+\newcommand{\CutLGAArLiveTime}{\SI{48.1(2)}{\day}}
+\newcommand{\CutLGUArLiveTime}{}
+%
+\newcommand{\CutVPNumber}{CX\#5}
+\newcommand{\CutVPString}{Veto data present}
+\newcommand{\CutVPSLADVariable}{veto\_present}
+\newcommand{\CutVPValue}{TRUE}
+\newcommand{\CutVPAArLiveTime}{\SI{47.1(2)}{\day}}
+\newcommand{\CutVPAArLiveDay}{\SI{47.1}{\liveday}}
+\newcommand{\CutVPUArLiveTime}{}
+%
+\newcommand{\CutNPNumber}{CX\#6}
+\newcommand{\CutNPString}{Number of pulses}
+\newcommand{\CutNPSLADVariable}{n\_phys\_pulses}
+\newcommand{\CutNPValue}{}
+\newcommand{\CutNPAcceptance}{\mbox{$0.95^{+0.00}_{-0.01}$}}
+%
+\newcommand{\CutTTNumber}{CX\#7}
+\newcommand{\CutTTString}{Coincident Trigger Time}
+\newcommand{\CutTTSLADVariable}{s1\_start\_time}
+\newcommand{\CutTTRange}{\SI{\pm50}{\ns}}
+\newcommand{\CutTTAcceptance}{\mbox{$1.00^{+0.00}_{-0.01}$}}
+%
+\newcommand{\CutNSNumber}{CX\#8}
+\newcommand{\CutNSString}{No \SOne\ Saturation}
+\newcommand{\CutNSValue}{FALSE}
+\newcommand{\CutNSSLADVariable}{is\_saturated\_pulse0}
+\newcommand{\CutNSAcceptance}{\num{1.00}}												%Suppress 0 error
+%
+\newcommand{\CutWPNumber}{CX\#9}
+\newcommand{\CutWPString}{\STwo\ pulse shape}
+\newcommand{\CutWPSLADVariable}{total\_s2\_f90\_fixed}
+\newcommand{\CutWPMax}{\num{0.20}}
+\newcommand{\CutWPAcceptance}{\num{1.00}}												%Suppress 0 error
+%
+\newcommand{\CutMWNumber}{CX\#10}
+\newcommand{\CutMWString}{Minimum \STwo}
+\newcommand{\CutMWSLADVariable}{total\_s2\_true}
+\newcommand{\CutMWMin}{\SI{100}{\pe}}
+\newcommand{\CutMWAcceptance}{\mbox{$0.99^{+0.01}_{-0.04}$}}
+%
+\newcommand{\CutMFNumber}{CX\#11}
+\newcommand{\CutMFString}{Max \SOne\ fraction per \PMT}
+\newcommand{\CutMFSLADVariable}{s1\_max\_frac}
+\newcommand{\CutMFAArAcceptance}{\SI{99}{\percent}}
+\newcommand{\CutMFUArAcceptance}{\SI{95}{\percent}}
+%
+\newcommand{\CutCVNumber}{CX\#12}
+\newcommand{\CutCVString}{Prompt \LSV\ Signal}
+\newcommand{\CutCVSLADVariable}{roi\_total\_prompt\_charge}
+\newcommand{\CutCVAArMax}{\SI{10}{\pe}}
+\newcommand{\CutCVUArMax}{\SI{1}{\pe}}
+\newcommand{\CutCVAArWindow}{\SIrange[range-units=single]{-10}{200}{\ns}}
+\newcommand{\CutCVUArWindow}{\SIrange[range-units=single]{-50}{250}{\ns}}
+\newcommand{\CutCVAArAcceptance}{\num{0.95}}												%Suppress 0 error
+\newcommand{\CutCVUArAcceptance}{}														%Suppress 0 error
+%
+\newcommand{\CutHV}{CX\#13}
+\newcommand{\CutHVstr}{Delayed \LSV\ and \WCV}
+%\newcommand{\CutHVsliderwidth}{\SI{300}{\ns}}												%DocDb#972, Analysis Memo v11 line 1024
+%\newcommand{\CutHVdelpemax}{\SI{80}{\pe}}
+%\newcommand{\CutHVdelenemax}{\SI{150}{\keV}}
+%\newcommand{\CutHVdelwin}{\SI{8.8}{\us}}													%DocDb#972, Analysis Memo v11 line 1024, confirmed by Shawn Westerdale: this is 8.8 us from PROMPT time, not TPC trig time.
+%\newcommand{\CutHVlatewin}{\mbox{\TPC\ record length}}
+%\newcommand{\CutHVlatepemax}{\SI{110}{\pe}}
+%\newcommand{\CutHVlateenemax}{\SI{200}{\keV}}
+%\newcommand{\CutHVlateenemaxmod}{\SI{280}{\keV}}
+%\newcommand{\CutHVlateenemaxalt}{\SI{300}{\keV}}
+%\newcommand{\CutHVlatectfpemax}{\SI{200}{\pe}}
+%\newcommand{\CutHVdef}{(lsv\_max\_window\_charge<\CutHVdelpemax)\&\&(lsv\_late\_window\_charge<\CutHVlatepemax)\&\&(wt\_charge<\CutHVlatectfpemax)}
+%\newcommand{\CutHVliv}{\SI{47.1(2)}{\day}}
+%\newcommand{\CutHVacc}{\num{0.94}}														%Suppress 0 error
+%\newcommand{\CutHVnewsliderwidth}{\SI{500}{\ns}}											%DocDb#972, Analysis Memo v11 line 1024
+%\newcommand{\CutHVnewslidershortcapturetimes}{$\sim$6}
+%\newcommand{\CutHVnewsliderlongcapturetimes}{$\sim$9}
+%\newcommand{\CutHVnewdelshortpemax}{\SI{3}{\pe}}
+%\newcommand{\CutHVnewdellongpemax}{\SI{6}{\pe}}
+%\newcommand{\CutHVnewsliderwidth}{\SI{500}{\ns}}											%DocDb#972, Analysis Memo v11 line 1024
+%\newcommand{\CutHVnewslidershortcapturetimes}{$\sim$6}
+%\newcommand{\CutHVnewsliderlongcapturetimes}{$\sim$9}
+\newcommand{\CutHVnewdelshortpemax}{\SI{3}{\pe}}                            								%DocDB 1345
+\newcommand{\CutHVnewdellongpemax}{\SI{6}{\pe}}											%DocDB 1345
+\newcommand{\CutHVnewsliderwidth}{\SI{500}{\ns}}												%DocDB 1345
+%%
+%\newcommand{\pvcutstr}{Pre-prompt \LSV\ Signal}
+\newcommand{\pvcutpemax}{\SI{3}{\pe}}														%DocDB 1345
+\newcommand{\pvcuttime}{$\sim$\SI{8}{\us}}													%DocDB 1345
+%%
+\newcommand{\mvcutstr}{Muon}															%DocDB 1345
+\newcommand{\mvcutlsvpemax}{\SI{> 2000}{\pe}}												%DocDB 1345
+\newcommand{\mvcutwcvpemax}{\SI{> 400}{\pe}}												%DocDB 1345
+\newcommand{\mvcutdelay}{\SI{2}{\second}}													%DocDB 1345
+%
+\newcommand{\CutDF}{CX\#14}
+\newcommand{\CutDFString}{Drift Time Fiducialization}
+\newcommand{\CutDFSLADVariable}{tdrift}
+\newcommand{\CutDFRange}{\SI{40.0}{334.5}{\us}}
+\newcommand{\CutDFZRange}{\SI{36.3}{317.0}{\mm}}
+\newcommand{\CutDFAcceptance}{\num{1.000(0)}}
+%
+\newcommand{\CutSONumber}{CX\#15}
+\newcommand{\CutSOString}{\SOne\ range}
+\newcommand{\CutSOSLADVariable}{total\_s1\_corr}
+\newcommand{\CutSOMin}{\SI{20}{\pe}}														%Update 9/22/2014
+\newcommand{\CutSOMax}{\SI{460}{\pe}}														%Update 9/22/2014
+\newcommand{\CutSOAcceptance}{\num{1.000(0)}}
+%
+\newcommand{\CutRLNumber}{CX\#16}
+\newcommand{\CutRLString}{Radial Fiducialization}
+\newcommand{\CutRLMax}{\SI{16}{\cm}}
+\newcommand{\CutRLSLADVariable}{radius<\CutRLMax}
+%
+\newcommand{\CutSRNumber}{CX\#17}
+\newcommand{\CutSRString}{\STwo/\SOne}
+\newcommand{\CutSRMax}{0.0}
+\newcommand{\CutSRSLADVariable}{nr\_sigma\_s2}
+\newcommand{\CutSRAcceptance}{\mbox{$0.53^{+0.01}_{-0.02}$}}
+%
+\newcommand{\CutRSNumber}{CX\#18}
+\newcommand{\CutRSString}{\TPC\ Core}
+\newcommand{\CutRSMax}{\SI{10}{\cm}}
+\newcommand{\CutRSSLADVariable}{radius}
+\newcommand{\CutRSFIducialMass}{\SI{11.7(5)}{\kg}}
+%
+\newcommand{\CutFNNumber}{CX\#19}
+\newcommand{\CutFNString}{Fast \FNinety}
+\newcommand{\CutFNMin}{0.15}
+\newcommand{\CutFNSLADVariablef}{total\_f90\_corr}
+\newcommand{\CutFNAcceptance}{\num{1.00(0)}}
+%
+\newcommand{\DSfAArLiveTime}{\CutVPAArLiveTime}
+\newcommand{\DSfAArDFCumulariveAcceptance}{\mbox{$0.82^{+0.01}_{-0.04}$}}
+\newcommand{\DSfAArSRCumulariveAcceptance}{\mbox{$0.429^{+0.010}_{-0.022}$}}
+\newcommand{\DSfAArFNCumulariveAcceptance}{\mbox{$0.428^{+0.010}_{-0.022}$}}
+\newcommand{\DSfUArLiveTime}{}
+\newcommand{\DSfUArDFCumulariveAcceptance}{}
+\newcommand{\DSfUArSRCumulariveAcceptance}{}
+\newcommand{\DSfUArFNCumulariveAcceptance}{}
+
+% from def.tex (1st Paper, or LNGS report)
+\newcommand{\enbortenexcitedgamma}{\SI{478}{\keV}}
+\newcommand{\brbortenground}{\SI{6.4}{\percent}}
+\newcommand{\enbortengroundalpha}{\SI{1775}{\keV}}
+\newcommand{\brbortenexcited}{\SI{93.6}{\percent}}
+\newcommand{\enbortenexcitedalpha}{\SI{1471}{\keV}}
+\newcommand{\enbortenexcitedalphaquenched}{\SIrange[range-units = single]{30}{35}{\keVee}}
+
+%
+\newcommand{\tdrift}{\ensuremath{t_{drift}}}

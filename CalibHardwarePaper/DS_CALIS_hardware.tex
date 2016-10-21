@@ -1,0 +1,129 @@
+%% 
+%% Copyright 2007, 2008, 2009 Elsevier Ltd
+%% 
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%% 
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%% 
+%% The list of all files belonging to the 'Elsarticle Bundle' is
+%% given in the file `manifest.txt'.
+%% 
+
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%% SP 2008/03/01
+
+%%\documentclass[preprint,10pt]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[authoryear,preprint,review,12pt]{elsarticle}
+%\documentclass[preprint,review,12pt]{elsarticle}
+\documentclass{elsarticle}
+%All options of article.cls can be used with this document class. The default options loaded are a4paper, 10pt, oneside, onecolumn and preprint.
+%http://mirror.hmc.edu/ctan/macros/latex/contrib/elsarticle/doc/elsdoc.pdf
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+% %\documentclass[final,1p,times,twocolumn]{elsarticle}
+% %\documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% For including figures, graphicx.sty has been loaded in
+%% elsarticle.cls. If you prefer to use the old commands
+%% please give \usepackage{epsfig}
+
+%% The amssymb package provides various useful mathematical symbols
+%%\usepackage{amssymb}
+%%\usepackage{subfigure}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers.
+%% \usepackage{lineno}
+
+%\journal{Physics Letters B}
+\journal{NIM A}
+\input def.tex
+\input newcommands.tex
+
+\begin{document}
+
+\begin{frontmatter}
+%---
+\title{CALIS - a CALibration Insertion System for the \dsf\, dark matter search experiment}
+%---
+%\input uar-70d-frontpage.tex
+%\input frontpage.tex
+\input AU-50_els.tex
+
+%---
+%\date{\today}
+%---
+\begin{abstract}
+This paper describes the design, fabrication, commissioning and use of  a CALibration source Insertion System (CALIS) in the \dsf\ direct dark matter search experiment. CALIS  deploys radioactive sources into the liquid scintillator veto to characterize the detector response and detection efficiency of the \dsf\ Liquid Argon Time Projection Chamber, and the surrounding \lsvscintillatormass\ organic liquid scintillator neutron veto.
+It was commissioned in September 2014 and has been used successfully in several gamma and neutron source campaigns since then. A description of the hardware and an excerpt of calibration analysis results are given below.
+
+%In order to calibrate the detector response and detection efficiency of the \dsf\ Liquid Argon Time Projection Chamber used for dark matter detection and the surrounding \lsvscintillatormass\ organic liquid scintillator neutron veto, we designed, built and implemented a calibration source insertion system (CALIS), which allows to deploy radioactive sources into the liquid scintillator veto. 
+
+%We report the first results of \dsf, a direct search for dark matter operating in the underground Laboratori Nazionali del Gran Sasso (LNGS) and searching for the rare nuclear recoils possibly induced by weakly interacting massive particles (WIMPs).  The dark matter detector is a Liquid Argon Time Projection Chamber with a \dsfactivemass\ active mass, operated inside a \lsvscintillatormass\ organic liquid scintillator neutron veto, which is in turn installed at the center of a \ctfwatermass\ water Cherenkov veto for the residual flux of cosmic rays.  We report here the null results of a dark matter search for a \dsfexpo\ exposure with an atmospheric argon fill.  This is the most sensitive dark matter search performed with an argon target, corresponding to a 90\% CL upper limit on the WIMP-nucleon spin-independent cross section of \dsflimit\ for a WIMP mass of \dsflimitmass.
+\end{abstract}
+%---
+\begin{keyword}
+%% keywords here, in the form: keyword \sep keyword
+
+%% PACS codes here, in the form: \PACS code \sep code
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+Dark matter\sep WIMP\sep Noble liquid detectors\sep Low-background detectors\sep Liquid scintillators\sep Radioactive source calibration\sep calibration device\sep insertion device\sep remote operation
+
+\end{keyword}
+
+\end{frontmatter}
+
+%\linenumbers
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+%% main text
+%\section{}
+%\label{}
+\input{introduction.tex}
+\input{hardware_design.tex}
+\input{hardware_details.tex}
+\input{calibrationcampaign.tex}
+\input{conclusions.tex}
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+%% \appendix
+
+%% \section{}
+%% \label{}
+
+%% If you have bibdatabase file and want bibtex to generate the
+%% bibitems, please use
+%%
+%%\bibliographystyle{elsarticle-num}
+\bibliographystyle{veto-description} 
+%%\bibliography{veto-description}
+\bibliography{CALIS}
+
+%% else use the following coding to input the bibitems directly in the
+%% TeX file.
+
+\end{document}
+\endinput
+%%
+%% End of file `elsarticle-template-num.tex'.
